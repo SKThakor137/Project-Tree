@@ -1,6 +1,6 @@
 {
   "name": "project-tree-md",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Generate a clean Markdown/ASCII folder structure tree, excluding node_modules, .git, dist, build, .next, and .env files.",
   "main": "src/index.js",
   "bin": {
