@@ -7,17 +7,17 @@ const DEFAULT_EXCLUDE = /node_modules|\.next|\.git|dist|build|coverage|\.turbo|\
 /**
  * Recursively builds an ASCII tree string from a directory-tree node.
  */
-function buildTreeText(node, prefix = "", isLast = true) {
+function buildTreeText(node, prefix = "", isLast = true, isRoot = true) {
   if (!node) return "";
 
   const lines = [];
-  const connector = prefix === "" ? "" : isLast ? "└── " : "├── ";
+  const connector = isRoot ? "" : (isLast ? "└── " : "├── ");
   lines.push(`${prefix}${connector}${node.name}`);
 
   if (node.children && node.children.length) {
-    const childPrefix = prefix + (prefix === "" ? "" : isLast ? "    " : "│   ");
+    const childPrefix = isRoot ? "" : (prefix + (isLast ? "    " : "│   "));
     node.children.forEach((child, index) => {
-      lines.push(buildTreeText(child, childPrefix, index === node.children.length - 1));
+      lines.push(buildTreeText(child, childPrefix, index === node.children.length - 1, false));
     });
   }
 
