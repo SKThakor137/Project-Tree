@@ -1,0 +1,7 @@
+*.log
+.DS_Store
+PROJECT_STRUCTURE.md
+TEST_OUTPUT.md
+.env
+.env.*
+.github/
