@@ -2,48 +2,41 @@
 
 [![npm version](https://img.shields.io/npm/v/project-tree-md.svg)](https://www.npmjs.com/package/project-tree-md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Zero Dependencies](https://img.shields.io/badge/dependencies-0-brightgreen.svg)](https://www.npmjs.com/package/project-tree-md)
 
-Generate a clean, Markdown-wrapped ASCII folder structure tree for your project. This is perfect for inserting into `README.md` files or pasting directly into AI prompts to provide context on your project's structure.
+Generate a clean, Markdown-wrapped ASCII folder structure tree for your project — perfect for `README.md` files, documentation, or pasting into AI prompts for project context.
 
-## Features
+> **v1.1.0** — Now with **zero dependencies**, colorized terminal preview, project statistics, and auto clipboard copy!
 
-- **Zero configuration**: Run it instantly.
-- **Smart defaults**: Automatically ignores common build, dependency, and configuration directories:
-  - `node_modules/`
-  - `.git/`
-  - `dist/` and `build/`
-  - `.next/` and `.turbo/`
-  - `.env*` files
-  - `coverage/`
-- **Highly customizable**: Override exclusions, limit recursion depth, and specify output paths.
+## ✨ Features
+
+- **Zero dependencies** — uses only built-in Node.js `fs` and `path` modules
+- **Colorized terminal preview** — see your project tree directly in the console with color-coded folders and files
+- **Project statistics** — shows total directory and file counts at a glance
+- **Auto clipboard copy** — the generated Markdown is automatically copied to your clipboard (disable with `--no-copy`)
+- **Smart defaults** — automatically ignores common build, dependency, and config directories:
+  - `node_modules/`, `.git/`, `dist/`, `build/`, `.next/`, `.turbo/`, `coverage/`, `.env*`
+- **Highly customizable** — override exclusions, limit recursion depth, and specify output paths
 
 ---
 
-## Quick Start
+## 🚀 Quick Start
 
-You can run it directly without installing it:
+Run it instantly without installing:
 
 ```bash
 npx project-tree-md
 ```
 
-Or install it as a dev dependency in your project:
+Or install it as a dev dependency:
 
 ```bash
 npm install --save-dev project-tree-md
 ```
 
-And run it using:
-
-```bash
-npx project-tree-md
-```
-
 ---
 
-## CLI Usage
-
-By default, running `npx project-tree-md` will generate a file named `PROJECT_STRUCTURE.md` in your current working directory.
+## 🖥️ CLI Usage
 
 ```bash
 npx project-tree-md [options]
@@ -56,66 +49,130 @@ npx project-tree-md [options]
 | `--out` | `-o` | Output file path | `PROJECT_STRUCTURE.md` |
 | `--depth` | `-L` | Maximum recursion depth | Unlimited |
 | `--exclude` | `-I` | Custom regex exclusion pattern | (Standard ignore list) |
-| `--help` | `-h` | Show help command | — |
+| `--no-copy` | — | Disable clipboard copy | (Auto-copy enabled) |
+| `--help` | `-h` | Show help message | — |
 
-#### Examples
+### Examples
 
-1. **Custom Output File Name:**
-   ```bash
-   npx project-tree-md --out docs/STRUCTURE.md
-   ```
+**1. Default — generate `PROJECT_STRUCTURE.md` with a colorized preview:**
+```bash
+npx project-tree-md
+```
 
-2. **Limit Traversal Depth:**
-   ```bash
-   npx project-tree-md --depth 3
-   ```
+**2. Custom output file:**
+```bash
+npx project-tree-md --out docs/STRUCTURE.md
+```
 
-3. **Custom Exclusion Regex:**
-   ```bash
-   npx project-tree-md --exclude "temp\|test"
-   ```
+**3. Limit traversal depth:**
+```bash
+npx project-tree-md --depth 3
+```
+
+**4. Custom exclusion regex:**
+```bash
+npx project-tree-md --exclude "temp|test"
+```
+
+**5. Generate without clipboard copy:**
+```bash
+npx project-tree-md --no-copy
+```
 
 ---
 
-## Programmatic Usage
+## 🧪 Testing the Package Locally on Another Project
 
-You can also import and use it directly in your Node.js scripts:
+You can test this tool on **any project folder** on your machine without publishing to npm.
+
+### Method 1: Direct node call
+
+Navigate to the project you want to scan, then run the CLI directly:
+
+```bash
+cd "C:\Users\you\your-other-project"
+node "C:\path\to\project-tree-md\bin\cli.js"
+```
+
+### Method 2: npm link (Recommended)
+
+Link the package globally so you can use `npx project-tree-md` anywhere:
+
+```bash
+# Inside the project-tree-md folder:
+npm link
+
+# Then navigate to any other project and run:
+cd "C:\Users\you\your-other-project"
+npx project-tree-md
+```
+
+To unlink when done:
+
+```bash
+npm unlink -g project-tree-md
+```
+
+---
+
+## 📦 Programmatic Usage
 
 ```javascript
 const { generateTree } = require("project-tree-md");
 
-const { markdown, outputPath } = generateTree({
+const { markdown, outputPath, statsText } = generateTree({
   rootDir: process.cwd(),
   outputFile: "PROJECT_STRUCTURE.md",
   maxDepth: 4,
 });
 
-console.log(`Markdown tree generated successfully at: ${outputPath}`);
+console.log(`Tree generated at: ${outputPath}`);
+console.log(`Stats: ${statsText}`);
 ```
 
 ---
 
-## Example Output
+## 📄 Example Output
 
-Here is what the generated `PROJECT_STRUCTURE.md` file looks like:
+Running `npx project-tree-md` shows a **colorized tree preview** in your terminal and saves `PROJECT_STRUCTURE.md`:
 
-# Project Structure
-
-_Auto-generated on 2026-07-20T10:15:00.000Z_
-
-```text
-my-project/
-├── bin/
+**Terminal output:**
+```
+my-project
+├── bin
 │   └── cli.js
-├── src/
+├── src
 │   └── index.js
 ├── package.json
-└── README.md
+├── README.md
+└── LICENSE
+
+📊 Stats: 2 directories, 5 files
+✅ Project structure written to PROJECT_STRUCTURE.md
+📋 Project structure copied to clipboard!
 ```
+
+**Generated `PROJECT_STRUCTURE.md`:**
+````markdown
+# Project Structure
+
+_Auto-generated on 2026-07-21T17:22:03.055Z_
+_Total: 2 directories, 5 files_
+
+```
+my-project
+├── bin
+│   └── cli.js
+├── src
+│   └── index.js
+├── package.json
+├── README.md
+└── LICENSE
+```
+````
 
 ---
 
 ## License
 
 [MIT](LICENSE)
-

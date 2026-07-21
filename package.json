@@ -1,7 +1,7 @@
 {
   "name": "project-tree-md",
-  "version": "1.0.2",
-  "description": "Generate a clean Markdown/ASCII folder structure tree, excluding node_modules, .git, dist, build, .next, and .env files.",
+  "version": "1.1.0",
+  "description": "Generate a clean Markdown/ASCII folder structure tree with colorized preview, stats, and clipboard copy. Zero dependencies.",
   "main": "src/index.js",
   "bin": {
     "project-tree-md": "bin/cli.js"
@@ -13,7 +13,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "test": "node bin/cli.js --out TEST_OUTPUT.md"
+    "test": "node bin/cli.js"
   },
   "keywords": [
     "tree",
@@ -33,7 +33,5 @@
   "engines": {
     "node": ">=14"
   },
-  "dependencies": {
-    "directory-tree": "^3.5.1"
-  }
+  "dependencies": {}
 }
