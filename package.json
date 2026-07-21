@@ -1,7 +1,7 @@
 {
   "name": "project-tree-md",
-  "version": "1.1.0",
-  "description": "Generate a clean Markdown/ASCII folder structure tree with colorized preview, stats, and clipboard copy. Zero dependencies.",
+  "version": "2.0.0",
+  "description": "The ultimate AI-ready project structure CLI. Generates Markdown, JSON, HTML, SVG, and Mermaid trees with colorized preview, project detection, AI context, clipboard copy, and more. Zero dependencies.",
   "main": "src/index.js",
   "bin": {
     "project-tree-md": "bin/cli.js"
@@ -13,7 +13,16 @@
     "LICENSE"
   ],
   "scripts": {
-    "test": "node bin/cli.js"
+    "test": "node bin/cli.js",
+    "test:all": "node tests/scanner.test.js & node tests/formatter.test.js & node tests/ignore.test.js & node tests/json.test.js & node tests/mermaid.test.js & node tests/html.test.js & node tests/svg.test.js & node tests/compare.test.js",
+    "test:scanner": "node tests/scanner.test.js",
+    "test:formatter": "node tests/formatter.test.js",
+    "test:ignore": "node tests/ignore.test.js",
+    "test:json": "node tests/json.test.js",
+    "test:mermaid": "node tests/mermaid.test.js",
+    "test:html": "node tests/html.test.js",
+    "test:svg": "node tests/svg.test.js",
+    "test:compare": "node tests/compare.test.js"
   },
   "keywords": [
     "tree",
@@ -22,13 +31,29 @@
     "markdown",
     "cli",
     "readme-generator",
-    "folder-structure"
+    "folder-structure",
+    "ai-context",
+    "ai-prompt",
+    "json-export",
+    "html-export",
+    "svg-export",
+    "mermaid",
+    "project-detection",
+    "monorepo",
+    "zero-dependencies",
+    "watch",
+    "clipboard",
+    "gitignore"
   ],
   "author": "SKThakor137",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SKThakor137/Project-Tree.git"
+  },
+  "homepage": "https://github.com/SKThakor137/Project-Tree#readme",
+  "bugs": {
+    "url": "https://github.com/SKThakor137/Project-Tree/issues"
   },
   "engines": {
     "node": ">=14"

@@ -1,0 +1,207 @@
+'use strict';
+
+const fs = require('fs');
+const path = require('path');
+const { isSensitive } = require('../utils/sensitive.js');
+
+/** Default exclusion pattern (kept for backward compatibility). */
+const DEFAULT_EXCLUDE = /node_modules|\.next|\.git|dist|build|coverage|\.turbo/;
+
+/** Binary file extensions — skipped unless --include-binary. */
+const BINARY_EXTENSIONS = new Set([
+  '.png','.jpg','.jpeg','.gif','.webp','.ico','.bmp','.tiff',
+  '.zip','.tar','.gz','.rar','.7z','.exe','.dll','.so','.dylib','.lib',
+  '.pdf','.mp4','.mov','.mp3','.wav','.avi','.mkv','.flac','.ogg',
+  '.woff','.woff2','.ttf','.eot','.otf',
+  '.pyc','.class','.o','.a','.pdb',
+  '.db','.sqlite','.sqlite3',
+]);
+
+/**
+ * @typedef {Object} ScanNode
+ * @property {string}      name
+ * @property {string}      path
+ * @property {boolean}     isSymlink
+ * @property {boolean}     isEmpty
+ * @property {boolean}     isSensitive
+ * @property {boolean}     isBinary
+ * @property {number}      [size]
+ * @property {string}      [ext]
+ * @property {string}      [symlinkTarget]
+ * @property {boolean}     [collapsed]
+ * @property {number}      [collapsedCount]
+ * @property {ScanNode[]}  [children]  — present for directories
+ */
+
+/**
+ * Check if a file extension is binary.
+ * @param {string} name
+ * @returns {boolean}
+ */
+function isBinaryFile(name) {
+  return BINARY_EXTENSIONS.has(path.extname(name).toLowerCase());
+}
+
+/**
+ * Parse a human-readable size string (e.g. "5MB", "500KB") to bytes.
+ * @param {string|number|undefined} sizeStr
+ * @returns {number} bytes (Infinity if unspecified / invalid)
+ */
+function parseSize(sizeStr) {
+  if (sizeStr === undefined || sizeStr === null) return Infinity;
+  const s = String(sizeStr);
+  const m = s.match(/^(\d+(?:\.\d+)?)\s*(B|KB|MB|GB)?$/i);
+  if (!m) return Infinity;
+  const multipliers = { B: 1, KB: 1024, MB: 1024 ** 2, GB: 1024 ** 3 };
+  return parseFloat(m[1]) * (multipliers[(m[2] || 'B').toUpperCase()] || 1);
+}
+
+/**
+ * Compress single-child directory chains into combined names (a/b/c).
+ * @param {ScanNode} node
+ * @returns {ScanNode}
+ */
+function compressTree(node) {
+  if (!node.children) return node;
+  const compressedChildren = node.children.map(compressTree);
+  if (
+    compressedChildren.length === 1 &&
+    compressedChildren[0].children !== undefined &&
+    !compressedChildren[0].collapsed
+  ) {
+    const child = compressedChildren[0];
+    return { ...child, name: `${node.name}/${child.name}`, children: child.children };
+  }
+  return { ...node, children: compressedChildren };
+}
+
+/**
+ * Scan a directory tree, returning a ScanNode hierarchy.
+ *
+ * @param {string} rootDir
+ * @param {Object} [options]
+ * @param {RegExp}   [options.exclude]            Hard-exclude regex.
+ * @param {number}   [options.maxDepth]           Max depth (default: Infinity).
+ * @param {Function} [options.ignoreFn]           Gitignore matcher.
+ * @param {boolean}  [options.includeBinary]      Include binary files.
+ * @param {boolean}  [options.showSensitive]      Show sensitive files.
+ * @param {number}   [options.maxSize]            Skip files larger than bytes.
+ * @param {boolean}  [options.compress]           Compress single-child dirs.
+ * @param {number}   [options.collapseThreshold]  Collapse dirs with > N children.
+ * @returns {ScanNode|null}
+ */
+function scan(rootDir, options = {}) {
+  const {
+    exclude        = DEFAULT_EXCLUDE,
+    maxDepth       = Infinity,
+    ignoreFn       = () => false,
+    includeBinary  = false,
+    showSensitive  = false,
+    maxSize        = Infinity,
+    compress       = false,
+    collapseThreshold = null,
+  } = options;
+
+  const absoluteRoot = path.resolve(rootDir);
+  if (!fs.existsSync(absoluteRoot)) return null;
+
+  function buildNode(itemPath, currentDepth) {
+    const name = path.basename(itemPath);
+    const normalizedPath = itemPath.replace(/\\/g, '/');
+
+    // Hard exclude
+    if (exclude && exclude.test(normalizedPath)) return null;
+
+    // Gitignore / ignore file check
+    const relPath = path.relative(absoluteRoot, itemPath).replace(/\\/g, '/');
+    if (relPath && ignoreFn(relPath)) return null;
+
+    // Sensitive file
+    const sensitive = isSensitive(name);
+    if (sensitive && !showSensitive) {
+      return {
+        name, path: itemPath,
+        isSensitive: true, isSymlink: false, isEmpty: false, isBinary: false,
+      };
+    }
+
+    let stat;
+    try { stat = fs.lstatSync(itemPath); } catch (_) { return null; }
+
+    const isSymlink = stat.isSymbolicLink();
+    let symlinkTarget;
+    if (isSymlink) {
+      try { symlinkTarget = fs.readlinkSync(itemPath); } catch (_) { symlinkTarget = '?'; }
+    }
+
+    // File node
+    if (stat.isFile() || (isSymlink && !stat.isDirectory())) {
+      const binary = isBinaryFile(name);
+      if (binary && !includeBinary) return null;
+      if (stat.size > maxSize) return null;
+      return {
+        name, path: itemPath, size: stat.size,
+        ext: path.extname(name).toLowerCase(),
+        isSymlink, symlinkTarget,
+        isEmpty: false, isSensitive: false, isBinary: binary,
+      };
+    }
+
+    // Directory node
+    if (stat.isDirectory() || isSymlink) {
+      const node = { name, path: itemPath, isSymlink, symlinkTarget, isEmpty: false, isSensitive: false, isBinary: false };
+
+      if (currentDepth >= maxDepth) {
+        node.children = [];
+        return node;
+      }
+
+      let entries;
+      try { entries = fs.readdirSync(itemPath); } catch (_) {
+        node.children = [];
+        return node;
+      }
+
+      entries.sort((a, b) =>
+        a.localeCompare(b, undefined, { sensitivity: 'base', numeric: true }));
+
+      const children = [];
+      for (const entry of entries) {
+        const child = buildNode(path.join(itemPath, entry), currentDepth + 1);
+        if (child) children.push(child);
+      }
+
+      node.isEmpty = children.length === 0;
+
+      // Smart collapse for large directories
+      if (collapseThreshold !== null && children.length > collapseThreshold) {
+        const fileCount = countFiles(children);
+        node.children = [];
+        node.collapsed = true;
+        node.collapsedCount = fileCount;
+        return node;
+      }
+
+      node.children = children;
+      return node;
+    }
+
+    return null;
+  }
+
+  const root = buildNode(absoluteRoot, 0);
+  if (!root) return null;
+  return compress ? compressTree(root) : root;
+}
+
+/** Count all file descendants (non-directory nodes). */
+function countFiles(nodes) {
+  let count = 0;
+  for (const n of nodes) {
+    if (!n.children) count++;
+    else count += countFiles(n.children);
+  }
+  return count;
+}
+
+module.exports = { scan, isBinaryFile, parseSize, compressTree, DEFAULT_EXCLUDE, BINARY_EXTENSIONS };
