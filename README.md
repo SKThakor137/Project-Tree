@@ -9,7 +9,7 @@
   </p>
 </p>
 
-Generate beautiful project structure docs in **Markdown**, **JSON**, **HTML**, **SVG**, and **Mermaid** — with colorized terminal preview, AI-ready context generation, project auto-detection (30+ tools), and rich stats dashboard. **Zero runtime dependencies.**
+Generate beautiful project structure docs in **Markdown**, **JSON**, **HTML**, **SVG**, and **Mermaid** — with colorized terminal preview, AI context token counter, file comment summarization, interactive HTML search, project auto-detection (30+ tools), and rich stats dashboard. **Zero runtime dependencies.**
 
 ---
 
@@ -17,6 +17,9 @@ Generate beautiful project structure docs in **Markdown**, **JSON**, **HTML**, *
 
 | Feature | Description |
 | :--- | :--- |
+| 🧮 **AI Token Estimator** | Estimate tokens & GPT-4o input costs without external libraries (`--tokens`) |
+| 📝 **Header Comment Extractor** | Extract top file comments & `package.json` descriptions inline (`--summarize`) |
+| 🔍 **Interactive HTML Search** | Sticky search bar with real-time tree filtering & folder auto-expand (`--html`) |
 | 🌳 **Multi-format export** | Markdown, JSON, HTML (collapsible), SVG, Mermaid graph |
 | 🎨 **4 tree themes** | `unicode` (default), `ascii`, `emoji`, `box` |
 | 🤖 **AI context generation** | Full project context doc for ChatGPT/Claude/Gemini |
@@ -53,14 +56,17 @@ npx project-tree-md
 # Basic usage — generates PROJECT_STRUCTURE.md
 npx project-tree-md
 
-# With emoji theme, file details, and stats dashboard
-npx project-tree-md --theme emoji --details --dashboard
+# Output AI context token count and cost estimation
+npx project-tree-md --tokens
 
-# Generate AI context document
-npx project-tree-md --ai
+# Extract file header comment summaries inline
+npx project-tree-md --summarize
 
-# Export to all formats
-npx project-tree-md --json --html --svg --mermaid
+# Export to interactive HTML with search bar
+npx project-tree-md --html
+
+# Combined AI-ready run
+npx project-tree-md --summarize --tokens --ai --html
 ```
 
 ---
@@ -81,19 +87,21 @@ Output Options:
   --no-copy               Do not copy to clipboard
   --theme <name>          Tree theme                   (unicode|ascii|emoji|box)
   --details               Show file size & extension
+  --summarize             Extract & show inline file comment summaries
   --compress              Compress single-child dirs
   --collapse <n>          Collapse dirs with >n files
   --dashboard             Show rich stats dashboard
 
 Export Formats:
   --json                  Export as JSON
-  --html                  Export as collapsible HTML
+  --html                  Export as collapsible HTML with interactive search
   --svg                   Export as SVG diagram
   --mermaid               Export as Mermaid graph
 
 AI Features:
   --ai                    Generate AI context document
   --prompt                Generate AI-ready prompt
+  --tokens                Output AI context token count & cost estimation
 
 Advanced:
   --inject <file>         Inject tree into file markers
@@ -111,6 +119,72 @@ Other:
 Subcommands:
   compare <a> <b>         Compare two dirs/snapshots
 ```
+
+---
+
+## 🧮 AI Context Token Estimator (`--tokens`)
+
+Estimate the token count and API input cost for generated project structure and AI context files:
+
+```bash
+npx project-tree-md --tokens
+```
+
+Output:
+```text
+🧮 Estimated Context Tokens: 1,447 tokens (~$0.0036 cost for GPT-4o input).
+```
+
+- **Zero-Dependency BPE Estimator**: Tuned to simulate OpenAI (`tiktoken`) and Claude tokenization by factoring in indentation runs, line breaks, word boundaries, and punctuation.
+- **Cost Calculator**: Computes estimated input cost based on GPT-4o model pricing ($2.50 per 1,000,000 tokens).
+
+---
+
+## 📝 File Header Comment Extractor (`--summarize`)
+
+Extract top file comments and descriptions inline right next to file names:
+
+```bash
+npx project-tree-md --summarize
+```
+
+Output:
+```text
+project-tree-md
+├── bin
+│   └── cli.js                          # CLI entrypoint and command parser for project-tree-md.
+├── package.json                        # The ultimate AI-ready project structure CLI.
+├── README.md                           # ✨ Features
+├── src
+│   ├── core
+│   │   ├── formatter.js                # Formats directory trees into plain text and colorized terminal outputs.
+│   │   ├── generator.js                # Main generator orchestrator — scans directory and generates tree.
+│   │   ├── scanner.js                  # Directory tree scanner module for building project hierarchy nodes.
+│   │   └── stats.js                    # Computes directory tree statistics and dashboard metrics.
+│   ├── exporters
+│   │   ├── html.js                     # Self-contained HTML project tree generator with interactive search.
+│   │   └── markdown.js                 # Markdown exporter — generates PROJECT_STRUCTURE.
+│   └── features
+│       ├── summarize.js                # Clean and format raw comment text into a 1-sentence description.
+│       └── tokens.js                   # Estimate tokens for a string using a lightweight heuristic.
+```
+
+- **Supported Formats**: Single-line (`//`, `#`, `--`, `;`), multi-line (`/* ... */`, `''' ... '''`, `<!-- ... -->`), JSDoc headers, `package.json` descriptions, and Markdown titles.
+- **Aligned Layout**: Automatically aligns all `#` inline comments at a clean, consistent column width across terminal and Markdown trees.
+
+---
+
+## 🔍 Interactive Search Bar for HTML Export (`--html`)
+
+Generates a standalone, self-contained HTML report featuring a responsive sticky search input:
+
+```bash
+npx project-tree-md --html
+```
+
+- **Sticky Search Header**: `🔍 Search files or folders...` bar stays pinned to top as you scroll.
+- **Real-Time DOM Filtering**: Dynamically filters files and folders as you type.
+- **Auto-Expanding Tree**: Automatically expands parent `<details>` folders to reveal matching nested items.
 
 ---
 
@@ -142,19 +216,6 @@ project-tree-md
 └── 📋 package.json
 ```
 
-### ASCII (`--theme ascii`)
-```
-project-tree-md
-+-- bin
-|   \-- cli.js
-+-- src
-|   +-- core
-|   |   +-- scanner.js
-|   |   \-- formatter.js
-|   \-- index.js
-\-- package.json
-```
-
 ---
 
 ## 🤖 AI Context Generation
@@ -162,7 +223,7 @@ project-tree-md
 Generate a comprehensive project context document for AI assistants:
 
 ```bash
-npx project-tree-md --ai
+npx project-tree-md --ai --tokens
 ```
 
 Creates `AI_CONTEXT.md` containing:
@@ -172,178 +233,7 @@ Creates `AI_CONTEXT.md` containing:
 - **Scripts** — available npm scripts
 - **Dependencies** — full dependency list
 - **Language Breakdown** — file distribution by language
-- **Folder Structure** — complete tree
-
-### AI-Ready Prompt
-
-```bash
-npx project-tree-md --prompt
-```
-
-Creates `AI_PROMPT.md` — a ready-to-paste prompt for ChatGPT/Claude/Gemini.
-
----
-
-## 📊 Stats Dashboard
-
-```bash
-npx project-tree-md --dashboard
-```
-
-```
-📊 Project Statistics
-──────────────────────────────────────────────────────
-  📁 Directories     8
-  📄 Files           34
-  💾 Total Size      106.9 KB
-  🏆 Largest File    cli.js (13.6 KB)
-  🌊 Max Depth       3
-  📐 Avg Depth       2.4
-
-  Language Breakdown
-  JavaScript       #####################     85% (29)
-  JSON             ##                        6% (2)
-  Markdown         #                         3% (1)
-
-  Largest Folders
-  src                    66.2 KB
-  core                   21.5 KB
-  features               15.3 KB
-
-  Top Extensions  .js(29)  .json(2)  .md(1)
-──────────────────────────────────────────────────────
-```
-
----
-
-## 📤 Export Formats
-
-### JSON (`--json`)
-```json
-{
-  "tree": {
-    "name": "my-project",
-    "type": "directory",
-    "children": [...]
-  },
-  "stats": { "dirs": 8, "files": 34, ... },
-  "generatedAt": "2025-01-01T00:00:00Z"
-}
-```
-
-### HTML (`--html`)
-Generates a self-contained, collapsible HTML page with GitHub dark theme styling.
-
-### SVG (`--svg`)
-Generates an SVG tree diagram — perfect for embedding in docs or READMEs.
-
-### Mermaid (`--mermaid`)
-Generates a Mermaid graph definition for use in GitHub, GitLab, or any Mermaid-compatible renderer.
-
----
-
-## 💉 README Auto-Inject
-
-Add these markers to your README.md:
-
-```markdown
-<!-- PROJECT_TREE_START -->
-<!-- PROJECT_TREE_END -->
-```
-
-Then run:
-
-```bash
-npx project-tree-md --inject README.md
-```
-
-The tree will be automatically inserted between the markers on every run.
-
----
-
-## 👀 Watch Mode
-
-Auto-regenerate on file changes:
-
-```bash
-npx project-tree-md --watch
-```
-
-Combine with other flags:
-
-```bash
-npx project-tree-md --watch --inject README.md --ai
-```
-
----
-
-## 🔄 Compare Mode
-
-Diff two directories or JSON snapshots:
-
-```bash
-npx project-tree-md compare ./v1 ./v2
-npx project-tree-md compare snapshot-old.json snapshot-new.json
-```
-
-Output:
-```
-✅ Added (3):
-  + v2/src/new-feature.js
-  + v2/tests/new-feature.test.js
-  + v2/docs/guide.md
-
-❌ Removed (1):
-  - v1/src/deprecated.js
-
-Summary: 3 added, 1 removed
-```
-
----
-
-## 🔐 Sensitive File Masking
-
-By default, sensitive files (`.env`, `credentials.json`, private keys, etc.) are masked:
-
-```
-├── .env (hidden)
-├── .env.production (hidden)
-└── service-account.json (hidden)
-```
-
-Use `--show-sensitive` to reveal them.
-
----
-
-## ⚙️ GitHub Action
-
-Auto-update your project structure on every push:
-
-```yaml
-# .github/workflows/project-tree.yml
-name: Update Project Tree
-on:
-  push:
-    branches: [main]
-
-permissions:
-  contents: write
-
-jobs:
-  update-tree:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: '20' }
-      - run: npx project-tree-md --no-copy
-      - run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add PROJECT_STRUCTURE.md
-          git diff --cached --quiet || git commit -m "docs: update project structure [skip ci]"
-          git push
-```
+- **Folder Structure** — complete tree with optional inline summaries
 
 ---
 
@@ -355,32 +245,29 @@ const {
   scan,
   buildTreeText,
   computeStats,
-  detectProject,
-  toJson,
+  estimateTokens,
+  formatTokenSummary,
+  extractFileSummary,
   toHtml,
-  toSvg,
-  toMermaid,
-  generateAiContext,
-  compare,
 } = require('project-tree-md');
 
-// Generate everything
+// Generate complete tree with token estimation & file summaries
 const result = generateTree({
   rootDir: process.cwd(),
   outputFile: 'MY_STRUCTURE.md',
-  theme: 'emoji',
-  details: true,
+  summarize: true,
+  theme: 'unicode',
 });
 
-console.log(result.treeText);
-console.log(result.stats);
-console.log(result.projectInfo);
+console.log(result.coloredTreeText);
+console.log(result.tokenSummary); // "Estimated Context Tokens: 1,447 tokens (~$0.0036 cost for GPT-4o input)."
 
-// Individual modules
-const tree = scan('./my-project', { maxDepth: 3 });
-const json = toJson(tree);
-const html = toHtml(tree);
-const svg = toSvg(tree);
+// Estimate tokens directly
+const tokens = estimateTokens('some context text');
+
+// Extract file summary description
+const summary = extractFileSummary('./src/core/scanner.js');
+console.log(summary); // "Directory tree scanner module for building project hierarchy nodes."
 ```
 
 ---
@@ -391,62 +278,17 @@ const svg = toSvg(tree);
 # Run CLI directly
 node bin/cli.js
 
-# Run all tests
+# Run all test suites
 npm run test:all
 
 # Run individual test suites
-npm run test:scanner
-npm run test:formatter
-npm run test:json
+npm run test:tokens
+npm run test:summarize
 npm run test:html
-npm run test:svg
-npm run test:mermaid
-npm run test:compare
-npm run test:ignore
+npm run test:scanner
 ```
 
 ---
-
-## 📁 Architecture
-
-```
-project-tree-md/
-├── bin/
-│   └── cli.js              # CLI entry point (all flags)
-├── src/
-│   ├── core/
-│   │   ├── scanner.js       # Iterative directory scanner
-│   │   ├── formatter.js     # Multi-theme tree formatter
-│   │   ├── stats.js         # Statistics engine + dashboard
-│   │   └── generator.js     # Main orchestrator
-│   ├── detectors/
-│   │   └── project.js       # 30+ framework/tool detector
-│   ├── exporters/
-│   │   ├── markdown.js      # Markdown export
-│   │   ├── json.js          # JSON export
-│   │   ├── html.js          # Collapsible HTML export
-│   │   ├── svg.js           # SVG diagram export
-│   │   └── mermaid.js       # Mermaid graph export
-│   ├── features/
-│   │   ├── ai.js            # AI context + prompt generator
-│   │   ├── inject.js        # README auto-inject
-│   │   ├── watcher.js       # Watch mode
-│   │   ├── compare.js       # Tree diff/compare
-│   │   └── monorepo.js      # Workspace detection
-│   ├── utils/
-│   │   ├── colors.js        # ANSI colors + spinner
-│   │   ├── clipboard.js     # System clipboard
-│   │   ├── ignore.js        # .gitignore parser
-│   │   └── sensitive.js     # Sensitive file detection
-│   └── index.js             # Public API re-exports
-└── tests/                   # Unit test suites
-```
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please open an issue or submit a PR.
 
 ## 📄 License
 
