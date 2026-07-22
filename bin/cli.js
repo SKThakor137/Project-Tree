@@ -22,20 +22,16 @@ const { watchDirectory } = require('../src/features/watcher.js');
 const { compare } = require('../src/features/compare.js');
 const { detectProject } = require('../src/detectors/project.js');
 const { estimateTokens, formatTokenSummary } = require('../src/features/tokens.js');
+const { generateArchitectureFlow } = require('../src/core/architectureFlow.js');
 
 // ─── Arg Parser ───────────────────────────────────────────────────────────────
 
 function parseArgs(argv) {
-  const args = {
-    rootDir: process.cwd(),
-    outputFile: 'PROJECT_STRUCTURE.md',
-    copy: true,
-    theme: 'unicode',
-    details: false,
-    compress: false,    interactive: false,
+  const args = {    interactive: false,
     dashboard: false,
     tokens: false,
     summarize: false,
+    flow: false,
     // Modes
     ai: false,
     prompt: false,
@@ -66,6 +62,7 @@ function parseArgs(argv) {
       case '--prompt':                 args.prompt = true; break;
       case '--tokens':                 args.tokens = true; break;
       case '--summarize':              args.summarize = true; break;
+      case '--flow':                   args.flow = true; break;
       case '--json':                   args.json = true; break;
       case '--html':                   args.html = true; break;
       case '--svg':                    args.svg = true; break;
@@ -117,13 +114,14 @@ ${colors.bold('Output Options:')}
   --theme <name>          Tree theme                   ${colors.gray('(unicode|ascii|emoji|box)')}
   --details               Show file size & extension
   --summarize             Extract & show inline file comment summaries
+  --flow                  Generate architecture execution flow & role map
   --compress              Compress single-child dirs
   --collapse <n>          Collapse dirs with >n files
   --dashboard             Show rich stats dashboard
 
 ${colors.bold('Export Formats:')}
   --json                  Export as JSON
-  --html                  Export as collapsible HTML
+  --html                  Export as collapsible HTML with interactive search
   --svg                   Export as SVG diagram
   --mermaid               Export as Mermaid graph
 
@@ -202,10 +200,18 @@ function runGenerate(args) {
       theme: args.theme,
       details: args.details,
       summarize: args.summarize,
+      flow: args.flow,
     });
 
     // Print colorized tree
     console.log('\n' + result.coloredTreeText + '\n');
+
+    // Architecture Flow Output
+    if (args.flow) {
+      const flowRes = result.flowResult || generateArchitectureFlow(args.rootDir, result.tree);
+      console.log(flowRes.coloredFlowText + '\n');
+    }
+
     console.log(`📊 ${colors.bold('Stats:')} ${result.statsText}`);
 
     // Dashboard

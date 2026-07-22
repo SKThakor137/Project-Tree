@@ -12,6 +12,7 @@ const { buildIgnoreMatcher } = require('../utils/ignore.js');
 const { toMarkdown } = require('../exporters/markdown.js');
 const { detectProject } = require('../detectors/project.js');
 const { estimateTokens, formatTokenSummary } = require('../features/tokens.js');
+const { generateArchitectureFlow } = require('./architectureFlow.js');
 
 /**
  * Main orchestrator — generates everything from a single call.
@@ -30,6 +31,7 @@ const { estimateTokens, formatTokenSummary } = require('../features/tokens.js');
  * @param {string}   [options.theme]
  * @param {boolean}  [options.details]
  * @param {boolean}  [options.summarize]
+ * @param {boolean}  [options.flow]
  * @param {boolean}  [options.writeFile] - write output file (default true)
  * @returns {Object}
  */
@@ -48,6 +50,7 @@ function generateTree(options = {}) {
     theme       = 'unicode',
     details     = false,
     summarize   = false,
+    flow        = false,
     writeFile   = true,
   } = options;
 
@@ -78,6 +81,13 @@ function generateTree(options = {}) {
   const tokens = estimateTokens(markdown);
   const tokenSummary = formatTokenSummary(tokens);
 
+  let flowResult = null;
+  if (flow) {
+    try {
+      flowResult = generateArchitectureFlow(rootDir, tree);
+    } catch (_) {}
+  }
+
   let outputPath = null;
   if (writeFile) {
     outputPath = path.isAbsolute(outputFile)
@@ -97,6 +107,9 @@ function generateTree(options = {}) {
     projectInfo,
     tokens,
     tokenSummary,
+    flowResult,
+    flowText: flowResult ? flowResult.flowText : null,
+    coloredFlowText: flowResult ? flowResult.coloredFlowText : null,
   };
 }
 

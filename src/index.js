@@ -24,6 +24,7 @@ const { compare } = require('./features/compare.js');
 const { detectMonorepo, formatWorkspaceSummary } = require('./features/monorepo.js');
 const { estimateTokens, calculateCost, formatTokenSummary } = require('./features/tokens.js');
 const { extractFileSummary } = require('./features/summarize.js');
+const { generateArchitectureFlow, detectFrameworkRole } = require('./core/architectureFlow.js');
 
 module.exports = {
   // Core (backward-compatible)
@@ -35,6 +36,8 @@ module.exports = {
   DEFAULT_EXCLUDE,
   detectProject,
   buildIgnoreMatcher,
+  generateArchitectureFlow,
+  detectFrameworkRole,
 
   // Exporters
   toJson,

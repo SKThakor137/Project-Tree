@@ -9,7 +9,7 @@
   </p>
 </p>
 
-Generate beautiful project structure docs in **Markdown**, **JSON**, **HTML**, **SVG**, and **Mermaid** — with colorized terminal preview, AI context token counter, file comment summarization, interactive HTML search, project auto-detection (30+ tools), and rich stats dashboard. **Zero runtime dependencies.**
+Generate beautiful project structure docs in **Markdown**, **JSON**, **HTML**, **SVG**, and **Mermaid** — with colorized terminal preview, AI context token counter, architecture flow execution engine, file comment summarization, interactive HTML search, project auto-detection (30+ tools), and rich stats dashboard. **Zero runtime dependencies.**
 
 ---
 
@@ -17,6 +17,7 @@ Generate beautiful project structure docs in **Markdown**, **JSON**, **HTML**, *
 
 | Feature | Description |
 | :--- | :--- |
+| ⚡ **Architecture Flow Engine** | Multi-language execution tree & framework role classification (`--flow`) |
 | 🧮 **AI Token Estimator** | Estimate tokens & GPT-4o input costs without external libraries (`--tokens`) |
 | 📝 **Header Comment Extractor** | Extract top file comments & `package.json` descriptions inline (`--summarize`) |
 | 🔍 **Interactive HTML Search** | Sticky search bar with real-time tree filtering & folder auto-expand (`--html`) |
@@ -56,6 +57,9 @@ npx project-tree-md
 # Basic usage — generates PROJECT_STRUCTURE.md
 npx project-tree-md
 
+# Generate Architecture Execution Flow & Role Map
+npx project-tree-md --flow
+
 # Output AI context token count and cost estimation
 npx project-tree-md --tokens
 
@@ -65,8 +69,8 @@ npx project-tree-md --summarize
 # Export to interactive HTML with search bar
 npx project-tree-md --html
 
-# Combined AI-ready run
-npx project-tree-md --summarize --tokens --ai --html
+# Full feature run
+npx project-tree-md --flow --summarize --tokens --ai --html
 ```
 
 ---
@@ -88,6 +92,7 @@ Output Options:
   --theme <name>          Tree theme                   (unicode|ascii|emoji|box)
   --details               Show file size & extension
   --summarize             Extract & show inline file comment summaries
+  --flow                  Generate architecture execution flow & role map
   --compress              Compress single-child dirs
   --collapse <n>          Collapse dirs with >n files
   --dashboard             Show rich stats dashboard
@@ -122,6 +127,30 @@ Subcommands:
 
 ---
 
+## ⚡ Architecture Flow Engine (`--flow`)
+
+Map out component connections, call metrics, and structural framework roles across **JavaScript/TypeScript**, **Python**, **Go**, **PHP**, **C/C++**, and **React/Next.js**:
+
+```bash
+npx project-tree-md --flow
+```
+
+Output:
+```text
+📦 Global Application Architecture Flow
+│
+└── 🌐 [ROUTE] src/routes/user.routes.js ───────────────────────── [2.1 KB] ──> Type: Route/Endpoint
+    └── ⚙️ [CONTROLLER] src/controllers/user.controller.js ─────── [4.5 KB] ──> Type: Controller (1 call)
+        ├── 🛡️ [MIDDLEWARE] src/middlewares/auth.middleware.js ─── [1.8 KB] ──> Type: Middleware
+        └── 💼 [SERVICE] src/services/user.service.js ──────────── [6.2 KB] ──> Type: Business Logic
+```
+
+- **Intelligent Role Classifier**: Automatically detects `ROUTE` 🌐, `CONTROLLER` ⚙️, `SERVICE` 💼, `MODEL` 🗄️, `MIDDLEWARE` 🛡️, `LAYOUT` 📋, `PAGE` 💻, `CLIENT_COMP` 🧱, `ENTRY` 🚀.
+- **Universal Multi-Language Import Scanner**: Resolves relative imports across JS/TS (`import`/`require`), Python (`from .`), Go (`import`), PHP (`require`), C/C++ (`#include`).
+- **Tabular Alignment**: Clean `padEnd` right-aligned formatting displaying file sizes and call frequencies.
+
+---
+
 ## 🧮 AI Context Token Estimator (`--tokens`)
 
 Estimate the token count and API input cost for generated project structure and AI context files:
@@ -135,9 +164,6 @@ Output:
 🧮 Estimated Context Tokens: 1,447 tokens (~$0.0036 cost for GPT-4o input).
 ```
 
-- **Zero-Dependency BPE Estimator**: Tuned to simulate OpenAI (`tiktoken`) and Claude tokenization by factoring in indentation runs, line breaks, word boundaries, and punctuation.
-- **Cost Calculator**: Computes estimated input cost based on GPT-4o model pricing ($2.50 per 1,000,000 tokens).
-
 ---
 
 ## 📝 File Header Comment Extractor (`--summarize`)
@@ -148,30 +174,6 @@ Extract top file comments and descriptions inline right next to file names:
 npx project-tree-md --summarize
 ```
 
-Output:
-```text
-project-tree-md
-├── bin
-│   └── cli.js                          # CLI entrypoint and command parser for project-tree-md.
-├── package.json                        # The ultimate AI-ready project structure CLI.
-├── README.md                           # ✨ Features
-├── src
-│   ├── core
-│   │   ├── formatter.js                # Formats directory trees into plain text and colorized terminal outputs.
-│   │   ├── generator.js                # Main generator orchestrator — scans directory and generates tree.
-│   │   ├── scanner.js                  # Directory tree scanner module for building project hierarchy nodes.
-│   │   └── stats.js                    # Computes directory tree statistics and dashboard metrics.
-│   ├── exporters
-│   │   ├── html.js                     # Self-contained HTML project tree generator with interactive search.
-│   │   └── markdown.js                 # Markdown exporter — generates PROJECT_STRUCTURE.
-│   └── features
-│       ├── summarize.js                # Clean and format raw comment text into a 1-sentence description.
-│       └── tokens.js                   # Estimate tokens for a string using a lightweight heuristic.
-```
-
-- **Supported Formats**: Single-line (`//`, `#`, `--`, `;`), multi-line (`/* ... */`, `''' ... '''`, `<!-- ... -->`), JSDoc headers, `package.json` descriptions, and Markdown titles.
-- **Aligned Layout**: Automatically aligns all `#` inline comments at a clean, consistent column width across terminal and Markdown trees.
-
 ---
 
 ## 🔍 Interactive Search Bar for HTML Export (`--html`)
@@ -181,10 +183,6 @@ Generates a standalone, self-contained HTML report featuring a responsive sticky
 ```bash
 npx project-tree-md --html
 ```
-
-- **Sticky Search Header**: `🔍 Search files or folders...` bar stays pinned to top as you scroll.
-- **Real-Time DOM Filtering**: Dynamically filters files and folders as you type.
-- **Auto-Expanding Tree**: Automatically expands parent `<details>` folders to reveal matching nested items.
 
 ---
 
@@ -203,19 +201,6 @@ project-tree-md
 └── package.json
 ```
 
-### Emoji (`--theme emoji`)
-```
-📁 project-tree-md
-├── 📁 bin
-│   └── 📄 cli.js
-├── 📁 src
-│   ├── 📁 core
-│   │   ├── 📄 scanner.js
-│   │   └── 📄 formatter.js
-│   └── 📄 index.js
-└── 📋 package.json
-```
-
 ---
 
 ## 🤖 AI Context Generation
@@ -223,17 +208,8 @@ project-tree-md
 Generate a comprehensive project context document for AI assistants:
 
 ```bash
-npx project-tree-md --ai --tokens
+npx project-tree-md --ai --tokens --flow
 ```
-
-Creates `AI_CONTEXT.md` containing:
-- **Project Info** — framework, language, runtime, build tool, package manager
-- **Detected Tools** — 30+ auto-detected technologies
-- **Configuration Files** — all config files found
-- **Scripts** — available npm scripts
-- **Dependencies** — full dependency list
-- **Language Breakdown** — file distribution by language
-- **Folder Structure** — complete tree with optional inline summaries
 
 ---
 
@@ -243,31 +219,25 @@ Creates `AI_CONTEXT.md` containing:
 const {
   generateTree,
   scan,
-  buildTreeText,
-  computeStats,
+  generateArchitectureFlow,
+  detectFrameworkRole,
   estimateTokens,
-  formatTokenSummary,
   extractFileSummary,
-  toHtml,
 } = require('project-tree-md');
 
-// Generate complete tree with token estimation & file summaries
+// Generate complete tree with architecture flow
 const result = generateTree({
   rootDir: process.cwd(),
-  outputFile: 'MY_STRUCTURE.md',
+  flow: true,
   summarize: true,
-  theme: 'unicode',
 });
 
 console.log(result.coloredTreeText);
-console.log(result.tokenSummary); // "Estimated Context Tokens: 1,447 tokens (~$0.0036 cost for GPT-4o input)."
+console.log(result.coloredFlowText);
 
-// Estimate tokens directly
-const tokens = estimateTokens('some context text');
-
-// Extract file summary description
-const summary = extractFileSummary('./src/core/scanner.js');
-console.log(summary); // "Directory tree scanner module for building project hierarchy nodes."
+// Direct architecture flow generation
+const flow = generateArchitectureFlow(process.cwd());
+console.log(flow.flowText);
 ```
 
 ---
@@ -276,16 +246,13 @@ console.log(summary); // "Directory tree scanner module for building project hie
 
 ```bash
 # Run CLI directly
-node bin/cli.js
+node bin/cli.js --flow
 
 # Run all test suites
 npm run test:all
 
-# Run individual test suites
-npm run test:tokens
-npm run test:summarize
-npm run test:html
-npm run test:scanner
+# Run architecture flow test suite
+npm run test:flow
 ```
 
 ---
