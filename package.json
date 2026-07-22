@@ -1,6 +1,6 @@
 {
   "name": "project-tree-md",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "The ultimate AI-ready project structure CLI. Generates Markdown, JSON, HTML, SVG, and Mermaid trees with colorized preview, project detection, AI context, clipboard copy, and more. Zero dependencies.",
   "main": "src/index.js",
   "bin": {
