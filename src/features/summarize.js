@@ -1,6 +1,7 @@
 'use strict';
 
 const fs = require('fs');
+const path = require('path');
 
 /**
  * Clean and format raw comment text into a 1-sentence description.
@@ -15,8 +16,8 @@ function cleanSummaryText(rawText) {
     // Remove doc tags like @file, @description, @overview, @module, @brief, @typedef, @param, @returns
     .replace(/@(?:typedef|param|returns?|type|template|see|link)\s*\{[^}]*\}\s*\w*/gi, '')
     .replace(/@(?:file|overview|description|module|brief|doc|typedef|param|returns?|type|template|see|link)\b/gi, '')
-    // Remove comment delimiters
-    .replace(/^(\/\/|#|--|;|\/\*+|\*+|\*\/|<!--|-->|'''|""")+/gm, '')
+    // Remove comment delimiters and markdown headers
+    .replace(/^(\/\/|#+|--|;|\/\*+|\*+|\*\/|<!--|-->|'''|""")+/gm, '')
     .replace(/(\/\*+|\*+|\*\/|<!--|-->|'''|""")+$/gm, '')
     // Replace tabs/newlines with spaces
     .replace(/[\r\n\t]+/g, ' ')
@@ -46,18 +47,30 @@ function cleanSummaryText(rawText) {
 }
 
 /**
- * Extract top header comment summary from a text file (first 5-10 lines).
+ * Extract top header comment summary from a text file.
  *
  * @param {string} filePath
- * @param {number} [maxLines=10]
+ * @param {number} [maxLines=35]
  * @returns {string|null}
  */
-function extractFileSummary(filePath, maxLines = 10) {
+function extractFileSummary(filePath, maxLines = 35) {
+  const fileName = path.basename(filePath).toLowerCase();
+  const ext = path.extname(filePath).toLowerCase();
+
+  // Special handling for package.json or JSON manifests
+  if (fileName === 'package.json') {
+    try {
+      const content = fs.readFileSync(filePath, 'utf8');
+      const json = JSON.parse(content);
+      if (json.description) return cleanSummaryText(json.description);
+    } catch (_) {}
+  }
+
   let fd;
   try {
     fd = fs.openSync(filePath, 'r');
-    const buffer = Buffer.alloc(2048);
-    const bytesRead = fs.readSync(fd, buffer, 0, 2048, 0);
+    const buffer = Buffer.alloc(4096);
+    const bytesRead = fs.readSync(fd, buffer, 0, 4096, 0);
     fs.closeSync(fd);
     fd = null;
 
@@ -72,6 +85,22 @@ function extractFileSummary(filePath, maxLines = 10) {
     const contentStr = contentBuffer.toString('utf8');
     const lines = contentStr.split(/\r?\n/).slice(0, maxLines);
 
+    // Special handling for Markdown files (.md)
+    if (ext === '.md') {
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed) continue;
+        if (trimmed.startsWith('#')) {
+          const headerText = trimmed.replace(/^#+\s*/, '').trim();
+          if (headerText) return cleanSummaryText(headerText);
+        }
+        if (trimmed.startsWith('>')) {
+          const quoteText = trimmed.replace(/^>\s*/, '').trim();
+          if (quoteText) return cleanSummaryText(quoteText);
+        }
+      }
+    }
+
     let commentLines = [];
     let inBlockComment = false;
     let blockCommentType = null; // 'slashStar', 'html', 'python'
@@ -79,13 +108,15 @@ function extractFileSummary(filePath, maxLines = 10) {
     for (let i = 0; i < lines.length; i++) {
       const line = lines[i].trim();
 
-      // Skip empty lines or shebang or directives if comment hasn't started yet
+      // Skip empty lines, shebangs, directives, or top-level require/import statements before comment start
       if (!inBlockComment && commentLines.length === 0) {
         if (!line) continue;
         if (line.startsWith('#!')) continue;
         if (/^['"]use strict['"];?$/i.test(line)) continue;
         if (/^\/\/\s*@ts-(?:nocheck|check)/i.test(line)) continue;
         if (/^\/\*\s*eslint-/i.test(line)) continue;
+        if (/^(?:const|let|var)\s+.*=\s*require\(.*$/i.test(line)) continue;
+        if (/^import\s+.*from\s+.*$/i.test(line)) continue;
       }
 
       // Check block comment start
@@ -159,7 +190,8 @@ function extractFileSummary(filePath, maxLines = 10) {
       // If we encounter code after or without comment, stop
       if (commentLines.length > 0) break;
       if (!line.startsWith('//') && !line.startsWith('#') && !line.startsWith('/*') && !line.startsWith('<!--')) {
-        break;
+        // If code line reached and no comment yet, continue searching a few lines down for JSDoc or module comments
+        continue;
       }
     }
 

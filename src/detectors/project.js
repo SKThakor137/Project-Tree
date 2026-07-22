@@ -1,3 +1,6 @@
+/**
+ * Detects project frameworks, runtimes, languages, package managers, and build tooling.
+ */
 'use strict';
 
 const fs = require('fs');

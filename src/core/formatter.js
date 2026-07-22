@@ -1,3 +1,6 @@
+/**
+ * Formats directory trees into plain text and colorized terminal outputs with aligned summaries.
+ */
 'use strict';
 
 const path = require('path');
@@ -108,7 +111,14 @@ function buildTreeText(node, options = {}, prefix = '', isLast = true, isRoot = 
   const lines = [];
 
   const connector = isRoot ? '' : (isLast ? `${t.last}${t.dash} ` : `${t.tee}${t.dash} `);
-  lines.push(`${prefix}${connector}${renderName(node, { theme, details, includeSummary: true })}`);
+  const baseLine = `${prefix}${connector}${renderName(node, { theme, details, includeSummary: false })}`;
+  
+  let line = baseLine;
+  if (node.summary) {
+    const padLen = Math.max(3, 40 - baseLine.length);
+    line += ' '.repeat(padLen) + `# ${node.summary}`;
+  }
+  lines.push(line);
 
   if (node.children && node.children.length && !node.collapsed) {
     const childPrefix = isRoot ? '' : prefix + (isLast ? t.indent : `${t.pipe}   `);
@@ -156,7 +166,13 @@ function buildColoredTreeText(node, options = {}, prefix = '', isLast = true, is
   );
 
   const baseName = renderName(node, { theme, details, includeSummary: false });
-  const summaryStr = node.summary ? `   ${G}# ${node.summary}${R}` : '';
+  const rawLineLength = `${prefix}${isRoot ? '' : (isLast ? `${t.last}${t.dash} ` : `${t.tee}${t.dash} `)}${baseName}`.length;
+
+  let summaryStr = '';
+  if (node.summary) {
+    const padLen = Math.max(3, 40 - rawLineLength);
+    summaryStr = ' '.repeat(padLen) + `${G}# ${node.summary}${R}`;
+  }
 
   let nameStr;
   if (node.isSensitive) {

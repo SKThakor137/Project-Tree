@@ -1,3 +1,6 @@
+/**
+ * Computes directory tree statistics, language breakdown, and dashboard metrics.
+ */
 'use strict';
 
 const path = require('path');

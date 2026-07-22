@@ -1,3 +1,6 @@
+/**
+ * Detects monorepo workspace configurations, package structures, and root configs.
+ */
 'use strict';
 
 const fs = require('fs');

@@ -1,3 +1,6 @@
+/**
+ * Directory tree scanner module for building project hierarchy nodes.
+ */
 'use strict';
 
 const fs = require('fs');

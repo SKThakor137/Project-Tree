@@ -1,3 +1,6 @@
+/**
+ * Main generator orchestrator — scans directory and generates tree, stats, and markdown exports.
+ */
 'use strict';
 
 const fs = require('fs');

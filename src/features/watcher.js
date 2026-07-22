@@ -1,3 +1,6 @@
+/**
+ * Watches directory for file system changes and triggers real-time tree regeneration.
+ */
 'use strict';
 
 const fs = require('fs');

@@ -1,3 +1,6 @@
+/**
+ * Exports project directory tree structure into Mermaid diagram graph syntax.
+ */
 'use strict';
 
 /** @typedef {import('../core/scanner').ScanNode} ScanNode */

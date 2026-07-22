@@ -1,3 +1,6 @@
+/**
+ * Exports project directory tree structure into JSON format.
+ */
 'use strict';
 
 /** @typedef {import('../core/scanner').ScanNode} ScanNode */

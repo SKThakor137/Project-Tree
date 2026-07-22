@@ -1,3 +1,6 @@
+/**
+ * Exports project directory tree structure as SVG vector diagram image.
+ */
 'use strict';
 
 /** @typedef {import('../core/scanner').ScanNode} ScanNode */

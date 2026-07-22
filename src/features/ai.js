@@ -1,3 +1,6 @@
+/**
+ * Generates AI context documents and AI-ready prompts for LLM assistants.
+ */
 'use strict';
 
 const { detectProject } = require('../detectors/project.js');

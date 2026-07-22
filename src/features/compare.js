@@ -1,3 +1,6 @@
+/**
+ * Compares two project directory trees and calculates structural diff summaries.
+ */
 'use strict';
 
 const fs = require('fs');

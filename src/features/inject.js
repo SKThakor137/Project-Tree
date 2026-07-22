@@ -1,3 +1,6 @@
+/**
+ * Injects generated project tree text into existing Markdown files between HTML comment markers.
+ */
 'use strict';
 
 const fs = require('fs');

@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/** CLI entrypoint and command parser for project-tree-md. */
 'use strict';
 
 const path = require('path');
