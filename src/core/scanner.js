@@ -3,6 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const { isSensitive } = require('../utils/sensitive.js');
+const { extractFileSummary } = require('../features/summarize.js');
 
 /** Default exclusion pattern (kept for backward compatibility). */
 const DEFAULT_EXCLUDE = /node_modules|\.next|\.git|dist|build|coverage|\.turbo/;
@@ -28,6 +29,7 @@ const BINARY_EXTENSIONS = new Set([
  * @property {number}      [size]
  * @property {string}      [ext]
  * @property {string}      [symlinkTarget]
+ * @property {string}      [summary]
  * @property {boolean}     [collapsed]
  * @property {number}      [collapsedCount]
  * @property {ScanNode[]}  [children]  — present for directories
@@ -88,6 +90,7 @@ function compressTree(node) {
  * @param {number}   [options.maxSize]            Skip files larger than bytes.
  * @param {boolean}  [options.compress]           Compress single-child dirs.
  * @param {number}   [options.collapseThreshold]  Collapse dirs with > N children.
+ * @param {boolean}  [options.summarize]          Extract top comment file summary.
  * @returns {ScanNode|null}
  */
 function scan(rootDir, options = {}) {
@@ -100,6 +103,7 @@ function scan(rootDir, options = {}) {
     maxSize        = Infinity,
     compress       = false,
     collapseThreshold = null,
+    summarize      = false,
   } = options;
 
   const absoluteRoot = path.resolve(rootDir);
@@ -139,12 +143,17 @@ function scan(rootDir, options = {}) {
       const binary = isBinaryFile(name);
       if (binary && !includeBinary) return null;
       if (stat.size > maxSize) return null;
-      return {
+      const fileNode = {
         name, path: itemPath, size: stat.size,
         ext: path.extname(name).toLowerCase(),
         isSymlink, symlinkTarget,
         isEmpty: false, isSensitive: false, isBinary: binary,
       };
+      if (summarize && !binary) {
+        const summary = extractFileSummary(itemPath);
+        if (summary) fileNode.summary = summary;
+      }
+      return fileNode;
     }
 
     // Directory node

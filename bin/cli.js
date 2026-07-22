@@ -20,6 +20,7 @@ const { injectIntoFile } = require('../src/features/inject.js');
 const { watchDirectory } = require('../src/features/watcher.js');
 const { compare } = require('../src/features/compare.js');
 const { detectProject } = require('../src/detectors/project.js');
+const { estimateTokens, formatTokenSummary } = require('../src/features/tokens.js');
 
 // ─── Arg Parser ───────────────────────────────────────────────────────────────
 
@@ -30,14 +31,10 @@ function parseArgs(argv) {
     copy: true,
     theme: 'unicode',
     details: false,
-    compress: false,
-    collapseThreshold: null,
-    maxSize: undefined,
-    includeBinary: false,
-    showSensitive: false,
-    noIgnore: false,
-    interactive: false,
+    compress: false,    interactive: false,
     dashboard: false,
+    tokens: false,
+    summarize: false,
     // Modes
     ai: false,
     prompt: false,
@@ -66,6 +63,8 @@ function parseArgs(argv) {
       // New flags
       case '--ai':                     args.ai = true; break;
       case '--prompt':                 args.prompt = true; break;
+      case '--tokens':                 args.tokens = true; break;
+      case '--summarize':              args.summarize = true; break;
       case '--json':                   args.json = true; break;
       case '--html':                   args.html = true; break;
       case '--svg':                    args.svg = true; break;
@@ -116,6 +115,7 @@ ${colors.bold('Output Options:')}
   --no-copy               Do not copy to clipboard
   --theme <name>          Tree theme                   ${colors.gray('(unicode|ascii|emoji|box)')}
   --details               Show file size & extension
+  --summarize             Extract & show inline file comment summaries
   --compress              Compress single-child dirs
   --collapse <n>          Collapse dirs with >n files
   --dashboard             Show rich stats dashboard
@@ -129,6 +129,7 @@ ${colors.bold('Export Formats:')}
 ${colors.bold('AI Features:')}
   --ai                    Generate AI context document
   --prompt                Generate AI-ready prompt
+  --tokens                Output AI context token count & cost estimation
 
 ${colors.bold('Advanced:')}
   --inject <file>         Inject tree into file markers
@@ -199,6 +200,7 @@ function runGenerate(args) {
       collapseThreshold: args.collapseThreshold,
       theme: args.theme,
       details: args.details,
+      summarize: args.summarize,
     });
 
     // Print colorized tree
@@ -208,6 +210,17 @@ function runGenerate(args) {
     // Dashboard
     if (args.dashboard) {
       printDashboard(result.stats);
+    }
+
+    // Token Estimation Summary
+    if (args.tokens) {
+      let targetText = result.markdown;
+      if (args.ai) {
+        targetText = generateAiContext(args.rootDir, result.treeText, result.stats);
+      }
+      const estimatedCount = estimateTokens(targetText);
+      const summaryText = formatTokenSummary(estimatedCount);
+      console.log(`🧮 ${colors.boldCyan(summaryText)}`);
     }
 
     // Export formats
@@ -289,7 +302,7 @@ function runGenerate(args) {
             noIgnore: args.noIgnore, includeBinary: args.includeBinary,
             showSensitive: args.showSensitive, maxSize: args.maxSize,
             compress: args.compress, collapseThreshold: args.collapseThreshold,
-            theme: args.theme, details: args.details,
+            theme: args.theme, details: args.details, summarize: args.summarize,
           });
           const ts = new Date().toLocaleTimeString();
           console.log(`🔄 ${colors.cyan(`Tree updated at ${ts}`)} (${r.statsText})`);

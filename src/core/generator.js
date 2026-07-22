@@ -8,6 +8,7 @@ const { computeStats } = require('./stats.js');
 const { buildIgnoreMatcher } = require('../utils/ignore.js');
 const { toMarkdown } = require('../exporters/markdown.js');
 const { detectProject } = require('../detectors/project.js');
+const { estimateTokens, formatTokenSummary } = require('../features/tokens.js');
 
 /**
  * Main orchestrator — generates everything from a single call.
@@ -25,6 +26,7 @@ const { detectProject } = require('../detectors/project.js');
  * @param {number}   [options.collapseThreshold]
  * @param {string}   [options.theme]
  * @param {boolean}  [options.details]
+ * @param {boolean}  [options.summarize]
  * @param {boolean}  [options.writeFile] - write output file (default true)
  * @returns {Object}
  */
@@ -42,6 +44,7 @@ function generateTree(options = {}) {
     collapseThreshold = null,
     theme       = 'unicode',
     details     = false,
+    summarize   = false,
     writeFile   = true,
   } = options;
 
@@ -57,6 +60,7 @@ function generateTree(options = {}) {
     maxSize: maxSizeBytes,
     compress,
     collapseThreshold,
+    summarize,
   });
 
   if (!tree) throw new Error(`Could not read directory: ${rootDir}`);
@@ -67,6 +71,9 @@ function generateTree(options = {}) {
   const stats = computeStats(tree);
   const projectInfo = detectProject(rootDir);
   const markdown = toMarkdown(treeText, stats, projectInfo);
+
+  const tokens = estimateTokens(markdown);
+  const tokenSummary = formatTokenSummary(tokens);
 
   let outputPath = null;
   if (writeFile) {
@@ -85,6 +92,8 @@ function generateTree(options = {}) {
     markdown,
     outputPath,
     projectInfo,
+    tokens,
+    tokenSummary,
   };
 }
 

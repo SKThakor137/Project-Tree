@@ -65,9 +65,10 @@ function getIcon(node) {
  * @param {Object} opts
  * @param {string}  [opts.theme]
  * @param {boolean} [opts.details]
+ * @param {boolean} [opts.includeSummary]
  * @returns {string}
  */
-function renderName(node, { theme = 'unicode', details = false } = {}) {
+function renderName(node, { theme = 'unicode', details = false, includeSummary = true } = {}) {
   if (node.isSensitive) return `${node.name} (hidden)`;
 
   let name = theme === 'emoji' ? `${getIcon(node)}${node.name}` : node.name;
@@ -81,6 +82,11 @@ function renderName(node, { theme = 'unicode', details = false } = {}) {
     if (node.ext) parts.push(node.ext);
     name += ` (${parts.join(', ')})`;
   }
+
+  if (includeSummary && node.summary) {
+    name += `   # ${node.summary}`;
+  }
+
   return name;
 }
 
@@ -102,7 +108,7 @@ function buildTreeText(node, options = {}, prefix = '', isLast = true, isRoot = 
   const lines = [];
 
   const connector = isRoot ? '' : (isLast ? `${t.last}${t.dash} ` : `${t.tee}${t.dash} `);
-  lines.push(`${prefix}${connector}${renderName(node, { theme, details })}`);
+  lines.push(`${prefix}${connector}${renderName(node, { theme, details, includeSummary: true })}`);
 
   if (node.children && node.children.length && !node.collapsed) {
     const childPrefix = isRoot ? '' : prefix + (isLast ? t.indent : `${t.pipe}   `);
@@ -149,20 +155,23 @@ function buildColoredTreeText(node, options = {}, prefix = '', isLast = true, is
     `${G}${t.pipe}${R}`
   );
 
+  const baseName = renderName(node, { theme, details, includeSummary: false });
+  const summaryStr = node.summary ? `   ${G}# ${node.summary}${R}` : '';
+
   let nameStr;
   if (node.isSensitive) {
     nameStr = `${Y}${node.name} (hidden)${R}`;
   } else if (isRoot) {
-    nameStr = `${BB}${renderName(node, { theme, details })}${R}`;
+    nameStr = `${BB}${baseName}${R}`;
   } else if (node.children !== undefined) {
-    nameStr = `${B}${renderName(node, { theme, details })}${R}`;
+    nameStr = `${B}${baseName}${R}`;
   } else if (node.isSymlink) {
-    nameStr = `${C}${renderName(node, { theme, details })}${R}`;
+    nameStr = `${C}${baseName}${R}`;
   } else {
-    nameStr = `${W}${renderName(node, { theme, details })}${R}`;
+    nameStr = `${W}${baseName}${R}`;
   }
 
-  lines.push(`${coloredPrefix}${connector}${nameStr}`);
+  lines.push(`${coloredPrefix}${connector}${nameStr}${summaryStr}`);
 
   if (node.children && node.children.length && !node.collapsed) {
     const childPrefix = isRoot ? '' : prefix + (isLast ? t.indent : `${t.pipe}   `);

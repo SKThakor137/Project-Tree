@@ -25,6 +25,12 @@ assert(html.includes('📁'), 'Contains folder icon');
 assert(html.includes('project-tree-md'), 'Contains project name');
 assert(html.includes('<style>'), 'Contains embedded styles');
 
+// Interactive search bar assertions
+assert(html.includes('id="treeSearch"'), 'Contains search input bar');
+assert(html.includes('id="searchStats"'), 'Contains search stats counter');
+assert(html.includes('<script>'), 'Contains embedded vanilla JS filtering script');
+assert(html.includes('searchInput.addEventListener'), 'Contains search event listener');
+
 // With stats
 const { computeStats } = require('../src/core/stats.js');
 const stats = computeStats(tree);

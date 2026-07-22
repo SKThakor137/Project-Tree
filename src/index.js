@@ -22,6 +22,8 @@ const { generateAiContext, generateAiPrompt } = require('./features/ai.js');
 const { injectIntoFile } = require('./features/inject.js');
 const { compare } = require('./features/compare.js');
 const { detectMonorepo, formatWorkspaceSummary } = require('./features/monorepo.js');
+const { estimateTokens, calculateCost, formatTokenSummary } = require('./features/tokens.js');
+const { extractFileSummary } = require('./features/summarize.js');
 
 module.exports = {
   // Core (backward-compatible)
@@ -47,4 +49,8 @@ module.exports = {
   compare,
   detectMonorepo,
   formatWorkspaceSummary,
+  estimateTokens,
+  calculateCost,
+  formatTokenSummary,
+  extractFileSummary,
 };

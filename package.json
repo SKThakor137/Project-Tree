@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "test": "node bin/cli.js",
-    "test:all": "node tests/scanner.test.js & node tests/formatter.test.js & node tests/ignore.test.js & node tests/json.test.js & node tests/mermaid.test.js & node tests/html.test.js & node tests/svg.test.js & node tests/compare.test.js",
+    "test:all": "node tests/scanner.test.js && node tests/formatter.test.js && node tests/ignore.test.js && node tests/json.test.js && node tests/mermaid.test.js && node tests/html.test.js && node tests/svg.test.js && node tests/compare.test.js && node tests/tokens.test.js && node tests/summarize.test.js",
     "test:scanner": "node tests/scanner.test.js",
     "test:formatter": "node tests/formatter.test.js",
     "test:ignore": "node tests/ignore.test.js",
@@ -22,7 +22,9 @@
     "test:mermaid": "node tests/mermaid.test.js",
     "test:html": "node tests/html.test.js",
     "test:svg": "node tests/svg.test.js",
-    "test:compare": "node tests/compare.test.js"
+    "test:compare": "node tests/compare.test.js",
+    "test:tokens": "node tests/tokens.test.js",
+    "test:summarize": "node tests/summarize.test.js"
   },
   "keywords": [
     "tree",
