@@ -25,6 +25,7 @@ const { estimateTokens, formatTokenSummary } = require('../src/features/tokens.j
 const { generateArchitectureFlow } = require('../src/core/architectureFlow.js');
 const { generateBundle } = require('../src/features/bundle.js');
 const { exportReports } = require('../src/features/exporter.js');
+const { toArchitectureFlowHtml } = require('../src/exporters/architectureFlowHtml.js');
 
 // ─── Arg Parser ───────────────────────────────────────────────────────────────
 
@@ -151,7 +152,7 @@ ${colors.bold('Output Options:')}
   -L, --depth <n>         Max depth to traverse        ${colors.gray('(default: unlimited)')}
   -I, --exclude <regex>   Custom exclude pattern       ${colors.gray('(default: standard ignores)')}
   --no-copy               Do not copy to clipboard
-  --theme <name>          Tree theme                   ${colors.gray('(unicode|ascii|emoji|box)')}
+  --theme <name>          Tree theme                   ${colors.gray('(default: emoji) (unicode|ascii|emoji|box)')}
   --details               Show file size & extension
   --summarize             Extract & show inline file comment summaries
   --flow                  Generate architecture execution flow & role map
@@ -193,7 +194,7 @@ function runInteractive() {
       reportChoice = (await ask(`  Reports to include [all / md,json,html,svg,ai,health] ${colors.gray('(all)')}: `)) || 'all';
     }
     const out = (await ask(`  Output file ${colors.gray('(PROJECT_STRUCTURE.md)')}: `)) || 'PROJECT_STRUCTURE.md';
-    const theme = (await ask(`  Theme [unicode/ascii/emoji/box] ${colors.gray('(unicode)')}: `)) || 'unicode';
+    const theme = (await ask(`  Theme [unicode/ascii/emoji/box] ${colors.gray('(emoji)')}: `)) || 'emoji';
 
     rl.close();
 
@@ -246,10 +247,20 @@ function runGenerate(args) {
     // Print colorized tree
     console.log('\n' + result.coloredTreeText + '\n');
 
+    const outDir = args.outputDir
+      ? (path.isAbsolute(args.outputDir) ? args.outputDir : path.join(rootDir, args.outputDir))
+      : rootDir;
+
     // Architecture Flow Output
     if (args.flow) {
       const flowRes = result.flowResult || generateArchitectureFlow(rootDir, result.tree);
       console.log(flowRes.coloredFlowText + '\n');
+
+      // Generate Architecture Flow HTML
+      const flowHtml = toArchitectureFlowHtml(flowRes, result.tree.name);
+      const flowHtmlPath = path.join(outDir, 'ARCHITECTURE_FLOW.html');
+      fs.writeFileSync(flowHtmlPath, flowHtml, 'utf8');
+      console.log(colors.success(`Architecture Flow HTML exported to ${path.relative(process.cwd(), flowHtmlPath)}`));
     }
 
     console.log(`📊 ${colors.bold('Stats:')} ${result.statsText}`);
@@ -269,10 +280,6 @@ function runGenerate(args) {
       const summaryText = formatTokenSummary(estimatedCount);
       console.log(`🧮 ${colors.boldCyan(summaryText)}`);
     }
-
-    const outDir = args.outputDir
-      ? (path.isAbsolute(args.outputDir) ? args.outputDir : path.join(rootDir, args.outputDir))
-      : rootDir;
 
     const baseOutName = args.outputFile ? path.basename(args.outputFile) : 'PROJECT_STRUCTURE.md';
 

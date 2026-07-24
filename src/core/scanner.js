@@ -155,7 +155,18 @@ function scan(rootDir, options = {}) {
         isEmpty: false, isSensitive: false, isBinary: binary,
       };
 
-      if (options.architecture && !binary && stat.size < 500000) { // Only parse if enabled
+      // Count lines for non-binary files under 1MB (for --details display)
+      if (!binary && stat.size < 1024 * 1024) {
+        try {
+          const content = fs.readFileSync(itemPath, 'utf8');
+          fileNode.lineCount = content.split('\n').length;
+
+          if (options.architecture && stat.size < 500000) {
+            fileNode.parsed = parseFile(content, itemPath);
+            fileNode.relPath = path.relative(absoluteRoot, itemPath).replace(/\\/g, '/');
+          }
+        } catch (_) {}
+      } else if (options.architecture && !binary && stat.size < 500000) {
         try {
           const content = fs.readFileSync(itemPath, 'utf8');
           fileNode.parsed = parseFile(content, itemPath);
@@ -195,16 +206,6 @@ function scan(rootDir, options = {}) {
       }
 
       node.isEmpty = children.length === 0;
-
-      // Smart collapse for large directories
-      if (collapseThreshold !== null && children.length > collapseThreshold) {
-        const fileCount = countFiles(children);
-        node.children = [];
-        node.collapsed = true;
-        node.collapsedCount = fileCount;
-        return node;
-      }
-
       node.children = children;
       return node;
     }
@@ -212,9 +213,14 @@ function scan(rootDir, options = {}) {
     return null;
   }
 
-  const root = buildNode(absoluteRoot, 0);
+  let root = buildNode(absoluteRoot, 0);
   if (!root) return null;
-  return compress ? compressTree(root) : root;
+
+  // Post-processing: compress first (merge single-child dirs), then collapse
+  if (compress) root = compressTree(root);
+  if (collapseThreshold !== null) root = collapseTree(root, collapseThreshold);
+
+  return root;
 }
 
 /** Count all file descendants (non-directory nodes). */
@@ -227,4 +233,34 @@ function countFiles(nodes) {
   return count;
 }
 
-module.exports = { scan, isBinaryFile, parseSize, compressTree, DEFAULT_EXCLUDE, BINARY_EXTENSIONS };
+/**
+ * Collapse directories that have more than `threshold` direct children.
+ * @param {ScanNode} node
+ * @param {number} threshold
+ * @returns {ScanNode}
+ */
+function collapseTree(node, threshold) {
+  if (!node.children) return node;
+
+  // Recursively collapse children first
+  const processedChildren = node.children.map(c => collapseTree(c, threshold));
+
+  // Count only direct file children (not subdirectories)
+  const directFileCount = processedChildren.filter(c => !c.children).length;
+
+  // Collapse if total direct children exceed threshold
+  if (processedChildren.length > threshold) {
+    const fileCount = countFiles(processedChildren);
+    return {
+      ...node,
+      children: [],
+      collapsed: true,
+      collapsedCount: fileCount,
+    };
+  }
+
+  return { ...node, children: processedChildren };
+}
+
+module.exports = { scan, isBinaryFile, parseSize, compressTree, collapseTree, DEFAULT_EXCLUDE, BINARY_EXTENSIONS };
+

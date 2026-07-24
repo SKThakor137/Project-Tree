@@ -28,6 +28,7 @@ const { generateArchitectureFlow, detectFrameworkRole } = require('./core/archit
 const { createZip } = require('./utils/zip.js');
 const { generateBundle, compileAllReports } = require('./features/bundle.js');
 const { exportReports } = require('./features/exporter.js');
+const { toArchitectureFlowHtml } = require('./exporters/architectureFlowHtml.js');
 
 module.exports = {
   // Core (backward-compatible)
@@ -47,6 +48,7 @@ module.exports = {
   toHtml,
   toSvg,
   toMermaid,
+  toArchitectureFlowHtml,
 
   // Features
   generateAiContext,

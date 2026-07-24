@@ -226,6 +226,14 @@ function extractFileSummary(filePath, maxLines = 35) {
       }
     } catch (_) {}
 
+    // Fallback 2: Filename pattern matching
+    const nameDesc = getDescriptionByFilename(fileName);
+    if (nameDesc) return `[Auto] ${nameDesc}`;
+
+    // Fallback 3: Extension-based description
+    const extDesc = getDescriptionByExtension(ext);
+    if (extDesc) return `[Auto] ${extDesc}`;
+
     return null;
   } catch (_) {
     return null;
@@ -236,7 +244,121 @@ function extractFileSummary(filePath, maxLines = 35) {
   }
 }
 
+// ─── Filename Pattern Descriptions ────────────────────────────────────────────
+
+const FILENAME_DESCRIPTIONS = [
+  [/^package\.json$/i, 'Node.js package manifest and dependency list.'],
+  [/^package-lock\.json$/i, 'Locked dependency version tree.'],
+  [/^yarn\.lock$/i, 'Yarn locked dependency versions.'],
+  [/^pnpm-lock\.yaml$/i, 'pnpm locked dependency versions.'],
+  [/^tsconfig[^/]*\.json$/i, 'TypeScript compiler configuration.'],
+  [/^jsconfig[^/]*\.json$/i, 'JavaScript project configuration.'],
+  [/^\.env/i, 'Environment variables configuration.'],
+  [/^\.gitignore$/i, 'Git ignore rules.'],
+  [/^\.npmignore$/i, 'npm publish ignore rules.'],
+  [/^\.eslintrc/i, 'ESLint linting configuration.'],
+  [/^\.prettierrc/i, 'Prettier formatting configuration.'],
+  [/^\.babelrc$/i, 'Babel transpiler configuration.'],
+  [/^\.browserslistrc$/i, 'Browser compatibility targets.'],
+  [/^readme/i, 'Project documentation and overview.'],
+  [/^license/i, 'Software license file.'],
+  [/^changelog/i, 'Version history and release notes.'],
+  [/^contributing/i, 'Contribution guidelines.'],
+  [/^dockerfile/i, 'Docker container build instructions.'],
+  [/^docker-compose/i, 'Multi-container Docker orchestration.'],
+  [/^makefile$/i, 'Build automation rules.'],
+  [/^procfile$/i, 'Process type declarations.'],
+  [/^jest\.config/i, 'Jest test framework configuration.'],
+  [/^vitest\.config/i, 'Vitest test framework configuration.'],
+  [/^webpack\.config/i, 'Webpack bundler configuration.'],
+  [/^rollup\.config/i, 'Rollup bundler configuration.'],
+  [/^postcss\.config/i, 'PostCSS processing configuration.'],
+  [/^tailwind\.config/i, 'Tailwind CSS configuration.'],
+  [/^vite\.config/i, 'Vite build tool configuration.'],
+  [/^next\.config/i, 'Next.js framework configuration.'],
+  [/^nuxt\.config/i, 'Nuxt.js framework configuration.'],
+  [/^svelte\.config/i, 'Svelte framework configuration.'],
+  [/^angular\.json$/i, 'Angular workspace configuration.'],
+  [/^manifest\.json$/i, 'App manifest metadata.'],
+  [/\.test\.(js|ts|jsx|tsx)$/i, 'Unit test file.'],
+  [/\.spec\.(js|ts|jsx|tsx)$/i, 'Test specification file.'],
+  [/\.stories\.(js|ts|jsx|tsx)$/i, 'Storybook component story.'],
+  [/\.module\.css$/i, 'CSS module scoped styles.'],
+  [/\.d\.ts$/i, 'TypeScript type declarations.'],
+  [/^seed\.(js|ts)$/i, 'Database seed data script.'],
+  [/^migrate/i, 'Database migration script.'],
+  [/^schema\.(prisma|graphql|gql)$/i, 'Database/API schema definition.'],
+];
+
+function getDescriptionByFilename(fileName) {
+  for (const [pattern, desc] of FILENAME_DESCRIPTIONS) {
+    if (pattern.test(fileName)) return desc;
+  }
+  return null;
+}
+
+// ─── Extension-Based Descriptions ─────────────────────────────────────────────
+
+const EXTENSION_DESCRIPTIONS = {
+  '.js': 'JavaScript source file.',
+  '.jsx': 'React JSX component file.',
+  '.ts': 'TypeScript source file.',
+  '.tsx': 'React TSX component file.',
+  '.mjs': 'ES module JavaScript file.',
+  '.cjs': 'CommonJS module file.',
+  '.vue': 'Vue single-file component.',
+  '.svelte': 'Svelte component file.',
+  '.css': 'Stylesheet.',
+  '.scss': 'SCSS stylesheet.',
+  '.sass': 'Sass stylesheet.',
+  '.less': 'Less stylesheet.',
+  '.html': 'HTML document.',
+  '.htm': 'HTML document.',
+  '.json': 'JSON data file.',
+  '.yaml': 'YAML configuration file.',
+  '.yml': 'YAML configuration file.',
+  '.toml': 'TOML configuration file.',
+  '.xml': 'XML data file.',
+  '.md': 'Markdown document.',
+  '.mdx': 'MDX document (Markdown + JSX).',
+  '.py': 'Python source file.',
+  '.go': 'Go source file.',
+  '.rs': 'Rust source file.',
+  '.java': 'Java source file.',
+  '.rb': 'Ruby source file.',
+  '.php': 'PHP source file.',
+  '.c': 'C source file.',
+  '.cpp': 'C++ source file.',
+  '.h': 'C/C++ header file.',
+  '.hpp': 'C++ header file.',
+  '.sh': 'Shell script.',
+  '.bash': 'Bash shell script.',
+  '.ps1': 'PowerShell script.',
+  '.sql': 'SQL database script.',
+  '.graphql': 'GraphQL schema/query file.',
+  '.gql': 'GraphQL schema/query file.',
+  '.prisma': 'Prisma database schema.',
+  '.env': 'Environment variables.',
+  '.svg': 'SVG vector graphic.',
+  '.png': 'PNG image.',
+  '.jpg': 'JPEG image.',
+  '.gif': 'GIF image.',
+  '.webp': 'WebP image.',
+  '.ico': 'Favicon icon.',
+  '.woff': 'Web font file.',
+  '.woff2': 'Web font file (WOFF2).',
+  '.ttf': 'TrueType font file.',
+  '.pdf': 'PDF document.',
+  '.lock': 'Dependency lock file.',
+};
+
+function getDescriptionByExtension(ext) {
+  return EXTENSION_DESCRIPTIONS[ext] || null;
+}
+
 module.exports = {
   extractFileSummary,
   cleanSummaryText,
+  getDescriptionByFilename,
+  getDescriptionByExtension,
 };

@@ -82,7 +82,7 @@ function renderName(node, { theme = 'unicode', details = false, includeSummary =
 
   if (details && !node.children && node.size !== undefined) {
     const parts = [formatSize(node.size)];
-    if (node.ext) parts.push(node.ext);
+    if (node.lineCount) parts.push(`${node.lineCount} lines`);
     name += ` (${parts.join(', ')})`;
   }
 

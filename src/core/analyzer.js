@@ -237,10 +237,30 @@ function buildArchitectureGraph(parsedFiles) {
     });
   });
 
-  // Detect Dead Code
+  // Detect Dead Code (excluding config/meta files that are used by tools, not imports)
+  const CONFIG_FILE_PATTERNS = [
+    /^package\.json$/i, /^package-lock\.json$/i, /^yarn\.lock$/i, /^pnpm-lock\.yaml$/i,
+    /^tsconfig[^/]*\.json$/i, /^jsconfig[^/]*\.json$/i,
+    /\.config\.(js|ts|mjs|cjs)$/i, /\.config\.(json|yaml|yml|toml)$/i,
+    /^\.env/i, /^\.gitignore$/i, /^\.npmignore$/i, /^\.eslintrc/i, /^\.prettierrc/i, /^\.babelrc/i,
+    /^README/i, /^LICENSE/i, /^CHANGELOG/i, /^CONTRIBUTING/i, /^CODE_OF_CONDUCT/i,
+    /^Dockerfile/i, /^docker-compose/i, /^Makefile$/i, /^Procfile$/i,
+    /^jest\.config/i, /^vitest\.config/i, /^webpack\.config/i, /^rollup\.config/i,
+    /^postcss\.config/i, /^tailwind\.config/i, /^vite\.config/i, /^next\.config/i,
+    /^nuxt\.config/i, /^svelte\.config/i, /^angular\.json$/i,
+    /^PROJECT_STRUCTURE/i, /^AI_CONTEXT/i, /^AI_PROMPT/i,
+    /\.lock$/i, /\.db$/i, /\.db-shm$/i, /\.db-wal$/i,
+    /^manifest\.json$/i, /^\.browserslistrc$/i,
+  ];
+
+  function isConfigFile(relPath) {
+    const baseName = path.basename(relPath);
+    return CONFIG_FILE_PATTERNS.some(p => p.test(baseName));
+  }
+
   parsedFiles.forEach(pf => {
     const usage = graph.usage[pf.relPath];
-    if (usage && usage.count === 0 && !pf.relPath.includes('index.') && !pf.relPath.includes('main.') && !pf.relPath.includes('app.')) {
+    if (usage && usage.count === 0 && !pf.relPath.includes('index.') && !pf.relPath.includes('main.') && !pf.relPath.includes('app.') && !isConfigFile(pf.relPath)) {
       graph.deadCode.files.push(pf.relPath);
       if (pf.parsed.components && pf.parsed.components.length > 0) {
         graph.deadCode.components.push(...pf.parsed.components.map(c => `${pf.relPath}::${c}`));

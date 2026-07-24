@@ -48,7 +48,7 @@ function generateTree(options = {}) {
     maxSize,
     compress    = false,
     collapseThreshold = null,
-    theme       = 'unicode',
+    theme       = 'emoji',
     details     = false,
     summarize   = false,
     flow        = false,
