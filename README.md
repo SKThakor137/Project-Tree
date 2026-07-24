@@ -4,8 +4,8 @@
   </a>
   <h1 align="center">🌳 project-tree-md</h1>
   <p align="center">
-    <strong>The Ultimate AI-Ready Project Analysis & Export Suite</strong><br>
-    <em>Generate Markdown, JSON, HTML, SVG, Mermaid, ZIP Bundles & AI Context in 1-Second. Zero Dependencies.</em>
+    <strong>The Ultimate AI-Ready Project Analysis, Architecture & Visualizer Suite</strong><br>
+    <em>Generate Interactive Code Graphs, Markdown, JSON, HTML, SVG, Mermaid, ZIP Bundles & AI Context in 1-Second. Zero Dependencies.</em>
   </p>
   <p align="center">
     <a href="https://www.npmjs.com/package/project-tree-md"><img src="https://img.shields.io/npm/v/project-tree-md.svg?style=for-the-badge&color=58a6ff" alt="npm version" /></a>
@@ -18,9 +18,9 @@
 
 <p align="center">
   <a href="#-quick-start">Quick Start</a> •
+  <a href="#-universal-code-relationship-visualizer----visualize">Interactive Code Graph</a> •
   <a href="#-why-project-tree-md">Why Us?</a> •
   <a href="#-bundle-export-workflow---bundle">ZIP Bundles</a> •
-  <a href="#-html-download-center---html">HTML Dashboard</a> •
   <a href="#-architecture-flow-engine---flow">Architecture Flow</a> •
   <a href="#-programmatic-api">API Usage</a>
 </p>
@@ -35,6 +35,48 @@ Run a complete codebase analysis and generate `PROJECT_STRUCTURE.md` immediately
 npx project-tree-md
 ```
 
+Generate a standalone **Interactive Code Relationship Graph HTML** (`CODE_GRAPH.html`):
+
+```bash
+npx project-tree-md --visualize
+```
+
+---
+
+## 🌐 Universal Code Relationship Visualizer (`--visualize`)
+
+Transform any codebase into a dynamic, interactive canvas graph showing complete architecture, dependency graphs, state flows, hooks, models, and service relationships!
+
+```bash
+npx project-tree-md --visualize
+```
+
+```
+                     App.jsx (React)
+                  /         |        \
+                 ▼          ▼         ▼
+             Header     Sidebar   AuthContext
+               │            │         │
+               ▼            ▼         ▼
+           UserMenu      NavList   useAuth()
+                                      │
+                                      ▼
+                                userService.js (API)
+```
+
+### ⚡ Visualizer Highlights
+
+* 🎨 **5 Layout Engines**: Switch on-the-fly between **DAG (Sugiyama)**, **Force-Directed (Barnes-Hut)**, **Tree**, **Radial**, and **Horizontal Flow**.
+* 🚀 **Multi-Language Support**: Framework-agnostic parsing for **20+ languages and frameworks** (React, Next.js, Vue, Angular, Svelte, Laravel, PHP, Node.js, Express, NestJS, Flutter, Dart, React Native, Python, Django, FastAPI, Java, Spring Boot, .NET/C#, Go, Rust).
+* ⚡ **High-Performance Canvas Rendering**: Virtual viewport rendering scales smoothly to 10,000+ nodes at 60 FPS.
+* 🔍 **Real-Time Instant Search**: Live query filtering with search count badges and auto-centering (`Ctrl+F`).
+* 🔍 **Interactive Minimap & Viewport**: Live bird's-eye minimap with draggable viewport rectangle.
+* 📑 **Slide-out Detail Panel**: Click any node to inspect code metrics, file size, line counts, incoming imports, outgoing exports, component dependencies, and raw JSON schema.
+* 🎯 **Node Expand/Collapse & Pinning**: Deeply inspect subtree branches or double-click to collapse complex sub-modules.
+* 🖱️ **Context Menu & Keyboard Shortcuts**: Right-click context actions (`E`/`C` expand/collapse, `F` fullscreen, `0` fit view, `Ctrl+Z`/`Ctrl+Y` undo/redo, `Ctrl+S` export).
+* 🌙 **Dark & Light Glassmorphism Themes**: Sleek UI with custom HSL badges, seamless theme toggle, and print optimization.
+* 📷 **PNG & JSON Export**: Export high-res vector PNG diagrams or raw `CODE_GRAPH.json` models for downstream processing.
+
 ---
 
 ## 🔥 Why `project-tree-md`?
@@ -46,23 +88,24 @@ Most directory tree generators only print basic text folders. **`project-tree-md
                   │           npx project-tree-md                │
                   └──────────────────────┬───────────────────────┘
                                          │
-       ┌──────────────────┬──────────────┼──────────────┬──────────────────┐
-       │                  │              │              │                  │
- 📄 Markdown Tree   📊 JSON & SVG   📦 ZIP Bundle  🤖 AI Context   🌐 HTML Dashboard
+       ┌──────────────────┬──────────────┼──────────────┬──────────────────┬──────────────────┐
+       │                  │              │              │                  │                  │
+ 🌐 Code Visualizer 📄 Markdown Tree 📊 JSON & SVG  📦 ZIP Bundle  🤖 AI Context   🌐 HTML Dashboard
 ```
 
 ### ⚡ Key Capabilities
 
-* 📦 **ZIP Analysis Bundles (`--bundle`)**: Export up to 19 analysis reports (Markdown, JSON, HTML, SVG, Mermaid, AI Context, Health Metrics, Component Maps, Dead Code) packaged into a single `project-analysis.zip` file with customizable report filtering.
-* 💻 **In-Browser HTML Download Center (`--html`)**: Generates an interactive, standalone HTML dashboard with real-time sticky search, folder auto-expand, Dark/Light mode, print optimization, and **1-click browser ZIP & file downloads** (zero backend needed!).
-* ⚡ **Architecture Flow Engine (`--flow`)**: Scans imports across **JavaScript/TypeScript**, **Python**, **Go**, **PHP**, **C/C++**, and **React/Next.js** to construct a route → controller → service execution flow map with framework role detection.
-* 🧹 **Dead Code & Circular Dependency Detection (`--architecture`)**: Scans AST declarations to spot unused files, dead components, cyclomatic complexity scores, and circular import loops.
-* 🤖 **AI-Ready Context & Token Counter (`--ai`, `--tokens`)**: Generates structured prompt documents for LLMs with token estimation and GPT-4o input cost calculations.
-* 📝 **File Comment Summarizer (`--summarize`)**: Parses top file comment headers inline to describe module purposes right next to file trees.
-* 🎨 **4 Visual Themes**: Switch between `unicode` (default), `ascii`, `emoji`, and `box` themes.
+* 🌐 **Universal Code Relationship Visualizer (`--visualize`)**: Generate standalone HTML canvas visualizers for codebases in 20+ programming languages.
+* 📋 **Graph JSON Export (`--graph-json`)**: Output structured node and edge relationship models for complete graph reconstruction.
+* 📦 **ZIP Analysis Bundles (`--bundle`)**: Export up to 20 analysis reports (Markdown, Interactive Graph, JSON, HTML, SVG, Mermaid, AI Context, Health Metrics, Component Maps, Dead Code) into a single `project-analysis.zip` archive.
+* 💻 **In-Browser HTML Download Center (`--html`)**: Standalone HTML dashboard with sticky real-time search, Dark/Light mode, and 1-click browser ZIP file downloads.
+* ⚡ **Architecture Flow Engine (`--flow`)**: Scans imports across JS/TS, Python, Go, PHP, C/C++, and React/Next.js to construct execution flow maps.
+* 🧹 **Dead Code & Circular Dependency Detection (`--architecture`)**: Detects unused files, dead components, cyclomatic complexity, and circular import loops.
+* 🤖 **AI-Ready Context & Token Counter (`--ai`, `--tokens`)**: Generates structured prompt documents for LLMs with token estimation and cost calculations.
+* 📝 **File Comment Summarizer (`--summarize`)**: Parses top file headers inline to describe module purposes right next to file trees.
 * 📁 **Monorepo & 30+ Stack Auto-Detection**: Native support for TurboRepo, Nx, pnpm, Yarn, Lerna, Docker, CI/CD, React, Vue, Angular, Svelte, Next.js, and more.
 * 🔒 **Gitignore & Sensitive File Shield**: Automatically respects `.gitignore`, `.npmignore`, and masks `.env`, secrets, and private keys.
-* ⚡ **Zero Runtime Dependencies**: Built 100% with Node.js standard modules (`zlib`, `fs`, `path`). Ultra-fast, lightweight, and safe.
+* ⚡ **Zero Runtime Dependencies**: Built 100% with Node.js standard modules. Ultra-fast, lightweight, and safe.
 
 ---
 
@@ -70,6 +113,8 @@ Most directory tree generators only print basic text folders. **`project-tree-md
 
 | Feature | `project-tree-md` | `tree` (Unix) | `tree-cli` | `directory-tree` |
 | :--- | :---: | :---: | :---: | :---: |
+| **Interactive Code Visualizer** | ✅ **Canvas HTML** | ❌ No | ❌ No | ❌ No |
+| **Universal Graph JSON** | ✅ **Built-in** | ❌ No | ❌ No | ❌ No |
 | **Markdown Export** | ✅ **Built-in** | ❌ No | ❌ No | ❌ No |
 | **Zero Dependencies** | ✅ **100% Zero** | ✅ System | ❌ Heavy | ❌ Heavy |
 | **ZIP Bundle Export** | ✅ **1-Click ZIP** | ❌ No | ❌ No | ❌ No |
@@ -85,52 +130,59 @@ Most directory tree generators only print basic text folders. **`project-tree-md
 
 ## ⚡ Quick Examples & Commands
 
-### 1. Default Run (Generates `PROJECT_STRUCTURE.md`)
+### 1. Interactive Code Relationship Visualizer
+```bash
+# Generate CODE_GRAPH.html
+npx project-tree-md --visualize
+
+# Export Universal Graph Model JSON
+npx project-tree-md --graph-json
+
+# Export both HTML graph and JSON
+npx project-tree-md --visualize --graph-json
+```
+
+### 2. Default Run (Generates `PROJECT_STRUCTURE.md`)
 ```bash
 npx project-tree-md
 ```
 
-### 2. Generate Full ZIP Analysis Bundle
+### 3. Generate Full ZIP Analysis Bundle
 ```bash
-# Package all reports into project-analysis.zip
+# Package all reports (including CODE_GRAPH.html & JSON) into project-analysis.zip
 npx project-tree-md --bundle
 
-# Custom ZIP containing only HTML, JSON & SVG reports
-npx project-tree-md --bundle html,json,svg
+# Custom ZIP containing only graph, HTML, JSON & SVG reports
+npx project-tree-md --bundle graph,html,json,svg
 
 # Target custom output folder
 npx project-tree-md --bundle --output-dir dist/reports/
 ```
 
-### 3. Selective Format Exports
+### 4. Selective Format Exports
 ```bash
 # Export only HTML, JSON, and SVG files
 npx project-tree-md --export html,json,svg --output-dir reports/
 
-# Export all 19 individual reports into folder
+# Export all individual reports into folder
 npx project-tree-md --export-all
 ```
 
-### 4. Architecture Execution Flow & Role Mapping
+### 5. Architecture Execution Flow & Role Mapping
 ```bash
 npx project-tree-md --flow
 ```
 
-### 5. AI LLM Context Generation & Token Estimation
+### 6. AI LLM Context Generation & Token Estimation
 ```bash
 npx project-tree-md --ai --tokens
-```
-
-### 6. Interactive Setup Wizard
-```bash
-npx project-tree-md -i
 ```
 
 ---
 
 ## 📦 Bundle Export System (`--bundle`)
 
-Generate a comprehensive project analysis package containing up to 19 report files:
+Generate a comprehensive project analysis package containing up to 20 report files:
 
 ```bash
 npx project-tree-md --bundle --output-dir reports/
@@ -139,6 +191,8 @@ npx project-tree-md --bundle --output-dir reports/
 ```text
 project-analysis.zip
 │
+├── CODE_GRAPH.html           # Interactive Code Relationship Graph Visualizer
+├── CODE_GRAPH.json           # Universal Graph JSON Model
 ├── PROJECT_STRUCTURE.md      # Standard Markdown project tree
 ├── PROJECT_STRUCTURE.json    # Full JSON tree hierarchy & metadata
 ├── PROJECT_STRUCTURE.html    # Interactive HTML Dashboard & Download Center
@@ -160,93 +214,6 @@ project-analysis.zip
 └── manifest.json             # Bundle metadata & timestamp
 ```
 
-### Terminal Output Summary
-
-```text
-📦 Bundle Generated Successfully
-
-Location:
-project-analysis.zip
-
-Reports Included in ZIP:
-  ✓ PROJECT_STRUCTURE.html
-  ✓ PROJECT_STRUCTURE.json
-  ✓ PROJECT_STATS.json
-  ✓ manifest.json
-
-Total Files: 4
-Bundle Size: 0.02 MB
-✅ Project structure written to PROJECT_STRUCTURE.md
-```
-
----
-
-## 💻 Interactive HTML Download Center (`--html`)
-
-Upgrade your project tree into a web dashboard:
-
-```bash
-npx project-tree-md --html
-```
-
-### Dashboard Highlights
-
-* **Checkboxes & Custom ZIP Builder**: Select which report formats you want in your ZIP archive directly from the UI.
-* **1-Click Downloads**: Download Markdown, JSON, SVG, Mermaid, AI Context, or ZIP bundles with zero server requirements.
-* **Sticky Real-Time Search**: Search bar (`/` shortcut) filters files instantly and auto-expands parent folder trees.
-* **Architecture Inspector**: Click any file to inspect incoming imports, outgoing exports, component usages, and dead code alerts.
-* **Dark / Light Mode**: Seamless theme switching (`D` shortcut).
-* **Print Optimized**: Clean `@media print` rules for instant PDF saving (`P` shortcut).
-
----
-
-## ⚡ Architecture Flow Engine (`--flow`)
-
-Map execution flows across **JavaScript/TypeScript**, **Python**, **Go**, **PHP**, **C/C++**, and **React/Next.js**:
-
-```bash
-npx project-tree-md --flow
-```
-
-```text
-📦 Global Application Architecture Flow
-│
-└── 🌐 [ROUTE] src/routes/user.routes.js ───────────────────────── [2.1 KB] ──> Type: Route/Endpoint
-    └── ⚙️ [CONTROLLER] src/controllers/user.controller.js ─────── [4.5 KB] ──> Type: Controller (1 call)
-        ├── 🛡️ [MIDDLEWARE] src/middlewares/auth.middleware.js ─── [1.8 KB] ──> Type: Middleware
-        └── 💼 [SERVICE] src/services/user.service.js ──────────── [6.2 KB] ──> Type: Business Logic
-```
-
----
-
-## 🎨 Tree Themes
-
-### Unicode (Default)
-```text
-project-tree-md
-├── bin
-│   └── cli.js
-├── src
-│   ├── core
-│   │   ├── scanner.js
-│   │   └── formatter.js
-│   └── index.js
-└── package.json
-```
-
-### Emoji (`--theme emoji`)
-```text
-📁 project-tree-md
-├── 📁 bin
-│   └── 📄 cli.js
-├── 📁 src
-│   ├── 📁 core
-│   │   ├── 📄 scanner.js
-│   │   └── 📄 formatter.js
-│   └── 📄 index.js
-└── 📄 package.json
-```
-
 ---
 
 ## 🎯 Complete CLI Options
@@ -258,9 +225,13 @@ Usage:
   npx project-tree-md [options]
   npx project-tree-md compare <pathA> <pathB>
 
+Visualizer & Graph Options:
+  --visualize, --graph    Generate interactive Code Relationship Graph HTML (CODE_GRAPH.html)
+  --graph-json            Export universal graph model JSON (CODE_GRAPH.json)
+
 Bundle & Export System:
-  --bundle [list]         Generate ZIP package with all or selected reports (e.g. --bundle html,json,svg)
-  --export [list]         Export selected reports to directory (e.g. --export html,json)
+  --bundle [list]         Generate ZIP package with all or selected reports (e.g. --bundle graph,html,json)
+  --export [list]         Export selected reports to directory (e.g. --export graph,html,json)
   --export-all            Export all individual analysis reports
   --output-dir <dir>      Output directory for exports and ZIP bundles
   --no-write, --stdout    Print to console without writing default output files
@@ -304,6 +275,10 @@ Integrate `project-tree-md` into your build tools, scripts, or CI/CD pipelines:
 ```javascript
 const {
   generateTree,
+  generateUniversalGraph,
+  toGraphVisualizerHtml,
+  toGraphJson,
+  fromGraphJson,
   generateBundle,
   exportReports,
   createZip,
@@ -311,7 +286,14 @@ const {
   estimateTokens,
 } = require('project-tree-md');
 
-// 1. Generate full tree
+// 1. Generate Universal Graph Model & Interactive HTML Visualizer
+const graphModel = generateUniversalGraph(process.cwd());
+const graphHtml = toGraphVisualizerHtml(graphModel, 'My Project');
+const graphJson = toGraphJson(graphModel);
+
+console.log(`Graph Nodes: ${graphModel.nodes.length}, Edges: ${graphModel.edges.length}`);
+
+// 2. Generate full tree
 const result = generateTree({
   rootDir: process.cwd(),
   flow: true,
@@ -319,30 +301,16 @@ const result = generateTree({
 });
 
 console.log(result.coloredTreeText);
-console.log(result.statsText);
 
-// 2. Generate customized ZIP bundle programmatically
+// 3. Generate customized ZIP bundle programmatically
 const bundle = generateBundle({
   rootDir: process.cwd(),
   outputDir: 'dist/reports',
   bundleName: 'my-app-analysis.zip',
-  exportList: ['html', 'json', 'svg'],
+  exportList: ['graph', 'html', 'json', 'svg'],
 });
 
 console.log(`ZIP created at: ${bundle.zipPath} (${bundle.sizeMb} MB)`);
-
-// 3. Selective format export
-exportReports({
-  rootDir: process.cwd(),
-  outputDir: 'dist/exports',
-  exportList: 'html,json',
-});
-
-// 4. Create custom zero-dependency ZIP archive
-const zipBuffer = createZip({
-  'README.txt': 'Project Tree Analysis',
-  'data.json': JSON.stringify({ status: 'success' }),
-});
 ```
 
 ---
@@ -351,8 +319,8 @@ const zipBuffer = createZip({
 
 Automatically classifies and detects 30+ technologies:
 - **Monorepos**: TurboRepo, Nx, pnpm Workspaces, Yarn Workspaces, Lerna.
-- **Frameworks**: React, Next.js, Vue, Nuxt, Angular, Svelte, Express, NestJS, FastAPI, Django, Laravel, Spring Boot.
-- **Languages**: TypeScript, JavaScript, Python, Go, Rust, Java, C/C++, PHP, Ruby.
+- **Frameworks**: React, Next.js, Vue, Nuxt, Angular, Svelte, Express, NestJS, FastAPI, Django, Laravel, Spring Boot, Flutter/Dart, .NET, Go, Rust.
+- **Languages**: TypeScript, JavaScript, Python, Go, Rust, Java, C/C++, PHP, Ruby, Dart, C#.
 - **Tools**: Docker, GitHub Actions, CI/CD, TailwindCSS, Vite, Webpack, ESLint, Prettier, Jest, Vitest.
 
 ---
