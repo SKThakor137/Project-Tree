@@ -14,6 +14,9 @@ const { toMermaid } = require('../exporters/mermaid.js');
 const { generateAiContext } = require('./ai.js');
 const { createZip } = require('../utils/zip.js');
 const colors = require('../utils/colors.js');
+const { generateUniversalGraph } = require('../core/universalParser.js');
+const { toGraphVisualizerHtml } = require('../exporters/graphVisualizer.js');
+const { toGraphJson } = require('../exporters/graphJson.js');
 
 const REPORT_ALIAS_MAP = {
   md: ['PROJECT_STRUCTURE.md'],
@@ -33,6 +36,9 @@ const REPORT_ALIAS_MAP = {
   framework: ['FRAMEWORK_INFO.json'],
   language: ['LANGUAGE_BREAKDOWN.json'],
   readme: ['README_ANALYSIS.md'],
+  graph: ['CODE_GRAPH.html', 'CODE_GRAPH.json'],
+  visualize: ['CODE_GRAPH.html'],
+  'graph-json': ['CODE_GRAPH.json'],
 };
 
 /**
@@ -227,6 +233,15 @@ ${sortedHeatmap.slice(0, 10).map((h, i) => `${i + 1}. \`${h.file}\` — Used by 
     reports: [...reportKeys, 'manifest.json'],
   };
   reports['manifest.json'] = JSON.stringify(manifest, null, 2);
+
+  // 20. CODE_GRAPH.html & CODE_GRAPH.json (Interactive Graph Visualizer)
+  try {
+    const graphModel = generateUniversalGraph(rootDir, tree);
+    reports['CODE_GRAPH.html'] = toGraphVisualizerHtml(graphModel, tree.name);
+    reports['CODE_GRAPH.json'] = toGraphJson(graphModel);
+  } catch (_) {
+    // Graph generation is optional — skip if it fails
+  }
 
   return reports;
 }

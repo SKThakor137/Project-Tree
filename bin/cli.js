@@ -26,6 +26,9 @@ const { generateArchitectureFlow } = require('../src/core/architectureFlow.js');
 const { generateBundle } = require('../src/features/bundle.js');
 const { exportReports } = require('../src/features/exporter.js');
 const { toArchitectureFlowHtml } = require('../src/exporters/architectureFlowHtml.js');
+const { generateUniversalGraph } = require('../src/core/universalParser.js');
+const { toGraphVisualizerHtml } = require('../src/exporters/graphVisualizer.js');
+const { toGraphJson } = require('../src/exporters/graphJson.js');
 
 // ─── Arg Parser ───────────────────────────────────────────────────────────────
 
@@ -37,6 +40,8 @@ function parseArgs(argv) {
     summarize: false,
     flow: false,
     architecture: false,
+    visualize: false,
+    graphJson: false,
     bundle: false,
     bundleList: null,
     exportAll: false,
@@ -97,6 +102,9 @@ function parseArgs(argv) {
       case '--summarize':              args.summarize = true; break;
       case '--flow':                   args.flow = true; break;
       case '--architecture':           args.architecture = true; break;
+      case '--visualize': case '--graph': case '--code-graph':
+                                       args.visualize = true; break;
+      case '--graph-json':             args.graphJson = true; break;
       case '--json':                   args.json = true; break;
       case '--html':                   args.html = true; break;
       case '--svg':                    args.svg = true; break;
@@ -156,6 +164,8 @@ ${colors.bold('Output Options:')}
   --details               Show file size & extension
   --summarize             Extract & show inline file comment summaries
   --flow                  Generate architecture execution flow & role map
+  --visualize             Generate interactive code relationship graph HTML
+  --graph-json            Export universal graph model as JSON
   --compress              Compress single-child dirs
   --collapse <n>          Collapse dirs with >n files
   --dashboard             Show rich stats dashboard
@@ -261,6 +271,31 @@ function runGenerate(args) {
       const flowHtmlPath = path.join(outDir, 'ARCHITECTURE_FLOW.html');
       fs.writeFileSync(flowHtmlPath, flowHtml, 'utf8');
       console.log(colors.success(`Architecture Flow HTML exported to ${path.relative(process.cwd(), flowHtmlPath)}`));
+    }
+
+    // Universal Code Relationship Graph
+    if (args.visualize || args.graphJson) {
+      try {
+        const graphModel = generateUniversalGraph(rootDir, result.tree);
+        const nodeCount = graphModel.nodes ? graphModel.nodes.length : 0;
+        const edgeCount = graphModel.edges ? graphModel.edges.length : 0;
+
+        if (args.visualize) {
+          const graphHtml = toGraphVisualizerHtml(graphModel, result.tree.name);
+          const graphHtmlPath = path.join(outDir, 'CODE_GRAPH.html');
+          fs.writeFileSync(graphHtmlPath, graphHtml, 'utf8');
+          console.log(colors.success(`Code Relationship Graph exported to ${path.relative(process.cwd(), graphHtmlPath)} (${nodeCount} nodes, ${edgeCount} edges)`));
+        }
+
+        if (args.graphJson) {
+          const graphJsonStr = toGraphJson(graphModel);
+          const graphJsonPath = path.join(outDir, 'CODE_GRAPH.json');
+          fs.writeFileSync(graphJsonPath, graphJsonStr, 'utf8');
+          console.log(colors.success(`Graph JSON exported to ${path.relative(process.cwd(), graphJsonPath)} (${nodeCount} nodes, ${edgeCount} edges)`));
+        }
+      } catch (graphErr) {
+        console.log(colors.warn(`Graph generation: ${graphErr.message}`));
+      }
     }
 
     console.log(`📊 ${colors.bold('Stats:')} ${result.statsText}`);

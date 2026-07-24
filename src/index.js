@@ -29,6 +29,9 @@ const { createZip } = require('./utils/zip.js');
 const { generateBundle, compileAllReports } = require('./features/bundle.js');
 const { exportReports } = require('./features/exporter.js');
 const { toArchitectureFlowHtml } = require('./exporters/architectureFlowHtml.js');
+const { generateUniversalGraph } = require('./core/universalParser.js');
+const { toGraphVisualizerHtml } = require('./exporters/graphVisualizer.js');
+const { toGraphJson, fromGraphJson } = require('./exporters/graphJson.js');
 
 module.exports = {
   // Core (backward-compatible)
@@ -49,6 +52,12 @@ module.exports = {
   toSvg,
   toMermaid,
   toArchitectureFlowHtml,
+
+  // Universal Code Relationship Graph
+  generateUniversalGraph,
+  toGraphVisualizerHtml,
+  toGraphJson,
+  fromGraphJson,
 
   // Features
   generateAiContext,
