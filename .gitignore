@@ -16,3 +16,5 @@ TEST_OUTPUT.md
 PROJECT_STRUCTURE.*
 AI_CONTEXT.md
 AI_PROMPT.md
+*.zip
+reports/

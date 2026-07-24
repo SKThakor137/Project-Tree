@@ -23,16 +23,25 @@ const { compare } = require('../src/features/compare.js');
 const { detectProject } = require('../src/detectors/project.js');
 const { estimateTokens, formatTokenSummary } = require('../src/features/tokens.js');
 const { generateArchitectureFlow } = require('../src/core/architectureFlow.js');
+const { generateBundle } = require('../src/features/bundle.js');
+const { exportReports } = require('../src/features/exporter.js');
 
 // ─── Arg Parser ───────────────────────────────────────────────────────────────
 
 function parseArgs(argv) {
-  const args = {    interactive: false,
+  const args = {
+    interactive: false,
     dashboard: false,
     tokens: false,
     summarize: false,
     flow: false,
     architecture: false,
+    bundle: false,
+    bundleList: null,
+    exportAll: false,
+    exportList: null,
+    outputDir: null,
+    noWrite: false,
     // Modes
     ai: false,
     prompt: false,
@@ -45,12 +54,13 @@ function parseArgs(argv) {
     compare: null,
     help: false,
     version: false,
+    copy: true,
   };
 
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
     switch (arg) {
-      // Existing flags (backward-compatible)
+      // Existing flags
       case '--out': case '-o':         args.outputFile = argv[++i]; break;
       case '--depth': case '-L':       args.maxDepth = parseInt(argv[++i], 10); break;
       case '--exclude': case '-I':     args.excludeStr = argv[++i]; break;
@@ -58,7 +68,28 @@ function parseArgs(argv) {
       case '--help': case '-h':        args.help = true; break;
       case '--version': case '-v':     args.version = true; break;
 
-      // New flags
+      // Bundle & Export System Flags
+      case '--bundle': case '--zip': case '--download':
+        args.bundle = true;
+        if (argv[i + 1] && !argv[i + 1].startsWith('-')) {
+          args.bundleList = argv[++i];
+        }
+        break;
+      case '--export-all':
+        args.exportAll = true; break;
+      case '--export':
+        if (argv[i + 1] && !argv[i + 1].startsWith('-')) {
+          args.exportList = argv[++i];
+        } else {
+          args.exportAll = true;
+        }
+        break;
+      case '--output-dir':
+        args.outputDir = argv[++i]; break;
+      case '--no-write': case '--stdout':
+        args.noWrite = true; break;
+
+      // Format & Analysis Flags
       case '--ai':                     args.ai = true; break;
       case '--prompt':                 args.prompt = true; break;
       case '--tokens':                 args.tokens = true; break;
@@ -102,11 +133,18 @@ function parseArgs(argv) {
 
 function printHelp() {
   console.log(`
-${colors.boldCyan('project-tree-md')} — AI-Ready Project Structure Generator
+${colors.boldCyan('project-tree-md')} — AI-Ready Project Analysis Suite
 
 ${colors.bold('Usage:')}
   npx project-tree-md [options]
   npx project-tree-md compare <pathA> <pathB>
+
+${colors.bold('Bundle & Export System:')}
+  --bundle [list]         Generate ZIP package with all or selected reports (${colors.cyan('e.g. --bundle html,json,svg')})
+  --export [list]         Export selected reports to directory (${colors.cyan('e.g. --export html,json')})
+  --export-all            Export all individual analysis reports
+  --output-dir <dir>      Output directory for exports and ZIP bundles
+  --no-write, --stdout    Print to console without writing default output files
 
 ${colors.bold('Output Options:')}
   -o, --out <file>        Output filename              ${colors.gray('(default: PROJECT_STRUCTURE.md)')}
@@ -124,7 +162,7 @@ ${colors.bold('Output Options:')}
 
 ${colors.bold('Export Formats:')}
   --json                  Export as JSON
-  --html                  Export as collapsible HTML with interactive search
+  --html                  Export as collapsible HTML with Download Center
   --svg                   Export as SVG diagram
   --mermaid               Export as Mermaid graph
 
@@ -133,21 +171,9 @@ ${colors.bold('AI Features:')}
   --prompt                Generate AI-ready prompt
   --tokens                Output AI context token count & cost estimation
 
-${colors.bold('Advanced:')}
-  --inject <file>         Inject tree into file markers
-  --watch                 Watch for changes & regenerate
-  --max-size <size>       Skip files larger than size   ${colors.gray('(e.g. 5MB, 500KB)')}
-  --include-binary        Include binary files
-  --show-sensitive        Show sensitive files (.env, secrets)
-  --no-ignore             Skip .gitignore parsing
-  -i, --interactive       Interactive setup mode
-
-${colors.bold('Other:')}
+${colors.bold('Other Options:')}
   -h, --help              Show this help
   -v, --version           Show version
-
-${colors.bold('Subcommands:')}
-  compare <a> <b>         Compare two dirs/snapshots
 `);
 }
 
@@ -156,29 +182,30 @@ ${colors.bold('Subcommands:')}
 function runInteractive() {
   const readline = require('readline');
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-
   const ask = (q) => new Promise(r => rl.question(q, r));
 
   (async () => {
     console.log(colors.boldCyan('\n🎯 project-tree-md — Interactive Setup\n'));
 
+    const action = (await ask(`  Action [bundle/export/default] ${colors.gray('(default)')}: `)).toLowerCase();
+    let reportChoice = 'all';
+    if (action === 'bundle' || action === 'export') {
+      reportChoice = (await ask(`  Reports to include [all / md,json,html,svg,ai,health] ${colors.gray('(all)')}: `)) || 'all';
+    }
     const out = (await ask(`  Output file ${colors.gray('(PROJECT_STRUCTURE.md)')}: `)) || 'PROJECT_STRUCTURE.md';
-    const depth = (await ask(`  Max depth ${colors.gray('(unlimited)')}: `)) || undefined;
     const theme = (await ask(`  Theme [unicode/ascii/emoji/box] ${colors.gray('(unicode)')}: `)) || 'unicode';
-    const ai = (await ask(`  Generate AI context? [y/n] ${colors.gray('(n)')}: `)).toLowerCase();
-    const dashboard = (await ask(`  Show stats dashboard? [y/n] ${colors.gray('(n)')}: `)).toLowerCase();
-    const copy = (await ask(`  Copy to clipboard? [y/n] ${colors.gray('(y)')}: `)).toLowerCase();
 
     rl.close();
 
-    const opts = [
-      '--out', out,
-      '--theme', theme,
-    ];
-    if (depth) opts.push('--depth', depth);
-    if (ai === 'y') opts.push('--ai');
-    if (dashboard === 'y') opts.push('--dashboard');
-    if (copy === 'n') opts.push('--no-copy');
+    const opts = ['--theme', theme];
+    if (action === 'bundle') {
+      opts.push('--bundle');
+      if (reportChoice !== 'all') opts.push(reportChoice);
+    } else if (action === 'export') {
+      opts.push('--export', reportChoice);
+    } else if (out) {
+      opts.push('--out', out);
+    }
 
     const args = parseArgs(opts);
     runGenerate(args);
@@ -189,9 +216,17 @@ function runInteractive() {
 
 function runGenerate(args) {
   try {
+    const rootDir = args.rootDir || process.cwd();
+
+    // Preserve 100% existing functionality: PROJECT_STRUCTURE.md is always written by default unless --no-write is passed
+    const shouldWriteMarkdown = !args.noWrite;
+
+    // If architecture is required by bundle or export, enable architecture mode automatically
+    const isArchNeeded = args.architecture || args.bundle || args.exportAll || args.exportList;
+
     const result = generateTree({
-      rootDir: args.rootDir,
-      outputFile: args.outputFile,
+      rootDir,
+      outputFile: args.outputFile || 'PROJECT_STRUCTURE.md',
       exclude: args.exclude || DEFAULT_EXCLUDE,
       maxDepth: args.maxDepth,
       noIgnore: args.noIgnore,
@@ -204,7 +239,8 @@ function runGenerate(args) {
       details: args.details,
       summarize: args.summarize,
       flow: args.flow,
-      architecture: args.architecture,
+      architecture: isArchNeeded,
+      writeFile: shouldWriteMarkdown,
     });
 
     // Print colorized tree
@@ -212,7 +248,7 @@ function runGenerate(args) {
 
     // Architecture Flow Output
     if (args.flow) {
-      const flowRes = result.flowResult || generateArchitectureFlow(args.rootDir, result.tree);
+      const flowRes = result.flowResult || generateArchitectureFlow(rootDir, result.tree);
       console.log(flowRes.coloredFlowText + '\n');
     }
 
@@ -227,73 +263,99 @@ function runGenerate(args) {
     if (args.tokens) {
       let targetText = result.markdown;
       if (args.ai) {
-        targetText = generateAiContext(args.rootDir, result.treeText, result.stats);
+        targetText = generateAiContext(rootDir, result.treeText, result.stats);
       }
       const estimatedCount = estimateTokens(targetText);
       const summaryText = formatTokenSummary(estimatedCount);
       console.log(`🧮 ${colors.boldCyan(summaryText)}`);
     }
 
-    // Export formats
+    const outDir = args.outputDir
+      ? (path.isAbsolute(args.outputDir) ? args.outputDir : path.join(rootDir, args.outputDir))
+      : rootDir;
+
+    const baseOutName = args.outputFile ? path.basename(args.outputFile) : 'PROJECT_STRUCTURE.md';
+
+    // Format Exports
     if (args.json) {
       const jsonStr = toJson(result.tree, result.stats);
-      const jsonPath = args.outputFile.replace(/\.md$/, '.json');
-      const absJsonPath = path.isAbsolute(jsonPath) ? jsonPath : path.join(args.rootDir, jsonPath);
-      fs.writeFileSync(absJsonPath, jsonStr, 'utf8');
-      console.log(colors.success(`JSON exported to ${path.relative(process.cwd(), absJsonPath)}`));
+      const jsonName = baseOutName.replace(/\.md$/, '.json');
+      const jsonPath = path.join(outDir, jsonName);
+      fs.writeFileSync(jsonPath, jsonStr, 'utf8');
+      console.log(colors.success(`JSON exported to ${path.relative(process.cwd(), jsonPath)}`));
     }
 
     if (args.html) {
       const htmlStr = toHtml(result.tree, result.stats);
-      const htmlPath = args.outputFile.replace(/\.md$/, '.html');
-      const absHtmlPath = path.isAbsolute(htmlPath) ? htmlPath : path.join(args.rootDir, htmlPath);
-      fs.writeFileSync(absHtmlPath, htmlStr, 'utf8');
-      console.log(colors.success(`HTML exported to ${path.relative(process.cwd(), absHtmlPath)}`));
+      const htmlName = baseOutName.replace(/\.md$/, '.html');
+      const htmlPath = path.join(outDir, htmlName);
+      fs.writeFileSync(htmlPath, htmlStr, 'utf8');
+      console.log(colors.success(`HTML exported to ${path.relative(process.cwd(), htmlPath)}`));
     }
 
     if (args.svg) {
       const svgStr = toSvg(result.tree, result.stats);
-      const svgPath = args.outputFile.replace(/\.md$/, '.svg');
-      const absSvgPath = path.isAbsolute(svgPath) ? svgPath : path.join(args.rootDir, svgPath);
-      fs.writeFileSync(absSvgPath, svgStr, 'utf8');
-      console.log(colors.success(`SVG exported to ${path.relative(process.cwd(), absSvgPath)}`));
+      const svgName = baseOutName.replace(/\.md$/, '.svg');
+      const svgPath = path.join(outDir, svgName);
+      fs.writeFileSync(svgPath, svgStr, 'utf8');
+      console.log(colors.success(`SVG exported to ${path.relative(process.cwd(), svgPath)}`));
     }
 
     if (args.mermaid) {
       const mermaidStr = toMermaid(result.tree);
-      const mermaidPath = args.outputFile.replace(/\.md$/, '_mermaid.md');
-      const absMermaidPath = path.isAbsolute(mermaidPath) ? mermaidPath : path.join(args.rootDir, mermaidPath);
+      const mermaidName = baseOutName.replace(/\.md$/, '_mermaid.md');
+      const mermaidPath = path.join(outDir, mermaidName);
       const content = '# Project Structure (Mermaid)\n\n```mermaid\n' + mermaidStr + '\n```\n';
-      fs.writeFileSync(absMermaidPath, content, 'utf8');
-      console.log(colors.success(`Mermaid exported to ${path.relative(process.cwd(), absMermaidPath)}`));
+      fs.writeFileSync(mermaidPath, content, 'utf8');
+      console.log(colors.success(`Mermaid exported to ${path.relative(process.cwd(), mermaidPath)}`));
     }
 
     // AI Context
     if (args.ai) {
-      const aiContent = generateAiContext(args.rootDir, result.treeText, result.stats);
-      const aiPath = path.join(args.rootDir, 'AI_CONTEXT.md');
+      const aiContent = generateAiContext(rootDir, result.treeText, result.stats);
+      const aiPath = path.join(outDir, 'AI_CONTEXT.md');
       fs.writeFileSync(aiPath, aiContent, 'utf8');
       console.log(colors.success(`AI context written to ${path.relative(process.cwd(), aiPath)}`));
     }
 
     // AI Prompt
     if (args.prompt) {
-      const promptContent = generateAiPrompt(args.rootDir, result.treeText, result.stats);
-      const promptPath = path.join(args.rootDir, 'AI_PROMPT.md');
+      const promptContent = generateAiPrompt(rootDir, result.treeText, result.stats);
+      const promptPath = path.join(outDir, 'AI_PROMPT.md');
       fs.writeFileSync(promptPath, promptContent, 'utf8');
       console.log(colors.success(`AI prompt written to ${path.relative(process.cwd(), promptPath)}`));
     }
 
     // Inject
     if (args.inject) {
-      const injectPath = path.isAbsolute(args.inject) ? args.inject : path.join(args.rootDir, args.inject);
+      const injectPath = path.isAbsolute(args.inject) ? args.inject : path.join(rootDir, args.inject);
       const { success, message } = injectIntoFile(injectPath, result.markdown);
       if (success) console.log(colors.success(message));
       else console.log(colors.warn(message));
     }
 
-    // Output file
-    if (result.outputPath) {
+    // Bundle Mode
+    if (args.bundle) {
+      const bundleRes = generateBundle({
+        rootDir,
+        outputDir: args.outputDir,
+        exportList: args.bundleList || args.exportList,
+      });
+      console.log('\n' + bundleRes.summaryText);
+    }
+
+    // Selective / All Exports Mode
+    if (args.exportAll || args.exportList) {
+      exportReports({
+        rootDir,
+        outputDir: args.outputDir,
+        exportList: args.exportList,
+        exportAll: args.exportAll,
+      });
+    }
+
+    // Output file report
+    if (result.outputPath && shouldWriteMarkdown) {
       console.log(colors.success(`Project structure written to ${colors.green(path.relative(process.cwd(), result.outputPath))}`));
     }
 
@@ -305,15 +367,16 @@ function runGenerate(args) {
 
     // Watch mode
     if (args.watch) {
-      watchDirectory(args.rootDir, () => {
+      watchDirectory(rootDir, () => {
         try {
           const r = generateTree({
-            rootDir: args.rootDir, outputFile: args.outputFile,
+            rootDir, outputFile: args.outputFile,
             exclude: args.exclude || DEFAULT_EXCLUDE, maxDepth: args.maxDepth,
             noIgnore: args.noIgnore, includeBinary: args.includeBinary,
             showSensitive: args.showSensitive, maxSize: args.maxSize,
             compress: args.compress, collapseThreshold: args.collapseThreshold,
             theme: args.theme, details: args.details, summarize: args.summarize,
+            writeFile: shouldWriteMarkdown,
           });
           const ts = new Date().toLocaleTimeString();
           console.log(`🔄 ${colors.cyan(`Tree updated at ${ts}`)} (${r.statsText})`);

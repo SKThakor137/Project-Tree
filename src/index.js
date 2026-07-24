@@ -25,6 +25,9 @@ const { detectMonorepo, formatWorkspaceSummary } = require('./features/monorepo.
 const { estimateTokens, calculateCost, formatTokenSummary } = require('./features/tokens.js');
 const { extractFileSummary } = require('./features/summarize.js');
 const { generateArchitectureFlow, detectFrameworkRole } = require('./core/architectureFlow.js');
+const { createZip } = require('./utils/zip.js');
+const { generateBundle, compileAllReports } = require('./features/bundle.js');
+const { exportReports } = require('./features/exporter.js');
 
 module.exports = {
   // Core (backward-compatible)
@@ -56,4 +59,10 @@ module.exports = {
   calculateCost,
   formatTokenSummary,
   extractFileSummary,
+
+  // Download & Export System
+  createZip,
+  compileAllReports,
+  generateBundle,
+  exportReports,
 };
