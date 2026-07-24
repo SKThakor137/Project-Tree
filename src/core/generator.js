@@ -13,6 +13,7 @@ const { toMarkdown } = require('../exporters/markdown.js');
 const { detectProject } = require('../detectors/project.js');
 const { estimateTokens, formatTokenSummary } = require('../features/tokens.js');
 const { generateArchitectureFlow } = require('./architectureFlow.js');
+const { buildArchitectureGraph } = require('./analyzer.js');
 
 /**
  * Main orchestrator — generates everything from a single call.
@@ -67,6 +68,7 @@ function generateTree(options = {}) {
     compress,
     collapseThreshold,
     summarize,
+    architecture: options.architecture,
   });
 
   if (!tree) throw new Error(`Could not read directory: ${rootDir}`);
@@ -75,6 +77,29 @@ function generateTree(options = {}) {
   const treeText = buildTreeText(tree, fmtOpts);
   const coloredTreeText = buildColoredTreeText(tree, fmtOpts);
   const stats = computeStats(tree);
+
+  if (options.architecture) {
+    // Collect parsed files for architecture graph
+    const parsedFiles = [];
+    function collectParsed(node) {
+      if (node.parsed) {
+        parsedFiles.push(node);
+      }
+      if (node.children) {
+        node.children.forEach(collectParsed);
+      }
+    }
+    collectParsed(tree);
+
+    const architectureGraph = buildArchitectureGraph(parsedFiles);
+
+    // Attach new architecture data to stats
+    stats.architectureGraph = architectureGraph;
+    stats.componentsCount = parsedFiles.reduce((acc, f) => acc + (f.parsed.components ? f.parsed.components.length : 0), 0);
+    stats.totalLines = parsedFiles.reduce((acc, f) => acc + (f.parsed.lines || 0), 0);
+    stats.avgComplexity = parsedFiles.length > 0 ? parsedFiles.reduce((acc, f) => acc + (f.parsed.complexity || 1), 0) / parsedFiles.length : 1;
+  }
+
   const projectInfo = detectProject(rootDir);
   const markdown = toMarkdown(treeText, stats, projectInfo);
 

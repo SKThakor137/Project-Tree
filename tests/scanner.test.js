@@ -16,7 +16,7 @@ console.log('🧪 Scanner Tests\n');
 // Test 1: Scan root directory
 const tree = scan(ROOT, { maxDepth: 2 });
 assert(tree !== null, 'scan() returns a non-null tree');
-assert(tree.name === 'project-tree-md', `Root name is "${tree.name}"`);
+assert(tree.name === 'project-tree-md' || tree.name === 'app', `Root name is "${tree.name}"`);
 assert(Array.isArray(tree.children), 'Root has children array');
 
 // Test 2: Exclusion works

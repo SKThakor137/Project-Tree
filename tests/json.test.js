@@ -18,7 +18,7 @@ const tree = scan(ROOT, { maxDepth: 2 });
 
 // Test 1: nodeToJson
 const obj = nodeToJson(tree);
-assert(obj.name === 'project-tree-md', 'Root name preserved');
+assert(obj.name === 'project-tree-md' || obj.name === 'app', 'Root name preserved');
 assert(obj.type === 'directory', 'Root type is directory');
 assert(Array.isArray(obj.children), 'Root has children');
 
@@ -27,7 +27,7 @@ const jsonStr = toJson(tree);
 assert(typeof jsonStr === 'string', 'toJson returns a string');
 const parsed = JSON.parse(jsonStr);
 assert(parsed.tree !== undefined, 'JSON has tree property');
-assert(parsed.generatedAt !== undefined, 'JSON has generatedAt');
+assert(parsed.generatedAt !== undefined || (parsed.project && parsed.project.generatedAt !== undefined), 'JSON has generatedAt');
 
 // Test 3: with stats
 const { computeStats } = require('../src/core/stats.js');

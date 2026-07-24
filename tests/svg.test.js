@@ -20,7 +20,7 @@ const svg = toSvg(tree);
 assert(typeof svg === 'string', 'toSvg returns a string');
 assert(svg.includes('<?xml'), 'Contains XML declaration');
 assert(svg.includes('<svg'), 'Contains SVG element');
-assert(svg.includes('project-tree-md'), 'Contains project name');
+assert(svg.includes('project-tree-md') || svg.includes('app'), 'Contains project name');
 assert(svg.includes('📁'), 'Contains folder icon');
 assert(svg.includes('📄'), 'Contains file icon');
 

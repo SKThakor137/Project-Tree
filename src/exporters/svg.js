@@ -62,9 +62,38 @@ function toSvg(tree, stats = null) {
 
   flatten(tree, 0, true, []);
 
-  const width = 700;
-  const height = TOP_PAD + y * LINE_HEIGHT + 20;
+  const width = 750;
   const statsLine = stats ? `${stats.statsText}` : '';
+
+  let archVisuals = [];
+  let currentYOffset = TOP_PAD + y * LINE_HEIGHT + 30;
+
+  if (stats && stats.architectureGraph) {
+    const depsCount = Object.keys(stats.architectureGraph.imports).reduce((a, k) => a + stats.architectureGraph.imports[k].length, 0);
+    if (depsCount > 0) {
+      archVisuals.push(`  <rect x="${LEFT_PAD}" y="${currentYOffset}" width="600" height="2" fill="#30363d" />`);
+      currentYOffset += 24;
+      archVisuals.push(`  <text x="${LEFT_PAD}" y="${currentYOffset}" fill="#58a6ff" font-family="${FONT}" font-size="14" font-weight="bold">🧬 Architecture Dependency Edges: ${depsCount}</text>`);
+      currentYOffset += 20;
+
+      const MAX_LINES = 15;
+      let linesDrawn = 0;
+      for (const [file, deps] of Object.entries(stats.architectureGraph.imports)) {
+        if (deps.length > 0 && linesDrawn < MAX_LINES) {
+          const depText = deps.slice(0, 3).join(', ') + (deps.length > 3 ? '...' : '');
+          archVisuals.push(`  <text x="${LEFT_PAD + 15}" y="${currentYOffset}" fill="#c9d1d9" font-family="${FONT}" font-size="12">▪ ${escXml(file)} ➔ [ ${escXml(depText)} ]</text>`);
+          currentYOffset += 18;
+          linesDrawn++;
+        }
+      }
+      if (linesDrawn === MAX_LINES) {
+         archVisuals.push(`  <text x="${LEFT_PAD + 15}" y="${currentYOffset}" fill="#8b949e" font-family="${FONT}" font-size="12">... and more dependencies.</text>`);
+         currentYOffset += 18;
+      }
+    }
+  }
+
+  const height = currentYOffset + 20;
 
   return [
     `<?xml version="1.0" encoding="UTF-8"?>`,
@@ -73,6 +102,7 @@ function toSvg(tree, stats = null) {
     `  <text x="${LEFT_PAD}" y="28" fill="#58a6ff" font-family="${FONT}" font-size="16" font-weight="bold">📂 ${escXml(tree.name)}</text>`,
     statsLine ? `  <text x="${LEFT_PAD}" y="42" fill="#8b949e" font-family="${FONT}" font-size="11">${escXml(statsLine)}</text>` : '',
     ...lines.filter(Boolean),
+    ...archVisuals,
     `</svg>`,
   ].join('\n');
 }

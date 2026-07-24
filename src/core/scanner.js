@@ -7,6 +7,7 @@ const fs = require('fs');
 const path = require('path');
 const { isSensitive } = require('../utils/sensitive.js');
 const { extractFileSummary } = require('../features/summarize.js');
+const { parseFile } = require('./analyzer.js');
 
 /** Default exclusion pattern (kept for backward compatibility). */
 const DEFAULT_EXCLUDE = /node_modules|\.next|\.git|dist|build|coverage|\.turbo/;
@@ -146,12 +147,22 @@ function scan(rootDir, options = {}) {
       const binary = isBinaryFile(name);
       if (binary && !includeBinary) return null;
       if (stat.size > maxSize) return null;
+
       const fileNode = {
         name, path: itemPath, size: stat.size,
         ext: path.extname(name).toLowerCase(),
         isSymlink, symlinkTarget,
         isEmpty: false, isSensitive: false, isBinary: binary,
       };
+
+      if (options.architecture && !binary && stat.size < 500000) { // Only parse if enabled
+        try {
+          const content = fs.readFileSync(itemPath, 'utf8');
+          fileNode.parsed = parseFile(content, itemPath);
+          fileNode.relPath = path.relative(absoluteRoot, itemPath).replace(/\\/g, '/');
+        } catch (_) {}
+      }
+
       if (summarize && !binary) {
         const summary = extractFileSummary(itemPath);
         if (summary) fileNode.summary = summary;

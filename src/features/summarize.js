@@ -195,10 +195,38 @@ function extractFileSummary(filePath, maxLines = 35) {
       }
     }
 
-    if (commentLines.length === 0) return null;
+    if (commentLines.length > 0) {
+      const rawText = commentLines.join(' ');
+      const clean = cleanSummaryText(rawText);
+      if (clean) return clean;
+    }
 
-    const rawText = commentLines.join(' ');
-    return cleanSummaryText(rawText);
+    // Fallback: Infer from framework role
+    try {
+      const { detectFrameworkRole } = require('../core/architectureFlow.js');
+      const role = detectFrameworkRole(filePath, contentStr);
+      if (role && role.role !== 'MODULE') {
+        const fallbacks = {
+          ENTRY: 'Application entry point.',
+          LAYOUT: 'UI Layout wrapper.',
+          PAGE: 'Page view component.',
+          CLIENT_COMP: 'Client-side UI component.',
+          ROUTE: 'API route handler.',
+          CONTROLLER: 'Handles incoming requests and responses.',
+          SERVICE: 'Business logic and core operations.',
+          MODEL: 'Database model or schema definition.',
+          MIDDLEWARE: 'Request interception and processing.',
+          COMPONENT: 'Reusable UI component.',
+          UTILITY: 'Helper utility functions.',
+        };
+        const description = fallbacks[role.role];
+        if (description) {
+           return `[Auto] ${description}`;
+        }
+      }
+    } catch (_) {}
+
+    return null;
   } catch (_) {
     return null;
   } finally {

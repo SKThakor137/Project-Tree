@@ -32,9 +32,32 @@ function nodeToJson(node) {
  * @returns {string}
  */
 function toJson(tree, stats = null) {
-  const output = { tree: nodeToJson(tree) };
-  if (stats) output.stats = stats;
-  output.generatedAt = new Date().toISOString();
+  const output = {
+    project: {
+      generatedAt: new Date().toISOString(),
+    },
+    tree: nodeToJson(tree),
+  };
+
+  if (stats) {
+    output.stats = {
+      dirs: stats.dirs,
+      files: stats.files,
+      totalSize: stats.totalSize,
+      componentsCount: stats.componentsCount,
+      totalLines: stats.totalLines,
+      avgComplexity: stats.avgComplexity,
+    };
+
+    if (stats.architectureGraph) {
+      output.imports = stats.architectureGraph.imports || {};
+      output.exports = stats.architectureGraph.exports || {};
+      output.unused = stats.architectureGraph.deadCode || {};
+      output.circular = stats.architectureGraph.circular || [];
+      output.usage = stats.architectureGraph.usage || {};
+    }
+  }
+
   return JSON.stringify(output, null, 2);
 }
 

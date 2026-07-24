@@ -32,6 +32,7 @@ function parseArgs(argv) {
     tokens: false,
     summarize: false,
     flow: false,
+    architecture: false,
     // Modes
     ai: false,
     prompt: false,
@@ -63,6 +64,7 @@ function parseArgs(argv) {
       case '--tokens':                 args.tokens = true; break;
       case '--summarize':              args.summarize = true; break;
       case '--flow':                   args.flow = true; break;
+      case '--architecture':           args.architecture = true; break;
       case '--json':                   args.json = true; break;
       case '--html':                   args.html = true; break;
       case '--svg':                    args.svg = true; break;
@@ -118,6 +120,7 @@ ${colors.bold('Output Options:')}
   --compress              Compress single-child dirs
   --collapse <n>          Collapse dirs with >n files
   --dashboard             Show rich stats dashboard
+  --architecture          Enable advanced architecture parsing & metrics
 
 ${colors.bold('Export Formats:')}
   --json                  Export as JSON
@@ -201,6 +204,7 @@ function runGenerate(args) {
       details: args.details,
       summarize: args.summarize,
       flow: args.flow,
+      architecture: args.architecture,
     });
 
     // Print colorized tree
