@@ -10,7 +10,7 @@ const { extractFileSummary } = require('../features/summarize.js');
 const { parseFile } = require('./analyzer.js');
 
 /** Default exclusion pattern (kept for backward compatibility). */
-const DEFAULT_EXCLUDE = /node_modules|\.next|\.git|dist|build|coverage|\.turbo/;
+const DEFAULT_EXCLUDE = /node_modules|\.next|\.git|dist|build|coverage|\.turbo|venv|\.venv|__pycache__|\.dart_tool|\.cache|\.pytest_cache|\.idea|\.vscode/;
 
 /** Binary file extensions — skipped unless --include-binary. */
 const BINARY_EXTENSIONS = new Set([

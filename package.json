@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "test": "node bin/cli.js --no-write",
-    "test:all": "node tests/scanner.test.js && node tests/formatter.test.js && node tests/ignore.test.js && node tests/json.test.js && node tests/mermaid.test.js && node tests/html.test.js && node tests/svg.test.js && node tests/compare.test.js && node tests/tokens.test.js && node tests/summarize.test.js && node tests/flow.test.js && node tests/zip.test.js && node tests/bundle.test.js && node tests/exporter.test.js && node tests/graph.test.js",
+    "test:all": "node tests/scanner.test.js && node tests/formatter.test.js && node tests/ignore.test.js && node tests/json.test.js && node tests/mermaid.test.js && node tests/html.test.js && node tests/svg.test.js && node tests/compare.test.js && node tests/tokens.test.js && node tests/summarize.test.js && node tests/flow.test.js && node tests/zip.test.js && node tests/bundle.test.js && node tests/exporter.test.js && node tests/graph.test.js && node tests/flutter_graph.test.js",
     "test:scanner": "node tests/scanner.test.js",
     "test:formatter": "node tests/formatter.test.js",
     "test:ignore": "node tests/ignore.test.js",
@@ -29,7 +29,8 @@
     "test:zip": "node tests/zip.test.js",
     "test:bundle": "node tests/bundle.test.js",
     "test:exporter": "node tests/exporter.test.js",
-    "test:graph": "node tests/graph.test.js"
+    "test:graph": "node tests/graph.test.js",
+    "test:flutter": "node tests/flutter_graph.test.js"
   },
   "keywords": [
     "tree",

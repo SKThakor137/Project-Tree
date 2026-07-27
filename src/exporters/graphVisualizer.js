@@ -578,7 +578,7 @@ function layoutDagre(isHorizontal) {
   const adjList = new Map();
   visible.forEach(n => { inDeg.set(n.id, 0); adjList.set(n.id, []); });
 
-  const visibleEdges = getVisibleEdges().filter(e => e.type === 'IMPORTS' || e.type === 'PARENT_CHILD');
+  const visibleEdges = getVisibleEdges();
   visibleEdges.forEach(e => {
     if (adjList.has(e.source) && inDeg.has(e.target)) {
       adjList.get(e.source).push(e.target);
@@ -651,8 +651,8 @@ function layoutForce() {
   const visibleEdges = getVisibleEdges();
   const idSet = new Set(visible.map(n => n.id));
 
-  // Run simulation iterations
-  const iterations = Math.min(300, 50 + visible.length);
+  // Run simulation iterations (capped for large graphs to prevent main thread freezing)
+  const iterations = visible.length > 200 ? 40 : (visible.length > 100 ? 60 : Math.min(200, 50 + visible.length));
   const repulsion = 8000;
   const attraction = 0.005;
   const damping = 0.85;
@@ -661,10 +661,11 @@ function layoutForce() {
   for (let iter = 0; iter < iterations; iter++) {
     const temp = 1 - iter / iterations;
 
-    // Repulsive forces
+    // Repulsive forces (sampled step for large graphs to ensure sub-100ms calculation)
+    const step = visible.length > 150 ? Math.max(1, Math.floor(visible.length / 50)) : 1;
     for (let i = 0; i < visible.length; i++) {
       const a = STATE.positions.get(visible[i].id);
-      for (let j = i + 1; j < visible.length; j++) {
+      for (let j = i + 1; j < visible.length; j += step) {
         const b = STATE.positions.get(visible[j].id);
         let dx = a.x - b.x, dy = a.y - b.y;
         let dist = Math.sqrt(dx * dx + dy * dy) || 1;
@@ -795,12 +796,7 @@ function runLayout(type) {
 // Auto-select best layout
 function autoSelectLayout() {
   const n = nodes.length;
-  const e = edges.length;
-  const density = n > 0 ? e / n : 0;
-
-  if (n <= 20) return 'dagre';
-  if (density > 3) return 'force';
-  if (n > 200) return 'force';
+  if (n > 150) return 'dagre';
   return 'dagre';
 }
 
@@ -881,6 +877,9 @@ function drawEdge(e) {
   const tgtPos = STATE.positions.get(e.target);
   if (!srcPos || !tgtPos) return;
 
+  // Viewport edge culling
+  if (!isOnScreen(srcPos.x, srcPos.y, 400) && !isOnScreen(tgtPos.x, tgtPos.y, 400)) return;
+
   const nw = STATE.nodeWidth, nh = STATE.nodeHeight;
   const sx = srcPos.x + nw / 2, sy = srcPos.y + nh;
   const tx = tgtPos.x + nw / 2, ty = tgtPos.y;
@@ -888,7 +887,9 @@ function drawEdge(e) {
   ctx.beginPath();
   ctx.strokeStyle = e.color || '#8b949e';
   ctx.lineWidth = (STATE.hoveredNode && (e.source === STATE.hoveredNode.id || e.target === STATE.hoveredNode.id)) ? 2.5 : 1.2;
-  ctx.globalAlpha = (STATE.searchTerm && !STATE.searchResults.find(r => r.id === e.source || r.id === e.target)) ? 0.1 : (
+  const isMatchSrc = STATE.searchResultIds && STATE.searchResultIds.has(e.source);
+  const isMatchTgt = STATE.searchResultIds && STATE.searchResultIds.has(e.target);
+  ctx.globalAlpha = (STATE.searchTerm && !isMatchSrc && !isMatchTgt) ? 0.1 : (
     STATE.selectedNode && e.source !== STATE.selectedNode.id && e.target !== STATE.selectedNode.id ? 0.2 : 0.8
   );
 
@@ -1393,6 +1394,7 @@ searchBox.addEventListener('input', () => {
       (n.label && n.label.toLowerCase().includes(STATE.searchTerm)) ||
       (n.language && n.language.toLowerCase().includes(STATE.searchTerm))
     );
+    STATE.searchResultIds = new Set(STATE.searchResults.map(r => r.id));
     searchCount.textContent = STATE.searchResults.length + ' found';
     if (STATE.searchResults.length > 0) {
       selectNode(STATE.searchResults[0]);
@@ -1400,6 +1402,7 @@ searchBox.addEventListener('input', () => {
     }
   } else {
     STATE.searchResults = [];
+    STATE.searchResultIds = new Set();
     searchCount.textContent = '';
   }
   render();
@@ -1727,6 +1730,37 @@ function esc(s) {
   const d = document.createElement('div');
   d.textContent = s;
   return d.innerHTML;
+}
+
+// ─── FIT VIEW ────────────────────────────────────────────────────────────────
+
+function fitView() {
+  const visible = getVisibleNodes();
+  if (visible.length === 0) return;
+
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+  for (const n of visible) {
+    const pos = STATE.positions.get(n.id);
+    if (!pos) continue;
+    if (pos.x < minX) minX = pos.x;
+    if (pos.x + STATE.nodeWidth > maxX) maxX = pos.x + STATE.nodeWidth;
+    if (pos.y < minY) minY = pos.y;
+    if (pos.y + STATE.nodeHeight > maxY) maxY = pos.y + STATE.nodeHeight;
+  }
+
+  if (minX === Infinity) return;
+
+  const contentW = maxX - minX + 100;
+  const contentH = maxY - minY + 100;
+  const zoomX = W / contentW;
+  const zoomY = H / contentH;
+
+  STATE.zoom = Math.max(0.05, Math.min(1.2, Math.min(zoomX, zoomY)));
+  STATE.offsetX = -(minX + (maxX - minX) / 2);
+  STATE.offsetY = -(minY + (maxY - minY) / 2);
+
+  render();
+  updateMinimap();
 }
 
 // ─── INIT ────────────────────────────────────────────────────────────────────

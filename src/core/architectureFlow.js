@@ -38,9 +38,9 @@ function detectFrameworkRole(filePath, fileContent = '') {
   const ext = path.extname(normPath);
 
   // 1. Entry point check
-  if (/^(?:index|main|app|server)\.(?:js|ts|tsx|jsx|py|go|php|rb|rs|java|c|cpp)$/i.test(baseName)) {
-    // Only classify as ENTRY if in root or src top level
-    if (!normPath.includes('/src/') || normPath.split('/').length <= 3) {
+  if (/^(?:index|main|app|server)\.(?:js|ts|tsx|jsx|py|go|php|rb|rs|java|dart|c|cpp)$/i.test(baseName)) {
+    // Only classify as ENTRY if in root, src top level, or lib/main.dart
+    if (!normPath.includes('/src/') || normPath.split('/').length <= 3 || normPath.endsWith('lib/main.dart')) {
       return ROLES.ENTRY;
     }
   }
@@ -68,6 +68,7 @@ function detectFrameworkRole(filePath, fileContent = '') {
 
   // 5. Frontend & Utility Patterns
   if (/(?:component|components|widget|widgets|ui\/)/i.test(normPath)) return ROLES.COMPONENT;
+  if (ext === '.dart' && fileContent && /extends\s+StatelessWidget|extends\s+StatefulWidget/.test(fileContent)) return ROLES.COMPONENT;
   if (/(?:util|utils|helper|helpers|lib|tools)/i.test(normPath)) return ROLES.UTILITY;
 
   return ROLES.MODULE;
@@ -89,7 +90,7 @@ function resolveFileTarget(baseDir, target) {
     return candidate;
   }
 
-  const exts = ['.js', '.ts', '.jsx', '.tsx', '.mjs', '.cjs', '.py', '.go', '.php', '.c', '.cpp', '.h'];
+  const exts = ['.js', '.ts', '.jsx', '.tsx', '.mjs', '.cjs', '.py', '.go', '.php', '.dart', '.c', '.cpp', '.h'];
   for (const e of exts) {
     if (fs.existsSync(candidate + e) && fs.statSync(candidate + e).isFile()) {
       return candidate + e;
@@ -188,6 +189,42 @@ function getFileImports(filePath, rootDir, fileContent) {
             }
           }
         }
+      }
+    }
+  }
+
+  // 6. Dart / Flutter
+  if (ext === '.dart') {
+    const dartRegex = /import\s+['"](.+?)['"]/g;
+    let m;
+    let pkgName = null;
+    const pubspecPath = path.join(rootDir, 'pubspec.yaml');
+    if (fs.existsSync(pubspecPath)) {
+      try {
+        const pContent = fs.readFileSync(pubspecPath, 'utf8');
+        const nm = pContent.match(/^name:\s*([a-zA-Z0-9_]+)/m);
+        if (nm) pkgName = nm[1];
+      } catch (_) {}
+    }
+
+    while ((m = dartRegex.exec(fileContent)) !== null) {
+      const imp = m[1];
+      if (imp.startsWith('package:')) {
+        const afterPkg = imp.replace(/^package:/, '');
+        const slashIdx = afterPkg.indexOf('/');
+        const importPkgName = slashIdx !== -1 ? afterPkg.substring(0, slashIdx) : afterPkg;
+        const subPath = slashIdx !== -1 ? afterPkg.substring(slashIdx + 1) : '';
+
+        if (pkgName && importPkgName === pkgName) {
+          rawTargets.add(path.join('lib', subPath));
+          rawTargets.add(subPath);
+        } else if (subPath) {
+          rawTargets.add(path.join('lib', subPath));
+          rawTargets.add(subPath);
+        }
+      } else {
+        rawTargets.add(imp);
+        rawTargets.add(path.join('lib', imp));
       }
     }
   }

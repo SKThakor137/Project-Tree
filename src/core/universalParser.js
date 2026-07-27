@@ -228,6 +228,30 @@ function detectNodeType(filePath, content, language) {
   return 'FILE';
 }
 
+// ─── Flutter Package Name Cache ──────────────────────────────────────────────
+
+let _cachedFlutterPkgName = undefined;
+let _cachedRootDir = null;
+
+function getFlutterPackageName(rootDir) {
+  if (_cachedRootDir === rootDir && _cachedFlutterPkgName !== undefined) {
+    return _cachedFlutterPkgName;
+  }
+  _cachedRootDir = rootDir;
+  _cachedFlutterPkgName = null;
+  const pubspecPath = path.join(rootDir, 'pubspec.yaml');
+  if (fs.existsSync(pubspecPath)) {
+    try {
+      const pubspecContent = fs.readFileSync(pubspecPath, 'utf8');
+      const nameMatch = pubspecContent.match(/^name:\s*([a-zA-Z0-9_]+)/m);
+      if (nameMatch) {
+        _cachedFlutterPkgName = nameMatch[1];
+      }
+    } catch (_) {}
+  }
+  return _cachedFlutterPkgName;
+}
+
 // ─── Relationship Extraction ─────────────────────────────────────────────────
 
 /**
@@ -239,12 +263,12 @@ function extractRelationships(filePath, rootDir, content, language) {
   const relationships = [];
   const ext = path.extname(filePath).toLowerCase();
   const fileDir = path.dirname(filePath);
+  let m;
 
   // ── JavaScript / TypeScript ──
   if (['JavaScript', 'TypeScript', 'Vue', 'Svelte', 'MDX'].includes(language)) {
     // Standard imports
     const importRegex = /(?:import|export)\s+(?:[\s\S]*?\s+from\s+)?['"](.*?)['"]|require\(['"](.*?)['"]\)|import\(['"](.*?)['"]\)/g;
-    let m;
     while ((m = importRegex.exec(content)) !== null) {
       const imp = m[1] || m[2] || m[3];
       if (!imp) continue;
@@ -450,17 +474,33 @@ function extractRelationships(filePath, rootDir, content, language) {
 
   // ── Dart / Flutter ──
   if (language === 'Dart') {
+    const pkgName = getFlutterPackageName(rootDir);
     // Import statements
     const dartImport = /import\s+['"](.+?)['"]/g;
     while ((m = dartImport.exec(content)) !== null) {
       const imp = m[1];
       if (imp.startsWith('package:')) {
-        const pkgParts = imp.replace('package:', '').split('/');
-        if (pkgParts.length > 0) {
-          relationships.push({ target: `dart:${pkgParts[0]}`, type: 'EXTERNAL_PACKAGE', metadata: { package: imp } });
+        const afterPkg = imp.replace(/^package:/, '');
+        const slashIdx = afterPkg.indexOf('/');
+        const importPkgName = slashIdx !== -1 ? afterPkg.substring(0, slashIdx) : afterPkg;
+        const subPath = slashIdx !== -1 ? afterPkg.substring(slashIdx + 1) : '';
+
+        let resolved = null;
+        if (pkgName && importPkgName === pkgName) {
+          resolved = resolveImport(rootDir, rootDir, path.join('lib', subPath)) ||
+                     resolveImport(rootDir, rootDir, subPath);
+        } else if (subPath) {
+          resolved = resolveImport(rootDir, rootDir, path.join('lib', subPath)) ||
+                     resolveImport(rootDir, rootDir, subPath);
+        }
+
+        if (resolved) {
+          relationships.push({ target: resolved, type: 'IMPORTS' });
+        } else {
+          relationships.push({ target: `dart:${importPkgName}`, type: 'EXTERNAL_PACKAGE', metadata: { package: imp } });
         }
       } else {
-        const resolved = resolveImport(fileDir, rootDir, imp);
+        const resolved = resolveImport(fileDir, rootDir, imp) || resolveImport(path.join(rootDir, 'lib'), rootDir, imp);
         if (resolved) relationships.push({ target: resolved, type: 'IMPORTS' });
       }
     }
@@ -593,34 +633,90 @@ function extractRelationships(filePath, rootDir, content, language) {
 
 // ─── Import Resolver ─────────────────────────────────────────────────────────
 
+// ─── Import Resolver ─────────────────────────────────────────────────────────
+
 function resolveImport(baseDir, rootDir, target) {
   if (!target || target.startsWith('pkg:')) return null;
 
-  const cleanTarget = target.replace(/^@\//, './');
-  const candidate = path.resolve(baseDir, cleanTarget);
+  // Handle @/ or ~/ path aliases (Next.js / React / Vue / Vite)
+  if (target.startsWith('@/') || target.startsWith('~/')) {
+    const rel = target.slice(2);
+    const candidates = [
+      path.resolve(rootDir, rel),
+      path.resolve(rootDir, 'src', rel),
+      path.resolve(rootDir, 'frontend', rel),
+      path.resolve(rootDir, 'frontend', 'src', rel),
+      path.resolve(rootDir, 'app', rel),
+      path.resolve(baseDir, rel),
+    ];
+    for (const cand of candidates) {
+      const res = tryResolveFile(cand, rootDir);
+      if (res) return res;
+    }
+  }
 
-  // Direct file match
+  // Handle relative imports (./ or ../)
+  if (target.startsWith('.')) {
+    const cand = path.resolve(baseDir, target);
+    const res = tryResolveFile(cand, rootDir);
+    if (res) return res;
+  }
+
+  // Direct resolve from baseDir
+  const candBase = path.resolve(baseDir, target);
+  const resBase = tryResolveFile(candBase, rootDir);
+  if (resBase) return resBase;
+
+  // Direct resolve from rootDir
+  const candRoot = path.resolve(rootDir, target);
+  const resRoot = tryResolveFile(candRoot, rootDir);
+  if (resRoot) return resRoot;
+
+  // Python module paths (e.g. apps.accounts.models or backend.apps.accounts.models)
+  const pyRel = target.replace(/\./g, '/');
+  const pyCandidates = [
+    path.resolve(rootDir, pyRel),
+    path.resolve(rootDir, 'backend', pyRel),
+    path.resolve(rootDir, 'src', pyRel),
+    path.resolve(baseDir, pyRel),
+  ];
+  for (const cand of pyCandidates) {
+    const res = tryResolveFile(cand, rootDir);
+    if (res) return res;
+  }
+
+  // Subdirectory search for relative paths (backend, frontend, src, apps, lib)
+  const subDirs = ['backend', 'frontend', 'src', 'app', 'apps', 'lib', 'components'];
+  for (const sd of subDirs) {
+    const candSub = path.resolve(rootDir, sd, target);
+    const resSub = tryResolveFile(candSub, rootDir);
+    if (resSub) return resSub;
+  }
+
+  return null;
+}
+
+function tryResolveFile(candidate, rootDir) {
   if (fs.existsSync(candidate) && safeIsFile(candidate)) {
     return path.relative(rootDir, candidate).replace(/\\/g, '/');
   }
-
-  // Try extensions
-  const exts = ['.js', '.ts', '.jsx', '.tsx', '.mjs', '.cjs', '.vue', '.svelte', '.py', '.go', '.php', '.rb', '.rs', '.java', '.kt', '.dart', '.cs', '.c', '.cpp', '.h', '.hpp'];
+  const exts = ['.js', '.ts', '.jsx', '.tsx', '.mjs', '.cjs', '.vue', '.svelte', '.py', '.go', '.php', '.rb', '.rs', '.java', '.kt', '.dart', '.cs', '.c', '.cpp', '.h', '.hpp', '.json', '.css', '.scss'];
   for (const e of exts) {
     const withExt = candidate + e;
     if (fs.existsSync(withExt) && safeIsFile(withExt)) {
       return path.relative(rootDir, withExt).replace(/\\/g, '/');
     }
   }
-
-  // Index file check
   for (const e of exts) {
     const idx = path.join(candidate, 'index' + e);
     if (fs.existsSync(idx) && safeIsFile(idx)) {
       return path.relative(rootDir, idx).replace(/\\/g, '/');
     }
+    const initPy = path.join(candidate, '__init__' + e);
+    if (fs.existsSync(initPy) && safeIsFile(initPy)) {
+      return path.relative(rootDir, initPy).replace(/\\/g, '/');
+    }
   }
-
   return null;
 }
 
@@ -694,14 +790,22 @@ function generateUniversalGraph(rootDir, scannedTree = null) {
   const langStats = {};
   let totalLines = 0;
 
-  // First pass: create nodes
+  // First pass: create file nodes
   const contentMap = {};
   const relPathSet = new Set();
+  const folderSet = new Set();
 
   for (const file of files) {
     const relPath = path.relative(absRoot, file.path).replace(/\\/g, '/');
     if (relPathSet.has(relPath)) continue;
     relPathSet.add(relPath);
+
+    // Track folder hierarchy
+    let parentFolder = path.dirname(relPath).replace(/\\/g, '/');
+    while (parentFolder && parentFolder !== '.') {
+      folderSet.add(parentFolder);
+      parentFolder = path.dirname(parentFolder).replace(/\\/g, '/');
+    }
 
     const language = detectLanguage(file.path);
     const content = readFileSafely(file.path);
@@ -725,12 +829,10 @@ function generateUniversalGraph(rootDir, scannedTree = null) {
     let functionNames = [];
 
     if (content && ['JavaScript', 'TypeScript', 'Vue', 'Svelte'].includes(language)) {
-      // Extract exported names
       const namedExports = content.match(/export\s+(?:const|let|var|function|class)\s+(\w+)/g);
       if (namedExports) {
         exportedNames = namedExports.map(e => e.match(/\s(\w+)$/)?.[1]).filter(Boolean);
       }
-      // Extract functions
       const funcs = content.match(/(?:function\s+(\w+)|(?:const|let|var)\s+(\w+)\s*=\s*(?:async\s*)?\()/g);
       if (funcs) {
         functionNames = funcs.map(f => {
@@ -741,9 +843,20 @@ function generateUniversalGraph(rootDir, scannedTree = null) {
       if (exportedNames.length > 0) {
         description = `Exports: ${exportedNames.slice(0, 5).join(', ')}${exportedNames.length > 5 ? '...' : ''}`;
       }
+    } else if (content && language === 'Dart') {
+      const classes = content.match(/class\s+([A-Z]\w+)/g);
+      if (classes) {
+        exportedNames = classes.map(c => c.replace(/^class\s+/, '')).filter(Boolean);
+      }
+      const funcs = content.match(/(?:void|Future<[^>]+>|String|int|double|bool|Widget)\s+([a-z]\w*)\s*\(/g);
+      if (funcs) {
+        functionNames = funcs.map(f => f.match(/\s+([a-z]\w*)\s*\(/)?.[1]).filter(Boolean);
+      }
+      if (exportedNames.length > 0) {
+        description = `Classes: ${exportedNames.slice(0, 5).join(', ')}${exportedNames.length > 5 ? '...' : ''}`;
+      }
     }
 
-    // Build badges
     const badges = [];
     if (frameworks.length > 0) {
       const relevantFw = frameworks.find(fw => {
@@ -782,6 +895,47 @@ function generateUniversalGraph(rootDir, scannedTree = null) {
     });
   }
 
+  // Create folder nodes and PARENT_CHILD edges for structure
+  for (const folder of folderSet) {
+    if (!builder._nodes.has(folder)) {
+      builder.addNode({
+        id: folder,
+        name: path.basename(folder),
+        type: 'FOLDER',
+        filePath: folder,
+        language: '',
+        framework: '',
+        description: `Directory: ${folder}`,
+        badges: ['Folder'],
+        status: 'active',
+        metadata: { isFolder: true },
+      });
+    }
+
+    const parent = path.dirname(folder).replace(/\\/g, '/');
+    if (parent && parent !== '.' && folderSet.has(parent)) {
+      builder.addEdge({
+        source: parent,
+        target: folder,
+        type: 'PARENT_CHILD',
+        label: 'Contains',
+      });
+    }
+  }
+
+  // Connect files to parent folders
+  for (const relPath of relPathSet) {
+    const parent = path.dirname(relPath).replace(/\\/g, '/');
+    if (parent && parent !== '.' && builder._nodes.has(parent)) {
+      builder.addEdge({
+        source: parent,
+        target: relPath,
+        type: 'PARENT_CHILD',
+        label: 'Contains',
+      });
+    }
+  }
+
   // Second pass: extract relationships and create edges
   for (const relPath of relPathSet) {
     const content = contentMap[relPath];
@@ -792,12 +946,42 @@ function generateUniversalGraph(rootDir, scannedTree = null) {
     const relationships = extractRelationships(absFilePath, absRoot, content, language);
 
     for (const rel of relationships) {
-      // Only add edge if target is a known node (for file-to-file relations)
-      // or if it's a special target (pkg:, hook:, ctx:, state:, etc.)
-      if (relPathSet.has(rel.target) || rel.target.includes(':')) {
+      let targetId = rel.target;
+
+      // Handle virtual package/API/pattern nodes
+      if (targetId.includes(':') && !builder._nodes.has(targetId)) {
+        const parts = targetId.split(':');
+        const prefix = parts[0];
+        const name = parts.slice(1).join(':');
+
+        let type = 'PACKAGE';
+        if (prefix === 'pkg') type = 'PACKAGE';
+        else if (prefix === 'api') type = 'API';
+        else if (prefix === 'hook') type = 'HOOK';
+        else if (prefix === 'ctx') type = 'CONTEXT';
+        else if (prefix === 'state') type = 'STORE';
+        else if (prefix === 'django' || prefix === 'rails' || prefix === 'fastapi') type = 'SERVICE';
+        else if (prefix === 'env') type = 'ENVIRONMENT';
+        else if (prefix === 'flutter') type = 'WIDGET';
+
+        builder.addNode({
+          id: targetId,
+          name: name || targetId,
+          type,
+          filePath: targetId,
+          language: '',
+          framework: prefix,
+          description: `Dependency / Pattern: ${targetId}`,
+          badges: [prefix.toUpperCase()],
+          status: 'active',
+          metadata: { isVirtual: true }
+        });
+      }
+
+      if (builder._nodes.has(targetId)) {
         builder.addEdge({
           source: relPath,
-          target: rel.target,
+          target: targetId,
           type: rel.type,
           metadata: rel.metadata || {},
         });

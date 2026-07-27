@@ -74,16 +74,16 @@ function parseArgs(argv) {
       case '--help': case '-h':        args.help = true; break;
       case '--version': case '-v':     args.version = true; break;
 
-      // Bundle & Export System Flags
-      case '--bundle': case '--zip': case '--download':
+      // Bundle & Export System Flags & Subcommands
+      case 'bundle': case '--bundle': case '--zip': case '--download':
         args.bundle = true;
         if (argv[i + 1] && !argv[i + 1].startsWith('-')) {
           args.bundleList = argv[++i];
         }
         break;
-      case '--export-all':
+      case 'export-all': case '--export-all':
         args.exportAll = true; break;
-      case '--export':
+      case 'export': case '--export':
         if (argv[i + 1] && !argv[i + 1].startsWith('-')) {
           args.exportList = argv[++i];
         } else {
@@ -95,32 +95,33 @@ function parseArgs(argv) {
       case '--no-write': case '--stdout':
         args.noWrite = true; break;
 
-      // Format & Analysis Flags
-      case '--ai':                     args.ai = true; break;
-      case '--prompt':                 args.prompt = true; break;
-      case '--tokens':                 args.tokens = true; break;
-      case '--summarize':              args.summarize = true; break;
-      case '--flow':                   args.flow = true; break;
-      case '--architecture':           args.architecture = true; break;
+      // Format & Analysis Flags & Subcommands
+      case 'ai': case '--ai':                         args.ai = true; break;
+      case 'prompt': case '--prompt':                 args.prompt = true; break;
+      case 'tokens': case '--tokens':                 args.tokens = true; break;
+      case 'summarize': case '--summarize':          args.summarize = true; break;
+      case 'flow': case '--flow':                     args.flow = true; break;
+      case 'architecture': case '--architecture':     args.architecture = true; break;
+      case 'visualize': case 'graph': case 'code-graph':
       case '--visualize': case '--graph': case '--code-graph':
-                                       args.visualize = true; break;
-      case '--graph-json':             args.graphJson = true; break;
-      case '--json':                   args.json = true; break;
-      case '--html':                   args.html = true; break;
-      case '--svg':                    args.svg = true; break;
-      case '--mermaid':                args.mermaid = true; break;
-      case '--watch':                  args.watch = true; break;
-      case '--inject':                 args.inject = argv[++i]; break;
-      case '--theme':                  args.theme = argv[++i]; break;
-      case '--details':                args.details = true; break;
-      case '--compress':               args.compress = true; break;
-      case '--collapse':               args.collapseThreshold = parseInt(argv[++i], 10); break;
-      case '--max-size':               args.maxSize = argv[++i]; break;
-      case '--include-binary':         args.includeBinary = true; break;
-      case '--show-sensitive':         args.showSensitive = true; break;
-      case '--no-ignore':              args.noIgnore = true; break;
-      case '--dashboard':              args.dashboard = true; break;
-      case '-i': case '--interactive': args.interactive = true; break;
+                                                      args.visualize = true; break;
+      case 'graph-json': case '--graph-json':         args.graphJson = true; break;
+      case 'json': case '--json':                     args.json = true; break;
+      case 'html': case '--html':                     args.html = true; break;
+      case 'svg': case '--svg':                       args.svg = true; break;
+      case 'mermaid': case '--mermaid':               args.mermaid = true; break;
+      case '--watch':                                 args.watch = true; break;
+      case '--inject':                                args.inject = argv[++i]; break;
+      case '--theme':                                 args.theme = argv[++i]; break;
+      case '--details':                               args.details = true; break;
+      case '--compress':                              args.compress = true; break;
+      case '--collapse':                              args.collapseThreshold = parseInt(argv[++i], 10); break;
+      case '--max-size':                              args.maxSize = argv[++i]; break;
+      case '--include-binary':                        args.includeBinary = true; break;
+      case '--show-sensitive':                        args.showSensitive = true; break;
+      case '--no-ignore':                             args.noIgnore = true; break;
+      case 'dashboard': case '--dashboard':           args.dashboard = true; break;
+      case '-i': case '--interactive':                args.interactive = true; break;
 
       // Subcommand
       case 'compare':
