@@ -1,6 +1,6 @@
 {
   "name": "project-tree-md",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "description": "The ultimate AI-ready project analysis, architecture & visualizer suite. Generates interactive Code Relationship Graphs (HTML/Canvas), Markdown, JSON, HTML, SVG, Mermaid, ZIP bundles, AI context, dependency graphs, dead code reports, and HTML Download Center. Zero dependencies.",
   "main": "src/index.js",
   "bin": {
