@@ -5,7 +5,7 @@
   <h1 align="center">🌳 project-tree-md</h1>
   <p align="center">
     <strong>The Ultimate AI-Ready Project Analysis, Architecture & Visualizer Suite</strong><br>
-    <em>Generate Interactive Code Graphs, Markdown, JSON, HTML, SVG, Mermaid, ZIP Bundles & AI Context in 1-Second. Zero Dependencies.</em>
+    <em>Generate 2D & 3D Interactive Code Graphs, Markdown, JSON, HTML, SVG, Mermaid, ZIP Bundles & AI Context in 1-Second. Zero Dependencies.</em>
   </p>
   <p align="center">
     <a href="https://www.npmjs.com/package/project-tree-md"><img src="https://img.shields.io/npm/v/project-tree-md.svg?style=for-the-badge&color=58a6ff" alt="npm version" /></a>
@@ -35,21 +35,23 @@ Run a complete codebase analysis and generate `PROJECT_STRUCTURE.md` immediately
 npx project-tree-md
 ```
 
-Generate a standalone **Interactive Code Relationship Graph HTML** (`CODE_GRAPH.html`):
+Generate a 2D **Interactive Code Relationship Graph HTML** (`CODE_GRAPH.html`):
 
 ```bash
 npx project-tree-md --visualize
+```
+
+Generate a 3D **WebGL Immersive Code Relationship Graph HTML** (`CODE_GRAPH_3D.html`):
+
+```bash
+npx project-tree-md --visualize-3d
 ```
 
 ---
 
-## 🌐 Universal Code Relationship Visualizer (`--visualize`)
+## 🌐 Universal 2D & 3D Code Relationship Visualizers (`--visualize`, `--visualize-3d`)
 
-Transform any codebase into a dynamic, interactive canvas graph showing complete architecture, dependency graphs, state flows, hooks, models, and service relationships!
-
-```bash
-npx project-tree-md --visualize
-```
+Transform any codebase into dynamic, interactive 2D canvas & 3D WebGL graphs showing complete architecture, dependency graphs, state flows, hooks, models, and service relationships!
 
 ```
                      App.jsx (React)
@@ -64,18 +66,31 @@ npx project-tree-md --visualize
                                 userService.js (API)
 ```
 
-### ⚡ Visualizer Highlights
+### 🎨 2D Interactive Canvas Visualizer (`--visualize`)
 
+```bash
+npx project-tree-md --visualize
+```
+
+Generates high-performance 2D canvas visualizer (`CODE_GRAPH.html`):
 * 🎨 **5 Layout Engines**: Switch on-the-fly between **DAG (Sugiyama)**, **Force-Directed (Barnes-Hut)**, **Tree**, **Radial**, and **Horizontal Flow**.
 * 🚀 **Multi-Language Support**: Framework-agnostic parsing for **20+ languages and frameworks** (React, Next.js, Vue, Angular, Svelte, Laravel, PHP, Node.js, Express, NestJS, Flutter, Dart, React Native, Python, Django, FastAPI, Java, Spring Boot, .NET/C#, Go, Rust).
 * ⚡ **High-Performance Canvas Rendering**: Virtual viewport rendering scales smoothly to 10,000+ nodes at 60 FPS.
-* 🔍 **Real-Time Instant Search**: Live query filtering with search count badges and auto-centering (`Ctrl+F`).
-* 🔍 **Interactive Minimap & Viewport**: Live bird's-eye minimap with draggable viewport rectangle.
-* 📑 **Slide-out Detail Panel**: Click any node to inspect code metrics, file size, line counts, incoming imports, outgoing exports, component dependencies, and raw JSON schema.
-* 🎯 **Node Expand/Collapse & Pinning**: Deeply inspect subtree branches or double-click to collapse complex sub-modules.
-* 🖱️ **Context Menu & Keyboard Shortcuts**: Right-click context actions (`E`/`C` expand/collapse, `F` fullscreen, `0` fit view, `Ctrl+Z`/`Ctrl+Y` undo/redo, `Ctrl+S` export).
-* 🌙 **Dark & Light Glassmorphism Themes**: Sleek UI with custom HSL badges, seamless theme toggle, and print optimization.
-* 📷 **PNG & JSON Export**: Export high-res vector PNG diagrams or raw `CODE_GRAPH.json` models for downstream processing.
+* 🔍 **Real-Time Instant Search & Minimap**: Live query filtering with auto-centering (`Ctrl+F`) and draggable minimap.
+* 📑 **Slide-out Detail Panel**: Inspect code metrics, file size, line counts, incoming imports, outgoing exports, and dependencies.
+* 📷 **PNG & JSON Export**: Export high-res vector PNG diagrams or raw `CODE_GRAPH.json` models.
+
+### 🧊 3D WebGL Immersive Visualizer (`--visualize-3d`)
+
+```bash
+npx project-tree-md --visualize-3d
+```
+
+Generates immersive 3D force-directed WebGL visualizer (`CODE_GRAPH_3D.html`):
+* 🌌 **Interactive 3D Sphere & Force Spatial Engine**: Explore project architecture in full 3D space with particle link effects and dynamic node spheres.
+* 🕹️ **Full Camera Navigation & Orbit Controls**: Rotate, zoom, pan, and focus in 3D perspective or orthographic view modes.
+* 💡 **Dynamic 3D Lighting & Shading**: Dark/Light mode with glowing status nodes, directional light sources, and particle beams.
+* 🎯 **3D Node Inspection & Focus**: Click any 3D node to smoothly focus camera and inspect dependency subtrees and code metrics.
 
 ---
 
@@ -95,7 +110,7 @@ Most directory tree generators only print basic text folders. **`project-tree-md
 
 ### ⚡ Key Capabilities
 
-* 🌐 **Universal Code Relationship Visualizer (`--visualize`)**: Generate standalone HTML canvas visualizers for codebases in 20+ programming languages.
+* 🌐 **Universal 2D & 3D Code Relationship Visualizers (`--visualize`, `--visualize-3d`)**: Generate standalone 2D canvas (`CODE_GRAPH.html`) and 3D WebGL (`CODE_GRAPH_3D.html`) interactive visualizers for codebases in 20+ programming languages.
 * 📋 **Graph JSON Export (`--graph-json`)**: Output structured node and edge relationship models for complete graph reconstruction.
 * 📦 **ZIP Analysis Bundles (`--bundle`)**: Export up to 20 analysis reports (Markdown, Interactive Graph, JSON, HTML, SVG, Mermaid, AI Context, Health Metrics, Component Maps, Dead Code) into a single `project-analysis.zip` archive.
 * 💻 **In-Browser HTML Download Center (`--html`)**: Standalone HTML dashboard with sticky real-time search, Dark/Light mode, and 1-click browser ZIP file downloads.
@@ -113,7 +128,7 @@ Most directory tree generators only print basic text folders. **`project-tree-md
 
 | Feature | `project-tree-md` | `tree` (Unix) | `tree-cli` | `directory-tree` |
 | :--- | :---: | :---: | :---: | :---: |
-| **Interactive Code Visualizer** | ✅ **Canvas HTML** | ❌ No | ❌ No | ❌ No |
+| **Interactive Code Visualizer** | ✅ **2D Canvas & 3D WebGL** | ❌ No | ❌ No | ❌ No |
 | **Universal Graph JSON** | ✅ **Built-in** | ❌ No | ❌ No | ❌ No |
 | **Markdown Export** | ✅ **Built-in** | ❌ No | ❌ No | ❌ No |
 | **Zero Dependencies** | ✅ **100% Zero** | ✅ System | ❌ Heavy | ❌ Heavy |
@@ -130,16 +145,19 @@ Most directory tree generators only print basic text folders. **`project-tree-md
 
 ## ⚡ Quick Examples & Commands
 
-### 1. Interactive Code Relationship Visualizer
+### 1. Interactive 2D & 3D Code Relationship Visualizers
 ```bash
-# Generate CODE_GRAPH.html
+# Generate 2D interactive graph (CODE_GRAPH.html)
 npx project-tree-md --visualize
+
+# Generate 3D WebGL interactive graph (CODE_GRAPH_3D.html)
+npx project-tree-md --visualize-3d
 
 # Export Universal Graph Model JSON
 npx project-tree-md --graph-json
 
-# Export both HTML graph and JSON
-npx project-tree-md --visualize --graph-json
+# Export 2D graph, 3D graph, and JSON model together
+npx project-tree-md --visualize --visualize-3d --graph-json
 ```
 
 ### 2. Default Run (Generates `PROJECT_STRUCTURE.md`)
@@ -191,7 +209,8 @@ npx project-tree-md --bundle --output-dir reports/
 ```text
 project-analysis.zip
 │
-├── CODE_GRAPH.html           # Interactive Code Relationship Graph Visualizer
+├── CODE_GRAPH.html           # 2D Interactive Code Relationship Graph Visualizer
+├── CODE_GRAPH_3D.html        # 3D WebGL Immersive Code Graph Visualizer
 ├── CODE_GRAPH.json           # Universal Graph JSON Model
 ├── PROJECT_STRUCTURE.md      # Standard Markdown project tree
 ├── PROJECT_STRUCTURE.json    # Full JSON tree hierarchy & metadata
@@ -226,8 +245,9 @@ Usage:
   npx project-tree-md compare <pathA> <pathB>
 
 Visualizer & Graph Options:
-  --visualize, --graph    Generate interactive Code Relationship Graph HTML (CODE_GRAPH.html)
-  --graph-json            Export universal graph model JSON (CODE_GRAPH.json)
+  --visualize, --graph        Generate interactive 2D Code Relationship Graph HTML (CODE_GRAPH.html)
+  --visualize-3d, --3d-graph  Generate interactive 3D WebGL Code Relationship Graph HTML (CODE_GRAPH_3D.html)
+  --graph-json                Export universal graph model JSON (CODE_GRAPH.json)
 
 Bundle & Export System:
   --bundle [list]         Generate ZIP package with all or selected reports (e.g. --bundle graph,html,json)
@@ -277,6 +297,7 @@ const {
   generateTree,
   generateUniversalGraph,
   toGraphVisualizerHtml,
+  toGraph3dVisualizerHtml,
   toGraphJson,
   fromGraphJson,
   generateBundle,
@@ -286,9 +307,10 @@ const {
   estimateTokens,
 } = require('project-tree-md');
 
-// 1. Generate Universal Graph Model & Interactive HTML Visualizer
+// 1. Generate Universal Graph Model & 2D / 3D Interactive HTML Visualizers
 const graphModel = generateUniversalGraph(process.cwd());
-const graphHtml = toGraphVisualizerHtml(graphModel, 'My Project');
+const graph2dHtml = toGraphVisualizerHtml(graphModel, 'My Project');
+const graph3dHtml = toGraph3dVisualizerHtml(graphModel, 'My Project');
 const graphJson = toGraphJson(graphModel);
 
 console.log(`Graph Nodes: ${graphModel.nodes.length}, Edges: ${graphModel.edges.length}`);
