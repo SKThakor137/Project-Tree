@@ -252,6 +252,61 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--fon
 .legend-line.dotted { background: none; border-top: 2px dotted; }
 
 /* ═══════════════════════════════════════════════════════════════════════════
+   SMART NAVIGATION TRACKER & POPPER
+   ═══════════════════════════════════════════════════════════════════════════ */
+.nav-tracker {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 6px; padding: 8px 10px; margin-bottom: 16px;
+  background: var(--bg-panel-2); border: 1px solid var(--border-light);
+  border-radius: var(--radius); position: relative;
+}
+.nav-tracker-btn {
+  display: inline-flex; align-items: center; gap: 4px; padding: 6px 12px;
+  background: var(--bg-hover); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); color: var(--text); font-size: 0.78rem;
+  font-weight: 500; font-family: var(--font-sans); cursor: pointer;
+  transition: var(--transition); user-select: none;
+}
+.nav-tracker-btn:hover:not(:disabled) {
+  background: var(--accent-bg); color: var(--accent); border-color: var(--accent);
+}
+.nav-tracker-btn:disabled {
+  opacity: 0.35; cursor: not-allowed; border-color: transparent;
+}
+.nav-tracker-info {
+  font-size: 0.7rem; font-weight: 600; color: var(--text-muted);
+  font-family: var(--font-mono); text-align: center; white-space: nowrap;
+}
+.conn-picker-popover {
+  position: absolute; top: calc(100% + 6px); right: 0; width: 280px;
+  max-height: 260px; overflow-y: auto; z-index: 250;
+  background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 8px; display: none;
+}
+.conn-picker-popover.open { display: block; }
+.conn-picker-title {
+  font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.5px; color: var(--accent); padding: 4px 8px 8px 8px;
+  border-bottom: 1px solid var(--border-light); margin-bottom: 6px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.conn-picker-item {
+  display: flex; align-items: center; gap: 8px; padding: 7px 10px;
+  border-radius: var(--radius-sm); font-size: 0.78rem; color: var(--text);
+  cursor: pointer; transition: var(--transition); margin-bottom: 2px;
+}
+.conn-picker-item:hover {
+  background: var(--accent-bg); color: var(--accent);
+}
+.conn-picker-badge {
+  font-size: 0.65rem; padding: 2px 6px; border-radius: 4px;
+  font-weight: 600; font-family: var(--font-mono); margin-left: auto;
+}
+.conn-picker-badge.inc { background: rgba(88,166,255,0.15); color: var(--accent); }
+.conn-picker-badge.out { background: rgba(63,185,80,0.15); color: var(--success); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
    STATS BAR
    ═══════════════════════════════════════════════════════════════════════════ */
 #statsBar {
@@ -574,16 +629,99 @@ function createTextTexture(text, color) {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// CAMERA FOCUS
+// CAMERA FOCUS & 3D PULSE EFFECT
 // ═══════════════════════════════════════════════════════════════════════════
+let pulsing3dNode = null;
+let pulsing3dStartTime = 0;
+let pulse3dAnimFrame = null;
+
+function trigger3dNodePulse(node) {
+  if (!node) return;
+  pulsing3dNode = node;
+  pulsing3dStartTime = performance.now();
+
+  const THREE = Graph.three();
+  const scene = Graph.scene();
+  if (!THREE || !scene) return;
+
+  const baseSize = Math.max(6, (node.val || 2) * 2.5);
+  const geometry = new THREE.SphereGeometry(baseSize, 24, 24);
+  const material = new THREE.MeshBasicMaterial({
+    color: node.color || '#58a6ff',
+    wireframe: true,
+    transparent: true,
+    opacity: 0.9,
+  });
+  const pulseMesh = new THREE.Mesh(geometry, material);
+  pulseMesh.position.set(node.x || 0, node.y || 0, node.z || 0);
+  scene.add(pulseMesh);
+
+  function animPulse(now) {
+    const elapsed = now - pulsing3dStartTime;
+    const progress = Math.min(1, elapsed / 1200);
+
+    if (progress < 1) {
+      const scale = 1 + progress * 2.5;
+      pulseMesh.scale.set(scale, scale, scale);
+      material.opacity = (1 - progress) * 0.9;
+      pulseMesh.position.set(node.x || 0, node.y || 0, node.z || 0);
+      pulse3dAnimFrame = requestAnimationFrame(animPulse);
+    } else {
+      scene.remove(pulseMesh);
+      geometry.dispose();
+      material.dispose();
+      pulsing3dNode = null;
+      pulse3dAnimFrame = null;
+    }
+  }
+
+  if (pulse3dAnimFrame) cancelAnimationFrame(pulse3dAnimFrame);
+  pulse3dAnimFrame = requestAnimationFrame(animPulse);
+}
+
 function focusCameraOnNode(node) {
-  const distance = 120;
-  const distRatio = 1 + distance / Math.hypot(node.x || 0, node.y || 0, node.z || 0);
+  if (!node) return;
+  const nx = node.x || 0;
+  const ny = node.y || 0;
+  const nz = node.z || 0;
+
+  const distance = 140;
+  const hyp = Math.hypot(nx, ny, nz) || 1;
+  const targetCamPos = {
+    x: nx + (nx / hyp) * distance,
+    y: ny + (ny / hyp) * distance + 20,
+    z: nz + (nz / hyp) * distance + 30,
+  };
+
+  // Smooth 3D camera transition over 1400ms
   Graph.cameraPosition(
-    { x: (node.x || 0) * distRatio, y: (node.y || 0) * distRatio, z: (node.z || 0) * distRatio },
-    { x: node.x || 0, y: node.y || 0, z: node.z || 0 },
-    1200 // ms transition
+    targetCamPos,
+    { x: nx, y: ny, z: nz },
+    1400
   );
+
+  // Highlight connected nodes & edges
+  highlightNodes.clear();
+  highlightLinks.clear();
+  highlightNodes.add(node);
+
+  const links = Graph.graphData().links;
+  links.forEach(l => {
+    const src = typeof l.source === 'object' ? l.source : nodeMap[l.source];
+    const tgt = typeof l.target === 'object' ? l.target : nodeMap[l.target];
+    if (src === node || tgt === node) {
+      highlightLinks.add(l);
+      if (src) highlightNodes.add(src);
+      if (tgt) highlightNodes.add(tgt);
+    }
+  });
+
+  Graph.nodeColor(Graph.nodeColor())
+    .linkColor(Graph.linkColor())
+    .linkWidth(Graph.linkWidth())
+    .linkDirectionalParticles(Graph.linkDirectionalParticles());
+
+  trigger3dNodePulse(node);
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
@@ -612,9 +750,114 @@ container.addEventListener('mousemove', (e) => {
 const detailPanel = document.getElementById('detailPanel');
 const detailContent = document.getElementById('detailContent');
 
-function selectNode(node) {
+// ═══════════════════════════════════════════════════════════════════════════
+// SMART NAVIGATION & HISTORY TRACKER
+// ═══════════════════════════════════════════════════════════════════════════
+const NAV_STACK = {
+  history: [], // Array of node IDs
+  index: -1,   // Pointer in history array
+};
+
+function selectNode(node, pushHist = true) {
   selectedNode = node;
   if (!node) { closeDetailPanel(); return; }
+
+  if (pushHist) {
+    if (NAV_STACK.index < NAV_STACK.history.length - 1) {
+      NAV_STACK.history = NAV_STACK.history.slice(0, NAV_STACK.index + 1);
+    }
+    if (NAV_STACK.history[NAV_STACK.index] !== node.id) {
+      NAV_STACK.history.push(node.id);
+      NAV_STACK.index = NAV_STACK.history.length - 1;
+    }
+  }
+
+  showDetailPanel3d(node);
+  focusCameraOnNode(node);
+}
+
+function navGoBack3d() {
+  if (NAV_STACK.index > 0) {
+    NAV_STACK.index--;
+    const prevId = NAV_STACK.history[NAV_STACK.index];
+    const node = graphNodes.find(n => n.id === prevId);
+    if (node) selectNode(node, false);
+  }
+}
+
+function navGoForward3d() {
+  if (NAV_STACK.index < NAV_STACK.history.length - 1) {
+    NAV_STACK.index++;
+    const nextId = NAV_STACK.history[NAV_STACK.index];
+    const node = graphNodes.find(n => n.id === nextId);
+    if (node) selectNode(node, false);
+    return;
+  }
+
+  if (!selectedNode) return;
+  const currId = selectedNode.id;
+  const inc = incomingMap[currId] || [];
+  const out = outgoingMap[currId] || [];
+
+  const connMap = new Map();
+  out.forEach(c => {
+    if (!connMap.has(c.target)) {
+      const tgt = graphNodes.find(n => n.id === c.target);
+      connMap.set(c.target, { id: c.target, name: tgt ? tgt.name : c.target, icon: tgt ? tgt.icon : '📄', dir: 'outgoing', label: c.type });
+    }
+  });
+  inc.forEach(c => {
+    if (!connMap.has(c.source)) {
+      const src = graphNodes.find(n => n.id === c.source);
+      connMap.set(c.source, { id: c.source, name: src ? src.name : c.source, icon: src ? src.icon : '📄', dir: 'incoming', label: c.type });
+    }
+  });
+
+  const connections = Array.from(connMap.values());
+
+  if (connections.length === 0) return;
+
+  if (connections.length === 1) {
+    const node = graphNodes.find(n => n.id === connections[0].id);
+    if (node) selectNode(node, true);
+    return;
+  }
+
+  toggleConnectionPicker3d(connections);
+}
+
+function toggleConnectionPicker3d(connections) {
+  const popover = document.getElementById('connPickerPopover');
+  if (!popover) return;
+
+  if (popover.classList.contains('open')) {
+    popover.classList.remove('open');
+    return;
+  }
+
+  let html = '<div class="conn-picker-title"><span>Kahan jana chahte hain?</span><span style="font-size:0.65rem;color:var(--text-muted);">' + connections.length + ' connections</span></div>';
+  connections.forEach(c => {
+    html += '<div class="conn-picker-item" data-pick-node="' + escHtml(c.id) + '">';
+    html += '<span>' + escHtml(c.icon) + '</span>';
+    html += '<span style="font-weight:500;overflow:hidden;text-overflow:ellipsis;">' + escHtml(c.name) + '</span>';
+    html += '<span class="conn-picker-badge ' + (c.dir === 'incoming' ? 'inc' : 'out') + '">' + (c.dir === 'incoming' ? '↓ IN' : '↑ OUT') + '</span>';
+    html += '</div>';
+  });
+
+  popover.innerHTML = html;
+  popover.classList.add('open');
+
+  popover.querySelectorAll('.conn-picker-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.stopPropagation();
+      popover.classList.remove('open');
+      const targetNode = graphNodes.find(n => n.id === item.dataset.pickNode);
+      if (targetNode) selectNode(targetNode, true);
+    });
+  });
+}
+
+function showDetailPanel3d(node) {
   const meta = node.metadata || {};
   const incoming = incomingMap[node.id] || [];
   const outgoing = outgoingMap[node.id] || [];
@@ -627,7 +870,21 @@ function selectNode(node) {
   html += '<span class="badge badge-type">' + escHtml(node.label || node.type) + '</span>';
   if (node.language) html += '<span class="badge badge-lang">' + escHtml(node.language) + '</span>';
   if (node.framework) html += '<span class="badge badge-fw">' + escHtml(node.framework) + '</span>';
-  html += '</div></div>';
+  html += '</div>';
+
+  // Navigation Tracker Bar UI
+  const isBackDisabled = NAV_STACK.index <= 0;
+  const totalConn = incoming.length + outgoing.length;
+  const isNextDisabled = NAV_STACK.index >= NAV_STACK.history.length - 1 && totalConn === 0;
+
+  html += '<div class="nav-tracker" id="navTrackerBar">';
+  html += '<button class="nav-tracker-btn" id="btnNavPrev" ' + (isBackDisabled ? 'disabled' : '') + '>← Previous File</button>';
+  html += '<span class="nav-tracker-info">Step ' + Math.max(1, NAV_STACK.index + 1) + ' / ' + Math.max(1, NAV_STACK.history.length) + '</span>';
+  html += '<button class="nav-tracker-btn" id="btnNavNext" ' + (isNextDisabled ? 'disabled' : '') + '>Next File →</button>';
+  html += '<div class="conn-picker-popover" id="connPickerPopover"></div>';
+  html += '</div>';
+
+  html += '</div>'; // End detail-header
 
   // Tabs
   html += '<div class="detail-tabs">';
@@ -695,6 +952,12 @@ function selectNode(node) {
   detailContent.innerHTML = html;
   detailPanel.classList.add('open');
 
+  // Navigation button listeners
+  const btnPrev = document.getElementById('btnNavPrev');
+  const btnNext = document.getElementById('btnNavNext');
+  if (btnPrev) btnPrev.addEventListener('click', (e) => { e.stopPropagation(); navGoBack3d(); });
+  if (btnNext) btnNext.addEventListener('click', (e) => { e.stopPropagation(); navGoForward3d(); });
+
   // Tab switching
   detailContent.querySelectorAll('.detail-tab').forEach(tab => {
     tab.addEventListener('click', () => {
@@ -711,8 +974,7 @@ function selectNode(node) {
       const nodeId = item.dataset.nodeId;
       const targetNode = graphNodes.find(n => n.id === nodeId);
       if (targetNode) {
-        selectNode(targetNode);
-        focusCameraOnNode(targetNode);
+        selectNode(targetNode, true);
       }
     });
   });

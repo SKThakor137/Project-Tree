@@ -345,6 +345,61 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--fon
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
+   SMART NAVIGATION TRACKER & POPPER
+   ═══════════════════════════════════════════════════════════════════════════ */
+.nav-tracker {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 6px; padding: 8px 10px; margin-bottom: 16px;
+  background: var(--bg-panel-2); border: 1px solid var(--border-light);
+  border-radius: var(--radius); position: relative;
+}
+.nav-tracker-btn {
+  display: inline-flex; align-items: center; gap: 4px; padding: 6px 12px;
+  background: var(--bg-hover); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); color: var(--text); font-size: 0.78rem;
+  font-weight: 500; font-family: var(--font-sans); cursor: pointer;
+  transition: var(--transition); user-select: none;
+}
+.nav-tracker-btn:hover:not(:disabled) {
+  background: var(--accent-bg); color: var(--accent); border-color: var(--accent);
+}
+.nav-tracker-btn:disabled {
+  opacity: 0.35; cursor: not-allowed; border-color: transparent;
+}
+.nav-tracker-info {
+  font-size: 0.7rem; font-weight: 600; color: var(--text-muted);
+  font-family: var(--font-mono); text-align: center; white-space: nowrap;
+}
+.conn-picker-popover {
+  position: absolute; top: calc(100% + 6px); right: 0; width: 280px;
+  max-height: 260px; overflow-y: auto; z-index: 250;
+  background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 8px; display: none;
+}
+.conn-picker-popover.open { display: block; }
+.conn-picker-title {
+  font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.5px; color: var(--accent); padding: 4px 8px 8px 8px;
+  border-bottom: 1px solid var(--border-light); margin-bottom: 6px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.conn-picker-item {
+  display: flex; align-items: center; gap: 8px; padding: 7px 10px;
+  border-radius: var(--radius-sm); font-size: 0.78rem; color: var(--text);
+  cursor: pointer; transition: var(--transition); margin-bottom: 2px;
+}
+.conn-picker-item:hover {
+  background: var(--accent-bg); color: var(--accent);
+}
+.conn-picker-badge {
+  font-size: 0.65rem; padding: 2px 6px; border-radius: 4px;
+  font-weight: 600; font-family: var(--font-mono); margin-left: auto;
+}
+.conn-picker-badge.inc { background: rgba(88,166,255,0.15); color: var(--accent); }
+.conn-picker-badge.out { background: rgba(63,185,80,0.15); color: var(--success); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
    SCROLLBAR
    ═══════════════════════════════════════════════════════════════════════════ */
 ::-webkit-scrollbar { width: 6px; }
@@ -950,6 +1005,22 @@ function drawNode(n, pos) {
   ctx.shadowColor = 'transparent';
   ctx.shadowBlur = 0;
 
+  // Pulse ring animation
+  if (pulseNodeId === n.id) {
+    const elapsed = performance.now() - pulseStartTime;
+    const progress = (elapsed % 600) / 600;
+    const pulseRadius = 14 * progress;
+    const pulseAlpha = (1 - progress) * 0.85;
+
+    ctx.save();
+    ctx.strokeStyle = n.color || '#58a6ff';
+    ctx.lineWidth = 3;
+    ctx.globalAlpha = pulseAlpha;
+    roundRect(ctx, x - pulseRadius, y - pulseRadius, nw + pulseRadius * 2, nh + pulseRadius * 2, 12);
+    ctx.stroke();
+    ctx.restore();
+  }
+
   // Border
   ctx.strokeStyle = isSelected ? (n.color || '#58a6ff') : (isHovered ? (n.color || '#58a6ff') : (isDark ? 'rgba(48,54,61,0.8)' : 'rgba(208,215,222,0.8)'));
   ctx.lineWidth = isSelected ? 2 : 1;
@@ -1173,9 +1244,92 @@ canvas.addEventListener('contextmenu', (e) => {
 
 // ─── SELECTION & DETAILS ─────────────────────────────────────────────────────
 
-function selectNode(n) {
+// ─── SMART NAVIGATION & HISTORY TRACKER ──────────────────────────────────────
+
+const NAV_STACK = {
+  history: [], // Array of node IDs
+  index: -1,   // History stack pointer
+};
+
+let pulseNodeId = null;
+let pulseStartTime = 0;
+let pulseAnimFrame = null;
+let animFocusFrame = null;
+
+function triggerNodePulse(nodeId) {
+  pulseNodeId = nodeId;
+  pulseStartTime = performance.now();
+
+  function animatePulse(now) {
+    const elapsed = now - pulseStartTime;
+    if (elapsed < 1200) {
+      render();
+      pulseAnimFrame = requestAnimationFrame(animatePulse);
+    } else {
+      pulseNodeId = null;
+      render();
+    }
+  }
+  if (pulseAnimFrame) cancelAnimationFrame(pulseAnimFrame);
+  pulseAnimFrame = requestAnimationFrame(animatePulse);
+}
+
+function smoothCenterOnNode(nodeId) {
+  const pos = STATE.positions.get(nodeId);
+  if (!pos) return;
+
+  const targetOffsetX = -(pos.x + STATE.nodeWidth / 2);
+  const targetOffsetY = -(pos.y + STATE.nodeHeight / 2);
+  const targetZoom = Math.max(0.7, Math.min(1.4, STATE.zoom));
+
+  const startOffsetX = STATE.offsetX;
+  const startOffsetY = STATE.offsetY;
+  const startZoom = STATE.zoom;
+
+  const startTime = performance.now();
+  const duration = 400;
+
+  if (animFocusFrame) cancelAnimationFrame(animFocusFrame);
+
+  function step(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(1, elapsed / duration);
+    const ease = 1 - Math.pow(1 - progress, 3); // Ease-out cubic
+
+    STATE.offsetX = startOffsetX + (targetOffsetX - startOffsetX) * ease;
+    STATE.offsetY = startOffsetY + (targetOffsetY - startOffsetY) * ease;
+    STATE.zoom = startZoom + (targetZoom - startZoom) * ease;
+
+    render();
+    updateMinimap();
+
+    if (progress < 1) {
+      animFocusFrame = requestAnimationFrame(step);
+    } else {
+      animFocusFrame = null;
+    }
+  }
+
+  animFocusFrame = requestAnimationFrame(step);
+}
+
+function selectNode(n, pushHist = true) {
+  if (!n) return;
   STATE.selectedNode = n;
+
+  if (pushHist) {
+    if (NAV_STACK.index < NAV_STACK.history.length - 1) {
+      NAV_STACK.history = NAV_STACK.history.slice(0, NAV_STACK.index + 1);
+    }
+    if (NAV_STACK.history[NAV_STACK.index] !== n.id) {
+      NAV_STACK.history.push(n.id);
+      NAV_STACK.index = NAV_STACK.history.length - 1;
+    }
+  }
+
   showDetailPanel(n);
+  smoothCenterOnNode(n.id);
+  triggerNodePulse(n.id);
   render();
 }
 
@@ -1183,6 +1337,93 @@ function deselectNode() {
   STATE.selectedNode = null;
   document.getElementById('detailPanel').classList.remove('open');
   render();
+}
+
+function navGoBack() {
+  if (NAV_STACK.index > 0) {
+    NAV_STACK.index--;
+    const prevId = NAV_STACK.history[NAV_STACK.index];
+    const node = nodeMap.get(prevId);
+    if (node) selectNode(node, false);
+  }
+}
+
+function navGoForward() {
+  // Case A: Back in history stack -> move forward in stack
+  if (NAV_STACK.index < NAV_STACK.history.length - 1) {
+    NAV_STACK.index++;
+    const nextId = NAV_STACK.history[NAV_STACK.index];
+    const node = nodeMap.get(nextId);
+    if (node) selectNode(node, false);
+    return;
+  }
+
+  // Case B: At tip of history stack. Check connections of current node
+  if (!STATE.selectedNode) return;
+  const currId = STATE.selectedNode.id;
+  const inc = incomingEdges.get(currId) || [];
+  const out = outgoingEdges.get(currId) || [];
+
+  const connMap = new Map();
+  out.forEach(e => {
+    if (!connMap.has(e.target)) {
+      const tgt = nodeMap.get(e.target);
+      connMap.set(e.target, { id: e.target, name: tgt ? tgt.name : e.target, icon: tgt ? tgt.icon : '📄', dir: 'outgoing', label: e.label || e.type, color: e.color });
+    }
+  });
+  inc.forEach(e => {
+    if (!connMap.has(e.source)) {
+      const src = nodeMap.get(e.source);
+      connMap.set(e.source, { id: e.source, name: src ? src.name : e.source, icon: src ? src.icon : '📄', dir: 'incoming', label: e.label || e.type, color: e.color });
+    }
+  });
+
+  const connections = Array.from(connMap.values());
+
+  if (connections.length === 0) {
+    toast('No connected files');
+    return;
+  }
+
+  if (connections.length === 1) {
+    const node = nodeMap.get(connections[0].id);
+    if (node) selectNode(node, true);
+    return;
+  }
+
+  // Multiple connections -> Open Popover Dropdown Picker!
+  toggleConnectionPicker(connections);
+}
+
+function toggleConnectionPicker(connections) {
+  const popover = document.getElementById('connPickerPopover');
+  if (!popover) return;
+
+  if (popover.classList.contains('open')) {
+    popover.classList.remove('open');
+    return;
+  }
+
+  let html = '<div class="conn-picker-title"><span>Kahan jana chahte hain?</span><span style="font-size:0.65rem;color:var(--text-muted);">' + connections.length + ' connections</span></div>';
+  connections.forEach(c => {
+    html += '<div class="conn-picker-item" data-pick-node="' + esc(c.id) + '">';
+    html += '<span>' + esc(c.icon) + '</span>';
+    html += '<span style="font-weight:500;overflow:hidden;text-overflow:ellipsis;">' + esc(c.name) + '</span>';
+    html += '<span class="conn-picker-badge ' + (c.dir === 'incoming' ? 'inc' : 'out') + '">' + (c.dir === 'incoming' ? '↓ IN' : '↑ OUT') + '</span>';
+    html += '</div>';
+  });
+
+  popover.innerHTML = html;
+  popover.classList.add('open');
+
+  popover.querySelectorAll('.conn-picker-item').forEach(item => {
+    item.addEventListener('click', (e) => {
+      e.stopPropagation();
+      popover.classList.remove('open');
+      const targetNode = nodeMap.get(item.dataset.pickNode);
+      if (targetNode) selectNode(targetNode, true);
+    });
+  });
 }
 
 function showDetailPanel(n) {
@@ -1201,7 +1442,21 @@ function showDetailPanel(n) {
   if (n.language) html += '<span class="badge badge-lang">' + esc(n.language) + '</span>';
   if (n.framework) html += '<span class="badge badge-fw">' + esc(n.framework) + '</span>';
   (n.badges || []).forEach(b => { html += '<span class="badge badge-fw">' + esc(b) + '</span>'; });
-  html += '</div></div>';
+  html += '</div>';
+
+  // Navigation Tracker Bar UI
+  const isBackDisabled = NAV_STACK.index <= 0;
+  const totalConn = incoming.length + outgoing.length;
+  const isNextDisabled = NAV_STACK.index >= NAV_STACK.history.length - 1 && totalConn === 0;
+
+  html += '<div class="nav-tracker" id="navTrackerBar">';
+  html += '<button class="nav-tracker-btn" id="btnNavPrev" ' + (isBackDisabled ? 'disabled' : '') + '>← Previous File</button>';
+  html += '<span class="nav-tracker-info">Step ' + Math.max(1, NAV_STACK.index + 1) + ' / ' + Math.max(1, NAV_STACK.history.length) + '</span>';
+  html += '<button class="nav-tracker-btn" id="btnNavNext" ' + (isNextDisabled ? 'disabled' : '') + '>Next File →</button>';
+  html += '<div class="conn-picker-popover" id="connPickerPopover"></div>';
+  html += '</div>';
+
+  html += '</div>'; // End detail-header
 
   // Tabs
   html += '<div class="detail-tabs">';
@@ -1261,6 +1516,12 @@ function showDetailPanel(n) {
   content.innerHTML = html;
   panel.classList.add('open');
 
+  // Navigation button listeners
+  const btnPrev = document.getElementById('btnNavPrev');
+  const btnNext = document.getElementById('btnNavNext');
+  if (btnPrev) btnPrev.addEventListener('click', (e) => { e.stopPropagation(); navGoBack(); });
+  if (btnNext) btnNext.addEventListener('click', (e) => { e.stopPropagation(); navGoForward(); });
+
   // Tab switching
   content.querySelectorAll('.detail-tab').forEach(tab => {
     tab.addEventListener('click', () => {
@@ -1276,8 +1537,7 @@ function showDetailPanel(n) {
     item.addEventListener('click', () => {
       const targetNode = nodeMap.get(item.dataset.node);
       if (targetNode) {
-        selectNode(targetNode);
-        centerOnNode(targetNode.id);
+        selectNode(targetNode, true);
       }
     });
   });
