@@ -29,6 +29,7 @@ const { toArchitectureFlowHtml } = require('../src/exporters/architectureFlowHtm
 const { generateUniversalGraph } = require('../src/core/universalParser.js');
 const { toGraphVisualizerHtml } = require('../src/exporters/graphVisualizer.js');
 const { toGraphJson } = require('../src/exporters/graphJson.js');
+const { toGraph3dVisualizerHtml } = require('../src/exporters/graph3dVisualizer.js');
 
 // ─── Arg Parser ───────────────────────────────────────────────────────────────
 
@@ -41,6 +42,7 @@ function parseArgs(argv) {
     flow: false,
     architecture: false,
     visualize: false,
+    visualize3d: false,
     graphJson: false,
     bundle: false,
     bundleList: null,
@@ -105,6 +107,9 @@ function parseArgs(argv) {
       case 'visualize': case 'graph': case 'code-graph':
       case '--visualize': case '--graph': case '--code-graph':
                                                       args.visualize = true; break;
+      case 'visualize-3d': case '3d-graph': case 'graph-3d':
+      case '--visualize-3d': case '--3d-graph': case '--graph-3d':
+                                                      args.visualize3d = true; break;
       case 'graph-json': case '--graph-json':         args.graphJson = true; break;
       case 'json': case '--json':                     args.json = true; break;
       case 'html': case '--html':                     args.html = true; break;
@@ -165,7 +170,8 @@ ${colors.bold('Output Options:')}
   --details               Show file size & extension
   --summarize             Extract & show inline file comment summaries
   --flow                  Generate architecture execution flow & role map
-  --visualize             Generate interactive code relationship graph HTML
+  --visualize             Generate interactive 2D code relationship graph HTML
+  --visualize-3d          Generate interactive 3D code relationship graph HTML
   --graph-json            Export universal graph model as JSON
   --compress              Compress single-child dirs
   --collapse <n>          Collapse dirs with >n files
@@ -275,7 +281,7 @@ function runGenerate(args) {
     }
 
     // Universal Code Relationship Graph
-    if (args.visualize || args.graphJson) {
+    if (args.visualize || args.visualize3d || args.graphJson) {
       try {
         const graphModel = generateUniversalGraph(rootDir, result.tree);
         const nodeCount = graphModel.nodes ? graphModel.nodes.length : 0;
@@ -286,6 +292,13 @@ function runGenerate(args) {
           const graphHtmlPath = path.join(outDir, 'CODE_GRAPH.html');
           fs.writeFileSync(graphHtmlPath, graphHtml, 'utf8');
           console.log(colors.success(`Code Relationship Graph exported to ${path.relative(process.cwd(), graphHtmlPath)} (${nodeCount} nodes, ${edgeCount} edges)`));
+        }
+
+        if (args.visualize3d) {
+          const graph3dHtml = toGraph3dVisualizerHtml(graphModel, result.tree.name);
+          const graph3dPath = path.join(outDir, 'CODE_GRAPH_3D.html');
+          fs.writeFileSync(graph3dPath, graph3dHtml, 'utf8');
+          console.log(colors.success(`3D Code Relationship Graph exported to ${path.relative(process.cwd(), graph3dPath)} (${nodeCount} nodes, ${edgeCount} edges)`));
         }
 
         if (args.graphJson) {

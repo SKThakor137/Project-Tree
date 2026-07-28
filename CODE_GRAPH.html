@@ -1,0 +1,1752 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>project-tree-md — Code Relationship Graph</title>
+  <meta name="description" content="Interactive code architecture visualization for project-tree-md">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+/* ═══════════════════════════════════════════════════════════════════════════
+   DESIGN SYSTEM
+   ═══════════════════════════════════════════════════════════════════════════ */
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Consolas', 'Courier New', monospace;
+  --radius: 10px;
+  --radius-sm: 6px;
+  --radius-lg: 16px;
+  --shadow: 0 8px 32px rgba(0,0,0,0.3);
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
+  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --glass-bg: rgba(22, 27, 34, 0.85);
+  --glass-border: rgba(255,255,255,0.08);
+  --glass-blur: blur(20px);
+}
+
+[data-theme="dark"] {
+  --bg: #0d1117;
+  --bg-canvas: #0a0e14;
+  --bg-panel: #161b22;
+  --bg-panel-2: #1c2128;
+  --bg-hover: #21262d;
+  --bg-active: #282e36;
+  --border: #30363d;
+  --border-light: #21262d;
+  --text: #e6edf3;
+  --text-secondary: #8b949e;
+  --text-muted: #6e7681;
+  --accent: #58a6ff;
+  --accent-hover: #79c0ff;
+  --accent-bg: rgba(88,166,255,0.12);
+  --accent-bg-hover: rgba(88,166,255,0.2);
+  --success: #3fb950;
+  --danger: #f85149;
+  --warning: #d29922;
+  --info: #58a6ff;
+  --purple: #bc8cff;
+  --pink: #f778ba;
+  --node-bg: rgba(22, 27, 34, 0.95);
+  --node-border: rgba(48, 54, 61, 0.8);
+  --node-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  --minimap-bg: rgba(22, 27, 34, 0.9);
+  --grid-color: rgba(48, 54, 61, 0.3);
+  --glass-bg: rgba(22, 27, 34, 0.85);
+}
+
+[data-theme="light"] {
+  --bg: #f6f8fa;
+  --bg-canvas: #ffffff;
+  --bg-panel: #ffffff;
+  --bg-panel-2: #f6f8fa;
+  --bg-hover: #eaeef2;
+  --bg-active: #dce1e7;
+  --border: #d0d7de;
+  --border-light: #e8ecf0;
+  --text: #1f2328;
+  --text-secondary: #656d76;
+  --text-muted: #8c959f;
+  --accent: #0969da;
+  --accent-hover: #0550ae;
+  --accent-bg: rgba(9,105,218,0.08);
+  --accent-bg-hover: rgba(9,105,218,0.15);
+  --success: #1a7f37;
+  --danger: #cf222e;
+  --warning: #9a6700;
+  --info: #0969da;
+  --purple: #8250df;
+  --pink: #bf3989;
+  --node-bg: rgba(255,255,255,0.98);
+  --node-border: rgba(208, 215, 222, 0.8);
+  --node-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  --minimap-bg: rgba(255,255,255,0.95);
+  --grid-color: rgba(208, 215, 222, 0.4);
+  --glass-bg: rgba(255, 255, 255, 0.85);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--font-sans); background: var(--bg); color: var(--text); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TOOLBAR
+   ═══════════════════════════════════════════════════════════════════════════ */
+#toolbar {
+  position: fixed; top: 0; left: 0; right: 0; height: 56px; z-index: 100;
+  background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+  border-bottom: 1px solid var(--glass-border);
+  display: flex; align-items: center; padding: 0 16px; gap: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+}
+.toolbar-brand {
+  display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.95rem;
+  color: var(--accent); white-space: nowrap; margin-right: 8px;
+}
+.toolbar-brand span { font-size: 1.2rem; }
+.toolbar-sep { width: 1px; height: 28px; background: var(--border); margin: 0 4px; flex-shrink: 0; }
+.tb-btn {
+  display: inline-flex; align-items: center; gap: 4px; padding: 6px 10px;
+  background: transparent; border: 1px solid transparent; border-radius: var(--radius-sm);
+  color: var(--text-secondary); font-size: 0.8rem; font-family: var(--font-sans);
+  cursor: pointer; transition: var(--transition); white-space: nowrap;
+}
+.tb-btn:hover { background: var(--bg-hover); color: var(--text); border-color: var(--border); }
+.tb-btn.active { background: var(--accent-bg); color: var(--accent); border-color: var(--accent); }
+.tb-btn .icon { font-size: 1rem; line-height: 1; }
+.tb-select {
+  padding: 5px 8px; background: var(--bg-panel); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); color: var(--text); font-size: 0.8rem;
+  font-family: var(--font-sans); cursor: pointer; outline: none;
+}
+.tb-select:focus { border-color: var(--accent); }
+#searchBox {
+  padding: 6px 12px 6px 32px; width: 220px; background: var(--bg-panel);
+  border: 1px solid var(--border); border-radius: var(--radius); color: var(--text);
+  font-size: 0.82rem; font-family: var(--font-sans); outline: none; transition: var(--transition);
+}
+#searchBox:focus { border-color: var(--accent); width: 280px; box-shadow: 0 0 0 3px var(--accent-bg); }
+.search-wrap { position: relative; display: flex; align-items: center; }
+.search-wrap::before { content: '🔍'; position: absolute; left: 10px; font-size: 0.8rem; pointer-events: none; }
+.search-results-count { position: absolute; right: 8px; font-size: 0.7rem; color: var(--text-muted); pointer-events: none; }
+.toolbar-right { margin-left: auto; display: flex; align-items: center; gap: 4px; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CANVAS AREA
+   ═══════════════════════════════════════════════════════════════════════════ */
+#canvasWrap {
+  position: fixed; top: 56px; left: 0; right: 0; bottom: 0;
+  background: var(--bg-canvas); overflow: hidden; cursor: grab;
+}
+#canvasWrap.dragging { cursor: grabbing; }
+#graphCanvas { display: block; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DETAIL PANEL
+   ═══════════════════════════════════════════════════════════════════════════ */
+#detailPanel {
+  position: fixed; top: 56px; right: 0; width: 380px; bottom: 0;
+  background: var(--glass-bg); backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+  border-left: 1px solid var(--glass-border); z-index: 90;
+  overflow-y: auto; padding: 20px; transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: -4px 0 24px rgba(0,0,0,0.15);
+}
+#detailPanel.open { transform: translateX(0); }
+#detailPanel .close-btn {
+  position: absolute; top: 12px; right: 12px; width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg-hover); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  color: var(--text-muted); cursor: pointer; font-size: 1rem; transition: var(--transition);
+}
+#detailPanel .close-btn:hover { background: var(--danger); color: #fff; border-color: var(--danger); }
+.detail-header { margin-bottom: 20px; }
+.detail-icon { font-size: 2rem; margin-bottom: 8px; }
+.detail-name { font-size: 1.15rem; font-weight: 700; color: var(--text); word-break: break-all; margin-bottom: 4px; }
+.detail-path { font-size: 0.78rem; font-family: var(--font-mono); color: var(--text-muted); word-break: break-all; margin-bottom: 12px; }
+.detail-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+.badge {
+  display: inline-flex; align-items: center; gap: 3px; padding: 3px 10px;
+  border-radius: 20px; font-size: 0.7rem; font-weight: 600; white-space: nowrap;
+  border: 1px solid; transition: var(--transition);
+}
+.badge-type { background: var(--accent-bg); color: var(--accent); border-color: rgba(88,166,255,0.3); }
+.badge-lang { background: rgba(188,140,255,0.12); color: var(--purple); border-color: rgba(188,140,255,0.3); }
+.badge-fw { background: rgba(63,185,80,0.12); color: var(--success); border-color: rgba(63,185,80,0.3); }
+.detail-section { margin-bottom: 20px; }
+.detail-section h3 {
+  font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px;
+  color: var(--text-muted); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+}
+.detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.detail-stat {
+  padding: 10px 12px; background: var(--bg-panel-2); border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+}
+.detail-stat .label { font-size: 0.7rem; color: var(--text-muted); margin-bottom: 2px; }
+.detail-stat .value { font-size: 1rem; font-weight: 600; color: var(--text); }
+.conn-list { list-style: none; }
+.conn-item {
+  display: flex; align-items: center; gap: 8px; padding: 8px 10px;
+  background: var(--bg-panel-2); border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm); margin-bottom: 4px; font-size: 0.8rem;
+  cursor: pointer; transition: var(--transition);
+}
+.conn-item:hover { background: var(--accent-bg); border-color: var(--accent); }
+.conn-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.conn-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.conn-type { font-size: 0.68rem; color: var(--text-muted); white-space: nowrap; }
+.detail-tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 16px; }
+.detail-tab {
+  padding: 8px 16px; cursor: pointer; font-size: 0.8rem; font-weight: 500;
+  color: var(--text-muted); border-bottom: 2px solid transparent; transition: var(--transition);
+}
+.detail-tab:hover { color: var(--text); }
+.detail-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MINIMAP
+   ═══════════════════════════════════════════════════════════════════════════ */
+#minimap {
+  position: fixed; bottom: 16px; right: 16px; width: 200px; height: 140px;
+  background: var(--minimap-bg); border: 1px solid var(--border);
+  border-radius: var(--radius); z-index: 80; overflow: hidden;
+  box-shadow: var(--shadow-sm); cursor: crosshair;
+}
+#minimapCanvas { width: 100%; height: 100%; }
+#minimap .viewport-rect {
+  position: absolute; border: 2px solid var(--accent); background: rgba(88,166,255,0.08);
+  border-radius: 2px; pointer-events: none;
+}
+#minimap .minimap-close {
+  position: absolute; top: 4px; right: 4px; width: 18px; height: 18px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg-hover); border-radius: 50%; font-size: 0.65rem;
+  color: var(--text-muted); cursor: pointer; border: none; z-index: 1;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LEGEND
+   ═══════════════════════════════════════════════════════════════════════════ */
+#legend {
+  position: fixed; bottom: 16px; left: 16px; max-width: 280px; max-height: 400px;
+  background: var(--glass-bg); backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border); border-radius: var(--radius);
+  z-index: 80; overflow: hidden; box-shadow: var(--shadow-sm);
+}
+#legend .legend-header {
+  padding: 10px 14px; font-size: 0.78rem; font-weight: 600; color: var(--text);
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--border); cursor: pointer;
+}
+#legend .legend-body { padding: 10px 14px; max-height: 320px; overflow-y: auto; }
+#legend.collapsed .legend-body { display: none; }
+.legend-group { margin-bottom: 12px; }
+.legend-group-title { font-size: 0.68rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+.legend-item {
+  display: flex; align-items: center; gap: 8px; padding: 3px 0; font-size: 0.75rem;
+  color: var(--text-secondary); cursor: pointer; transition: var(--transition);
+}
+.legend-item:hover { color: var(--text); }
+.legend-color { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+.legend-line { width: 20px; height: 2px; flex-shrink: 0; border-radius: 1px; }
+.legend-line.dashed { background: none; border-top: 2px dashed; }
+.legend-line.dotted { background: none; border-top: 2px dotted; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CONTEXT MENU
+   ═══════════════════════════════════════════════════════════════════════════ */
+#contextMenu {
+  position: fixed; z-index: 200; min-width: 200px;
+  background: var(--bg-panel); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 6px 0; box-shadow: var(--shadow);
+  display: none;
+}
+.ctx-item {
+  padding: 8px 16px; font-size: 0.82rem; color: var(--text);
+  cursor: pointer; display: flex; align-items: center; gap: 10px;
+  transition: var(--transition);
+}
+.ctx-item:hover { background: var(--accent-bg); color: var(--accent); }
+.ctx-item .icon { width: 18px; text-align: center; }
+.ctx-item .shortcut { margin-left: auto; font-size: 0.68rem; color: var(--text-muted); }
+.ctx-sep { height: 1px; background: var(--border); margin: 4px 0; }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TOAST / STATUS
+   ═══════════════════════════════════════════════════════════════════════════ */
+#toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px);
+  padding: 10px 24px; background: var(--bg-panel); border: 1px solid var(--border);
+  border-radius: var(--radius); font-size: 0.82rem; color: var(--text);
+  box-shadow: var(--shadow); z-index: 300; transition: transform 0.3s ease; pointer-events: none;
+}
+#toast.show { transform: translateX(-50%) translateY(0); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   KEYBOARD HELP MODAL
+   ═══════════════════════════════════════════════════════════════════════════ */
+#kbdModal {
+  position: fixed; inset: 0; z-index: 500; display: none;
+  align-items: center; justify-content: center; background: rgba(0,0,0,0.5);
+}
+#kbdModal.show { display: flex; }
+#kbdModal .modal-content {
+  background: var(--bg-panel); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); padding: 24px 32px; max-width: 480px;
+  width: 90%; max-height: 80vh; overflow-y: auto; box-shadow: var(--shadow);
+}
+#kbdModal h2 { font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; color: var(--accent); }
+.kbd-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--border-light); font-size: 0.82rem; }
+.kbd-row:last-child { border-bottom: none; }
+.kbd-key {
+  display: inline-block; padding: 2px 8px; background: var(--bg-hover); border: 1px solid var(--border);
+  border-radius: 4px; font-family: var(--font-mono); font-size: 0.72rem; color: var(--text);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SCROLLBAR
+   ═══════════════════════════════════════════════════════════════════════════ */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  #detailPanel { width: 100%; top: auto; bottom: 0; height: 50vh; border-left: none; border-top: 1px solid var(--glass-border); transform: translateY(100%); }
+  #detailPanel.open { transform: translateY(0); }
+  #toolbar { gap: 4px; padding: 0 8px; }
+  #searchBox { width: 140px; }
+  #searchBox:focus { width: 180px; }
+  .tb-label { display: none; }
+  #minimap { width: 140px; height: 100px; }
+  #legend { max-width: 200px; }
+}
+
+@media print {
+  #toolbar, #detailPanel, #minimap, #legend, #contextMenu, #toast, #kbdModal { display: none !important; }
+  #canvasWrap { position: static; }
+}
+  </style>
+</head>
+<body>
+
+<!-- ═══ TOOLBAR ═══ -->
+<div id="toolbar">
+  <div class="toolbar-brand"><span>◈</span> project-tree-md</div>
+  <div class="toolbar-sep"></div>
+
+  <select class="tb-select" id="layoutSelect" title="Layout">
+    <option value="dagre">DAG</option>
+    <option value="force">Force Directed</option>
+    <option value="tree">Tree</option>
+    <option value="radial">Radial</option>
+    <option value="horizontal">Horizontal</option>
+  </select>
+
+  <div class="toolbar-sep"></div>
+
+  <button class="tb-btn" id="btnExpandAll" title="Expand All"><span class="icon">⊞</span><span class="tb-label">Expand</span></button>
+  <button class="tb-btn" id="btnCollapseAll" title="Collapse All"><span class="icon">⊟</span><span class="tb-label">Collapse</span></button>
+  <button class="tb-btn" id="btnFitView" title="Fit View"><span class="icon">⊡</span><span class="tb-label">Fit</span></button>
+
+  <div class="toolbar-sep"></div>
+
+  <div class="search-wrap">
+    <input type="text" id="searchBox" placeholder="Search nodes... (Ctrl+F)" autocomplete="off">
+    <span class="search-results-count" id="searchCount"></span>
+  </div>
+
+  <div class="toolbar-right">
+    <button class="tb-btn" id="btnUndo" title="Undo (Ctrl+Z)"><span class="icon">↩</span></button>
+    <button class="tb-btn" id="btnRedo" title="Redo (Ctrl+Y)"><span class="icon">↪</span></button>
+    <div class="toolbar-sep"></div>
+    <button class="tb-btn" id="btnExport" title="Export PNG"><span class="icon">📷</span><span class="tb-label">Export</span></button>
+    <button class="tb-btn" id="btnExportJSON" title="Export JSON"><span class="icon">{ }</span></button>
+    <div class="toolbar-sep"></div>
+    <button class="tb-btn" id="btnTheme" title="Toggle Theme"><span class="icon">🌙</span></button>
+    <button class="tb-btn" id="btnFullscreen" title="Fullscreen (F)"><span class="icon">⛶</span></button>
+    <button class="tb-btn" id="btnHelp" title="Shortcuts (?)"><span class="icon">?</span></button>
+  </div>
+</div>
+
+<!-- ═══ CANVAS ═══ -->
+<div id="canvasWrap">
+  <canvas id="graphCanvas"></canvas>
+</div>
+
+<!-- ═══ DETAIL PANEL ═══ -->
+<div id="detailPanel">
+  <div class="close-btn" id="detailClose">✕</div>
+  <div id="detailContent">
+    <div class="detail-header">
+      <div class="detail-icon">◈</div>
+      <div class="detail-name">Select a node</div>
+      <div class="detail-path">Click any node in the graph to see details</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MINIMAP ═══ -->
+<div id="minimap">
+  <button class="minimap-close" id="minimapClose">✕</button>
+  <canvas id="minimapCanvas"></canvas>
+  <div class="viewport-rect" id="viewportRect"></div>
+</div>
+
+<!-- ═══ LEGEND ═══ -->
+<div id="legend">
+  <div class="legend-header" id="legendToggle">
+    <span>◈ Legend</span><span id="legendArrow">▼</span>
+  </div>
+  <div class="legend-body" id="legendBody"></div>
+</div>
+
+<!-- ═══ CONTEXT MENU ═══ -->
+<div id="contextMenu"></div>
+
+<!-- ═══ TOAST ═══ -->
+<div id="toast" id="toast"></div>
+
+<!-- ═══ KEYBOARD HELP ═══ -->
+<div id="kbdModal">
+  <div class="modal-content">
+    <h2>⌨️ Keyboard Shortcuts</h2>
+    <div class="kbd-row"><span>Search</span><span class="kbd-key">Ctrl+F</span></div>
+    <div class="kbd-row"><span>Zoom In</span><span class="kbd-key">+</span></div>
+    <div class="kbd-row"><span>Zoom Out</span><span class="kbd-key">-</span></div>
+    <div class="kbd-row"><span>Fit View</span><span class="kbd-key">0</span></div>
+    <div class="kbd-row"><span>Expand Selected</span><span class="kbd-key">E</span></div>
+    <div class="kbd-row"><span>Collapse Selected</span><span class="kbd-key">C</span></div>
+    <div class="kbd-row"><span>Fullscreen</span><span class="kbd-key">F</span></div>
+    <div class="kbd-row"><span>Undo</span><span class="kbd-key">Ctrl+Z</span></div>
+    <div class="kbd-row"><span>Redo</span><span class="kbd-key">Ctrl+Y</span></div>
+    <div class="kbd-row"><span>Export PNG</span><span class="kbd-key">Ctrl+S</span></div>
+    <div class="kbd-row"><span>Deselect / Close</span><span class="kbd-key">Esc</span></div>
+    <div class="kbd-row"><span>Show Shortcuts</span><span class="kbd-key">?</span></div>
+    <div style="margin-top: 16px; text-align: center;">
+      <button class="tb-btn" onclick="document.getElementById('kbdModal').classList.remove('show')" style="padding:8px 24px;">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     MAIN APPLICATION SCRIPT
+     ═══════════════════════════════════════════════════════════════════════════ -->
+<script>
+(function() {
+'use strict';
+
+// ─── DATA ────────────────────────────────────────────────────────────────────
+const GRAPH = {"projectName":"project-tree-md","nodes":[{"id":".npmignore","name":".npmignore","type":"CONFIG","icon":"⚙️","label":"Configuration","color":"#8b949e","filePath":".npmignore","language":"Unknown","framework":"","description":"","badges":[],"status":"active","metadata":{"size":73,"lines":8,"exports":[],"functions":[],"ext":""},"incomingCount":0,"outgoingCount":0,"collapsed":false},{"id":"bin/cli.js","name":"cli.js","type":"FILE","icon":"📄","label":"File","color":"#c9d1d9","filePath":"bin/cli.js","language":"JavaScript","framework":"","description":"","badges":[],"status":"active","metadata":{"size":21287,"lines":495,"exports":[],"functions":["parseArgs","printHelp","runInteractive","ask","action","out","theme","runGenerate","main"],"ext":".js"},"incomingCount":1,"outgoingCount":30,"collapsed":false},{"id":"LICENSE","name":"LICENSE","type":"DOCUMENTATION","icon":"📝","label":"Documentation","color":"#8b949e","filePath":"LICENSE","language":"Unknown","framework":"","description":"","badges":[],"status":"active","metadata":{"size":1066,"lines":22,"exports":[],"functions":[],"ext":""},"incomingCount":0,"outgoingCount":0,"collapsed":false},{"id":"package-lock.json","name":"package-lock.json","type":"CONFIG","icon":"⚙️","label":"Configuration","color":"#8b949e","filePath":"package-lock.json","language":"JSON","framework":"","description":"","badges":[],"status":"active","metadata":{"size":351,"lines":20,"exports":[],"functions":[],"ext":".json"},"incomingCount":0,"outgoingCount":0,"collapsed":false},{"id":"package.json","name":"package.json","type":"CONFIG","icon":"⚙️","label":"Configuration","color":"#8b949e","filePath":"package.json","language":"JSON","framework":"","description":"","badges":[],"status":"active","metadata":{"size":3094,"lines":89,"exports":[],"functions":[],"ext":".json"},"incomingCount":2,"outgoingCount":0,"collapsed":false},{"id":"README.md","name":"README.md","type":"DOCUMENTATION","icon":"📝","label":"Documentation","color":"#8b949e","filePath":"README.md","language":"Markdown","framework":"","description":"","badges":[],"status":"active","metadata":{"size":15934,"lines":340,"exports":[],"functions":[],"ext":".md"},"incomingCount":0,"outgoingCount":0,"collapsed":false},{"id":"src/core/analyzer.js","name":"analyzer.js","type":"FILE","icon":"📄","label":"File","color":"#c9d1d9","filePath":"src/core/analyzer.js","language":"JavaScript","framework":"","description":"Exports: x, x, x, x, x","badges":[],"status":"active","metadata":{"size":12048,"lines":353,"exports":["x","x","x","x","x"],"functions":["parseFile","x","buildArchitectureGraph","isConfigFile","detectCycle"],"ext":".js"},"incomingCount":3,"outgoingCount":7,"collapsed":false},{"id":"src/core/architectureFlow.js","name":"architectureFlow.js","type":"FILE","icon":"📄","label":"File","color":"#c9d1d9","filePath":"src/core/architectureFlow.js","language":"JavaScript","framework":"","description":"","badges":[],"status":"active","metadata":{"size":19694,"lines":570,"exports":[],"functions":["detectFrameworkRole","resolveFileTarget","getFileImports","collectAllFiles","traverse","readContentSafely","analyzeCodebase","detectEntryPoint","buildDependencyTree","formatArchitectureFlowText","formatArchitectureFlowColored","generateArchitectureFlow"],"ext":".js"},"incomingCount":7,"outgoingCount":4,"collapsed":false},{"id":"src/core/formatter.js","name":"formatter.js","type":"FILE","icon":"📄","label":"File","color":"#c9d1d9","filePath":"src/core/formatter.js","language":"JavaScript","framework":"","description":"","badges":[],"status":"active","metadata":{"size":7689,"lines":201,"exports":[],"functions":["formatSize","getIcon","renderName","buildTreeText","buildColoredTreeText"],"ext":".js"},"incomingCount":10,"outgoingCount":2,"collapsed":false},{"id":"src/core/generator.js","name":"generator.js","type":"FILE","icon":"📄","label":"File","color":"#c9d1d9","filePath":"src/core/generator.js","language":"JavaScript","framework":"","description":"","badges":[],"status":"active","metadata":{"size":4497,"lines":142,"exports":[],"functions":["generateTree","collectParsed"],"ext":".js"},"incomingCount":4,"outgoingCount":11,"collapsed":false},{"id":"src/core/scanner.js","name":"scanner.js","type":"FILE","icon":"📄","label":"File","color":"#c9d1d9","filePath":"src/core/scanner.js","language":"JavaScript","framework":"","description":"","badges":[],"status":"active","metadata":{"size":9041,"lines":267,"exports":[],"functions":["isBinaryFile","parseSize","compressTree","scan","buildNode","countFiles","collapseTree"],"ext":".js"},"incomingCount":20,"outgoingCount":5,"collapsed":false},{"id":"src/core/stats.js","name":"stats.js","type":"FILE","icon":"📄","label":"File","color":"#c9d1d9","filePath":"src/core/stats.js","language":"JavaScript","framework":"","description":"","badges":[],"status":"active","metadata":{"size":6289,"lines":184,"exports":[],"functions":["getDirSize","computeStats","traverse","printDashboard"],"ext":".js"},"incomingCount":8,"outgoingCount":4,"collapsed":false},{"id":"src/core/universalGraph.js","name":"universalGraph.js","type":"FILE","icon":"📄","label":"File","color":"#c9d1d9","filePath":"src/core/universalGraph.js","language":"JavaScript","framework":"","description":"","badges":[],"status":"active","metadata":{"size":17983,"lines":314,"exports":[],"functions":[],"ext":".js"},"incomingCount":3,"outgoingCount":0,"collapsed":false},{"id":"src/core/universalParser.js","name":"universalParser.js","type":"FILE","icon":"📄","label":"File","color":"#c9d1d9","filePath":"src/core/universalParser.js","language":"JavaScript","framework":"","description":"","badges":[],"status":"active","metadata":{"size":39576,"lines":1012,"exports":[],"functions":["detectLanguage","detectFrameworks","hasFile","detectNodeType","getFlutterPackageName","extractRelationships","resolveImport","tryResolveFile","safeIsFile","readFileSafely","collectFiles","walk","generateUniversalGraph"],"ext":".js"},"incomingCount":6,"outgoingCount":4,"collapsed":false},{"id":"src/detectors/project.js","name":"project.js","type":"FILE","icon":"📄","label":"File","color":"#c9d1d9","filePath":"src/detectors/project.js","language":"JavaScript","framework":"","description":"","badges":[],"status":"active","metadata":{"size":12582,"lines":207,"exports":[],"functions":["detectProject","exists"],"ext":".js"},"incomingCount":5,"outgoingCount":2,"collapsed":false},{"id":"src/exporters/architectureFlowHtml.js","name":"architectureFlowHtml.js","type":"FILE","icon":"📄","label":"File","color":"#c9d1d9","filePath":"src/exporters/architectureFlowHtml.js","language":"JavaScript","framework":"","description":"","badges":[],"status":"active","metadata":{"size":15215,"lines":325,"exports":[],"functions":["toArchitectureFlowHtml","formatSize","esc","renderNode","showDetail","childPaths","circularPaths","simplifyNode","esc"],"ext":".js"},"incomingCount":4,"outgoingCount":1,"collapsed":false},{"id":"src/exporters/graph3dVisualizer.js","name":"graph3dVisualizer.js","type":"FILE","icon":"📄","label":"File","color":"#c9d1d9","filePath":"src/exporters/graph3dVisualizer.js","language":"JavaScript","framework":"","description":"","badges":[],"status":"active","metadata":{"size":47064,"lines":912,"exports":[],"functions":["esc","toGraph3dVisualizerHtml","isDark","createTextTexture","focusCameraOnNode","updateTooltip","selectNode","closeDetailPanel","escHtml","formatBytes","buildLegend","toggleTheme"],"ext":".js"},"incomingCount":4,"outgoingCount":0,"collapsed":false},{"id":"src/exporters/graphJson.js","name":"graphJson.js","type":"FILE","icon":"📄","label":"File","color":"#c9d1d9","filePath":"src/exporters/graphJson.js","language":"JavaScript","framework":"","description":"","badges":[],"status":"active","metadata":{"size":1166,"lines":43,"exports":[],"functions":["toGraphJson","fromGraphJson"],"ext":".js"},"incomingCount":5,"outgoingCount":0,"collapsed":false},{"id":"src/exporters/graphVisualizer.js","name":"graphVisualizer.js","type":"FILE","icon":"📄","label":"File","color":"#c9d1d9","filePath":"src/exporters/graphVisualizer.js","language":"JavaScript","framework":"","description":"","badges":[],"status":"active","metadata":{"size":73991,"lines":1795,"exports":[],"functions":["esc","toGraphVisualizerHtml","resizeCanvas","getVisibleNodes","getVisibleEdges","layoutDagre","layoutForce","angle","fx","fy","fx","fy","layoutTree","layoutRadial","angle","layoutHorizontal","runLayout","autoSelectLayout","worldToScreen","screenToWorld","isOnScreen","render","drawGrid","offX","offY","drawEdge","midY","drawNode","hasConnections","roundRect","roundRectLeft","nodeAtScreen","wx","wy","selectNode","deselectNode","showDetailPanel","incoming","outgoing","formatSize","toggleCollapse","expandAll","collapseAll","updateHiddenNodes","showContextMenu","hideContextMenu","fitView","cx","cy","centerOnNode","updateMinimap","offsetX","offsetY","vpLeft","vpTop","wx","wy","buildLegend","exportPNG","exportJSON","pushHistory","undo","redo","restoreHistory","toast","esc","fitView","init"],"ext":".js"},"incomingCount":6,"outgoingCount":0,"collapsed":false},{"id":"src/exporters/html.js","name":"html.js","type":"FILE","icon":"📄","label":"File","color":"#c9d1d9","filePath":"src/exporters/html.js","language":"JavaScript","framework":"","description":"","badges":[],"status":"active","metadata":{"size":30765,"lines":720,"exports":[],"functions":["toHtml","renderNode","archData","deadCount","circularCount","buildClientZip","getCrc","time","date","downloadFile","downloadReport","toggleSelectAllReports","downloadSelectedZipBundle","toggleTheme","isDead"],"ext":".js"},"incomingCount":5,"outgoingCount":8,"collapsed":false},{"id":"src/exporters/json.js","name":"json.js","type":"FILE","icon":"📄","label":"File","color":"#c9d1d9","filePath":"src/exporters/json.js","language":"JavaScript","framework":"","description":"","badges":[],"status":"active","metadata":{"size":1962,"lines":65,"exports":[],"functions":["nodeToJson","toJson"],"ext":".js"},"incomingCount":7,"outgoingCount":1,"collapsed":false},{"id":"src/exporters/markdown.js","name":"markdown.js","type":"FILE","icon":"📄","label":"File","color":"#c9d1d9","filePath":"src/exporters/markdown.js","language":"JavaScript","framework":"","description":"","badges":[],"status":"active","metadata":{"size":778,"lines":28,"exports":[],"functions":["toMarkdown"],"ext":".js"},"incomingCount":3,"outgoingCount":0,"collapsed":false},{"id":"src/exporters/mermaid.js","name":"mermaid.js","type":"FILE","icon":"📄","label":"File","color":"#c9d1d9","filePath":"src/exporters/mermaid.js","language":"JavaScript","framework":"","description":"","badges":[],"status":"active","metadata":{"size":2428,"lines":85,"exports":[],"functions":["toMermaid","cleanId","genId","traverse","escapeMermaid"],"ext":".js"},"incomingCount":6,"outgoingCount":1,"collapsed":false},{"id":"src/exporters/svg.js","name":"svg.js","type":"FILE","icon":"📄","label":"File","color":"#c9d1d9","filePath":"src/exporters/svg.js","language":"JavaScript","framework":"","description":"","badges":[],"status":"active","metadata":{"size":6685,"lines":179,"exports":[],"functions":["toSvg","flatten","textLen","formatSizeSvg","escXml"],"ext":".js"},"incomingCount":6,"outgoingCount":1,"collapsed":false},{"id":"src/features/ai.js","name":"ai.js","type":"FILE","icon":"📄","label":"File","color":"#c9d1d9","filePath":"src/features/ai.js","language":"JavaScript","framework":"","description":"","badges":[],"status":"active","metadata":{"size":7133,"lines":203,"exports":[],"functions":["generateAiContext","generateAiPrompt"],"ext":".js"},"incomingCount":5,"outgoingCount":2,"collapsed":false},{"id":"src/features/bundle.js","name":"bundle.js","type":"FILE","icon":"📄","label":"File","color":"#c9d1d9","filePath":"src/features/bundle.js","language":"JavaScript","framework":"","description":"","badges":[],"status":"active","metadata":{"size":12116,"lines":343,"exports":[],"functions":["compileAllReports","walkNode","deadCount","circularCount","generateBundle","sizeMb"],"ext":".js"},"incomingCount":5,"outgoingCount":15,"collapsed":false},{"id":"src/features/compare.js","name":"compare.js","type":"FILE","icon":"📄","label":"File","color":"#c9d1d9","filePath":"src/features/compare.js","language":"JavaScript","framework":"","description":"","badges":[],"status":"active","metadata":{"size":2778,"lines":93,"exports":[],"functions":["compare","loadTree","collectPaths"],"ext":".js"},"incomingCount":4,"outgoingCount":5,"collapsed":false},{"id":"src/features/exporter.js","name":"exporter.js","type":"FILE","icon":"📄","label":"File","color":"#c9d1d9","filePath":"src/features/exporter.js","language":"JavaScript","framework":"","description":"","badges":[],"status":"active","metadata":{"size":3879,"lines":111,"exports":[],"functions":["exportReports"],"ext":".js"},"incomingCount":4,"outgoingCount":4,"collapsed":false},{"id":"src/features/inject.js","name":"inject.js","type":"FILE","icon":"📄","label":"File","color":"#c9d1d9","filePath":"src/features/inject.js","language":"JavaScript","framework":"","description":"","badges":[],"status":"active","metadata":{"size":1528,"lines":46,"exports":[],"functions":["injectIntoFile"],"ext":".js"},"incomingCount":3,"outgoingCount":1,"collapsed":false},{"id":"src/features/monorepo.js","name":"monorepo.js","type":"REPOSITORY","icon":"🗃️","label":"Repository","color":"#da3633","filePath":"src/features/monorepo.js","language":"JavaScript","framework":"","description":"","badges":[],"status":"active","metadata":{"size":5218,"lines":164,"exports":[],"functions":["detectMonorepo","exists","extractPnpmWorkspaceGlobs","resolveGlobs","formatWorkspaceSummary"],"ext":".js"},"incomingCount":2,"outgoingCount":2,"collapsed":false},{"id":"src/features/summarize.js","name":"summarize.js","type":"FILE","icon":"📄","label":"File","color":"#c9d1d9","filePath":"src/features/summarize.js","language":"JavaScript","framework":"","description":"","badges":[],"status":"active","metadata":{"size":13884,"lines":365,"exports":[],"functions":["cleanSummaryText","extractFileSummary","getDescriptionByFilename","getDescriptionByExtension"],"ext":".js"},"incomingCount":4,"outgoingCount":3,"collapsed":false},{"id":"src/features/tokens.js","name":"tokens.js","type":"FILE","icon":"📄","label":"File","color":"#c9d1d9","filePath":"src/features/tokens.js","language":"JavaScript","framework":"","description":"","badges":[],"status":"active","metadata":{"size":2075,"lines":77,"exports":[],"functions":["estimateTokens","calculateCost","formatTokenSummary"],"ext":".js"},"incomingCount":5,"outgoingCount":0,"collapsed":false},{"id":"src/features/watcher.js","name":"watcher.js","type":"FILE","icon":"📄","label":"File","color":"#c9d1d9","filePath":"src/features/watcher.js","language":"JavaScript","framework":"","description":"","badges":[],"status":"active","metadata":{"size":1585,"lines":57,"exports":[],"functions":["watchDirectory","debounced","cleanup"],"ext":".js"},"incomingCount":2,"outgoingCount":3,"collapsed":false},{"id":"src/index.js","name":"index.js","type":"ENTRY","icon":"🚀","label":"Entry Point","color":"#3fb950","filePath":"src/index.js","language":"JavaScript","framework":"Entry Point","description":"","badges":["Entry Point"],"status":"active","metadata":{"size":2789,"lines":82,"exports":[],"functions":[],"ext":".js"},"incomingCount":1,"outgoingCount":26,"collapsed":false},{"id":"src/utils/clipboard.js","name":"clipboard.js","type":"UTILITY","icon":"🛠️","label":"Utility","color":"#8b949e","filePath":"src/utils/clipboard.js","language":"JavaScript","framework":"","description":"","badges":[],"status":"active","metadata":{"size":961,"lines":29,"exports":[],"functions":["copyToClipboard"],"ext":".js"},"incomingCount":2,"outgoingCount":1,"collapsed":false},{"id":"src/utils/colors.js","name":"colors.js","type":"UTILITY","icon":"🛠️","label":"Utility","color":"#8b949e","filePath":"src/utils/colors.js","language":"JavaScript","framework":"","description":"","badges":[],"status":"active","metadata":{"size":3160,"lines":90,"exports":[],"functions":["isColorEnabled","code","wrap"],"ext":".js"},"incomingCount":6,"outgoingCount":1,"collapsed":false},{"id":"src/utils/ignore.js","name":"ignore.js","type":"UTILITY","icon":"🛠️","label":"Utility","color":"#8b949e","filePath":"src/utils/ignore.js","language":"JavaScript","framework":"","description":"","badges":[],"status":"active","metadata":{"size":2916,"lines":94,"exports":[],"functions":["globToRegExpStr","parseIgnoreFile","that","buildIgnoreMatcher","isIgnored"],"ext":".js"},"incomingCount":5,"outgoingCount":2,"collapsed":false},{"id":"src/utils/sensitive.js","name":"sensitive.js","type":"UTILITY","icon":"🛠️","label":"Utility","color":"#8b949e","filePath":"src/utils/sensitive.js","language":"JavaScript","framework":"","description":"","badges":[],"status":"active","metadata":{"size":848,"lines":37,"exports":[],"functions":["isSensitive","maskName"],"ext":".js"},"incomingCount":2,"outgoingCount":0,"collapsed":false},{"id":"src/utils/zip.js","name":"zip.js","type":"UTILITY","icon":"🛠️","label":"Utility","color":"#8b949e","filePath":"src/utils/zip.js","language":"JavaScript","framework":"","description":"","badges":[],"status":"active","metadata":{"size":6048,"lines":166,"exports":[],"functions":["crc32","toDosDateTime","createZip"],"ext":".js"},"incomingCount":4,"outgoingCount":1,"collapsed":false},{"id":"TESTING_GUIDE.md","name":"TESTING_GUIDE.md","type":"DOCUMENTATION","icon":"📝","label":"Documentation","color":"#8b949e","filePath":"TESTING_GUIDE.md","language":"Markdown","framework":"","description":"","badges":[],"status":"active","metadata":{"size":9408,"lines":287,"exports":[],"functions":[],"ext":".md"},"incomingCount":0,"outgoingCount":0,"collapsed":false},{"id":"tests/bundle.test.js","name":"bundle.test.js","type":"TEST","icon":"🧪","label":"Test","color":"#7ee787","filePath":"tests/bundle.test.js","language":"JavaScript","framework":"Test","description":"","badges":["Test"],"status":"active","metadata":{"size":3466,"lines":107,"exports":[],"functions":["test"],"ext":".js"},"incomingCount":1,"outgoingCount":4,"collapsed":false},{"id":"tests/compare.test.js","name":"compare.test.js","type":"TEST","icon":"🧪","label":"Test","color":"#7ee787","filePath":"tests/compare.test.js","language":"JavaScript","framework":"Test","description":"","badges":["Test"],"status":"active","metadata":{"size":1340,"lines":37,"exports":[],"functions":["assert"],"ext":".js"},"incomingCount":1,"outgoingCount":4,"collapsed":false},{"id":"tests/exporter.test.js","name":"exporter.test.js","type":"TEST","icon":"🧪","label":"Test","color":"#7ee787","filePath":"tests/exporter.test.js","language":"JavaScript","framework":"Test","description":"","badges":["Test"],"status":"active","metadata":{"size":1358,"lines":51,"exports":[],"functions":["test"],"ext":".js"},"incomingCount":1,"outgoingCount":4,"collapsed":false},{"id":"tests/flow.test.js","name":"flow.test.js","type":"TEST","icon":"🧪","label":"Test","color":"#7ee787","filePath":"tests/flow.test.js","language":"JavaScript","framework":"Test","description":"Exports: Header","badges":["Test"],"status":"active","metadata":{"size":3580,"lines":89,"exports":["Header"],"functions":["Header"],"ext":".js"},"incomingCount":1,"outgoingCount":5,"collapsed":false},{"id":"tests/flutter_graph.test.js","name":"flutter_graph.test.js","type":"TEST","icon":"🧪","label":"Test","color":"#7ee787","filePath":"tests/flutter_graph.test.js","language":"JavaScript","framework":"Test","description":"","badges":["Test"],"status":"active","metadata":{"size":6846,"lines":176,"exports":[],"functions":[],"ext":".js"},"incomingCount":1,"outgoingCount":14,"collapsed":false},{"id":"tests/formatter.test.js","name":"formatter.test.js","type":"TEST","icon":"🧪","label":"Test","color":"#7ee787","filePath":"tests/formatter.test.js","language":"JavaScript","framework":"Test","description":"","badges":["Test"],"status":"active","metadata":{"size":2051,"lines":52,"exports":[],"functions":["assert"],"ext":".js"},"incomingCount":1,"outgoingCount":3,"collapsed":false},{"id":"tests/graph.test.js","name":"graph.test.js","type":"TEST","icon":"🧪","label":"Test","color":"#7ee787","filePath":"tests/graph.test.js","language":"JavaScript","framework":"Test","description":"","badges":["Test"],"status":"active","metadata":{"size":12439,"lines":227,"exports":[],"functions":["assert"],"ext":".js"},"incomingCount":1,"outgoingCount":5,"collapsed":false},{"id":"tests/html.test.js","name":"html.test.js","type":"TEST","icon":"🧪","label":"Test","color":"#7ee787","filePath":"tests/html.test.js","language":"JavaScript","framework":"Test","description":"","badges":["Test"],"status":"active","metadata":{"size":1585,"lines":41,"exports":[],"functions":["assert"],"ext":".js"},"incomingCount":1,"outgoingCount":4,"collapsed":false},{"id":"tests/ignore.test.js","name":"ignore.test.js","type":"TEST","icon":"🧪","label":"Test","color":"#7ee787","filePath":"tests/ignore.test.js","language":"JavaScript","framework":"Test","description":"","badges":["Test"],"status":"active","metadata":{"size":1154,"lines":34,"exports":[],"functions":["assert"],"ext":".js"},"incomingCount":1,"outgoingCount":1,"collapsed":false},{"id":"tests/json.test.js","name":"json.test.js","type":"TEST","icon":"🧪","label":"Test","color":"#7ee787","filePath":"tests/json.test.js","language":"JavaScript","framework":"Test","description":"","badges":["Test"],"status":"active","metadata":{"size":1541,"lines":42,"exports":[],"functions":["assert"],"ext":".js"},"incomingCount":1,"outgoingCount":4,"collapsed":false},{"id":"tests/mermaid.test.js","name":"mermaid.test.js","type":"TEST","icon":"🧪","label":"Test","color":"#7ee787","filePath":"tests/mermaid.test.js","language":"JavaScript","framework":"Test","description":"","badges":["Test"],"status":"active","metadata":{"size":921,"lines":28,"exports":[],"functions":["assert"],"ext":".js"},"incomingCount":1,"outgoingCount":3,"collapsed":false},{"id":"tests/scanner.test.js","name":"scanner.test.js","type":"TEST","icon":"🧪","label":"Test","color":"#7ee787","filePath":"tests/scanner.test.js","language":"JavaScript","framework":"Test","description":"","badges":["Test"],"status":"active","metadata":{"size":2030,"lines":52,"exports":[],"functions":["assert"],"ext":".js"},"incomingCount":1,"outgoingCount":2,"collapsed":false},{"id":"tests/summarize.test.js","name":"summarize.test.js","type":"TEST","icon":"🧪","label":"Test","color":"#7ee787","filePath":"tests/summarize.test.js","language":"JavaScript","framework":"Test","description":"","badges":["Test"],"status":"active","metadata":{"size":2943,"lines":62,"exports":[],"functions":["scan"],"ext":".js"},"incomingCount":1,"outgoingCount":6,"collapsed":false},{"id":"tests/svg.test.js","name":"svg.test.js","type":"TEST","icon":"🧪","label":"Test","color":"#7ee787","filePath":"tests/svg.test.js","language":"JavaScript","framework":"Test","description":"","badges":["Test"],"status":"active","metadata":{"size":1194,"lines":35,"exports":[],"functions":["assert"],"ext":".js"},"incomingCount":1,"outgoingCount":4,"collapsed":false},{"id":"tests/tokens.test.js","name":"tokens.test.js","type":"TEST","icon":"🧪","label":"Test","color":"#7ee787","filePath":"tests/tokens.test.js","language":"JavaScript","framework":"Test","description":"","badges":["Test"],"status":"active","metadata":{"size":1749,"lines":47,"exports":[],"functions":[],"ext":".js"},"incomingCount":1,"outgoingCount":2,"collapsed":false},{"id":"tests/zip.test.js","name":"zip.test.js","type":"TEST","icon":"🧪","label":"Test","color":"#7ee787","filePath":"tests/zip.test.js","language":"JavaScript","framework":"Test","description":"","badges":["Test"],"status":"active","metadata":{"size":1406,"lines":56,"exports":[],"functions":["test"],"ext":".js"},"incomingCount":1,"outgoingCount":2,"collapsed":false},{"id":"bin","name":"bin","type":"FOLDER","icon":"📁","label":"Folder","color":"#8b949e","filePath":"bin","language":"","framework":"","description":"Directory: bin","badges":["Folder"],"status":"active","metadata":{"isFolder":true},"incomingCount":0,"outgoingCount":1,"collapsed":false},{"id":"src/core","name":"core","type":"FOLDER","icon":"📁","label":"Folder","color":"#8b949e","filePath":"src/core","language":"","framework":"","description":"Directory: src/core","badges":["Folder"],"status":"active","metadata":{"isFolder":true},"incomingCount":1,"outgoingCount":8,"collapsed":false},{"id":"src","name":"src","type":"FOLDER","icon":"📁","label":"Folder","color":"#8b949e","filePath":"src","language":"","framework":"","description":"Directory: src","badges":["Folder"],"status":"active","metadata":{"isFolder":true},"incomingCount":0,"outgoingCount":6,"collapsed":false},{"id":"src/detectors","name":"detectors","type":"FOLDER","icon":"📁","label":"Folder","color":"#8b949e","filePath":"src/detectors","language":"","framework":"","description":"Directory: src/detectors","badges":["Folder"],"status":"active","metadata":{"isFolder":true},"incomingCount":1,"outgoingCount":1,"collapsed":false},{"id":"src/exporters","name":"exporters","type":"FOLDER","icon":"📁","label":"Folder","color":"#8b949e","filePath":"src/exporters","language":"","framework":"","description":"Directory: src/exporters","badges":["Folder"],"status":"active","metadata":{"isFolder":true},"incomingCount":1,"outgoingCount":9,"collapsed":false},{"id":"src/features","name":"features","type":"FOLDER","icon":"📁","label":"Folder","color":"#8b949e","filePath":"src/features","language":"","framework":"","description":"Directory: src/features","badges":["Folder"],"status":"active","metadata":{"isFolder":true},"incomingCount":1,"outgoingCount":9,"collapsed":false},{"id":"src/utils","name":"utils","type":"FOLDER","icon":"📁","label":"Folder","color":"#8b949e","filePath":"src/utils","language":"","framework":"","description":"Directory: src/utils","badges":["Folder"],"status":"active","metadata":{"isFolder":true},"incomingCount":1,"outgoingCount":5,"collapsed":false},{"id":"tests","name":"tests","type":"FOLDER","icon":"📁","label":"Folder","color":"#8b949e","filePath":"tests","language":"","framework":"","description":"Directory: tests","badges":["Folder"],"status":"active","metadata":{"isFolder":true},"incomingCount":0,"outgoingCount":16,"collapsed":false},{"id":"pkg:path","name":"path","type":"PACKAGE","icon":"📦","label":"Package","color":"#f0883e","filePath":"pkg:path","language":"","framework":"pkg","description":"Dependency / Pattern: pkg:path","badges":["PKG"],"status":"active","metadata":{"isVirtual":true},"incomingCount":31,"outgoingCount":0,"collapsed":false},{"id":"pkg:fs","name":"fs","type":"PACKAGE","icon":"📦","label":"Package","color":"#f0883e","filePath":"pkg:fs","language":"","framework":"pkg","description":"Dependency / Pattern: pkg:fs","badges":["PKG"],"status":"active","metadata":{"isVirtual":true},"incomingCount":20,"outgoingCount":0,"collapsed":false},{"id":"pkg:readline","name":"readline","type":"PACKAGE","icon":"📦","label":"Package","color":"#f0883e","filePath":"pkg:readline","language":"","framework":"pkg","description":"Dependency / Pattern: pkg:readline","badges":["PKG"],"status":"active","metadata":{"isVirtual":true},"incomingCount":1,"outgoingCount":0,"collapsed":false},{"id":"pkg:y","name":"y","type":"PACKAGE","icon":"📦","label":"Package","color":"#f0883e","filePath":"pkg:y","language":"","framework":"pkg","description":"Dependency / Pattern: pkg:y","badges":["PKG"],"status":"active","metadata":{"isVirtual":true},"incomingCount":6,"outgoingCount":0,"collapsed":false},{"id":"pkg:project-tree-md","name":"project-tree-md","type":"PACKAGE","icon":"📦","label":"Package","color":"#f0883e","filePath":"pkg:project-tree-md","language":"","framework":"pkg","description":"Dependency / Pattern: pkg:project-tree-md","badges":["PKG"],"status":"active","metadata":{"isVirtual":true},"incomingCount":1,"outgoingCount":0,"collapsed":false},{"id":"pkg:child_process","name":"child_process","type":"PACKAGE","icon":"📦","label":"Package","color":"#f0883e","filePath":"pkg:child_process","language":"","framework":"pkg","description":"Dependency / Pattern: pkg:child_process","badges":["PKG"],"status":"active","metadata":{"isVirtual":true},"incomingCount":1,"outgoingCount":0,"collapsed":false},{"id":"env:variables","name":"variables","type":"ENVIRONMENT","icon":"🌍","label":"Environment","color":"#7ee787","filePath":"env:variables","language":"","framework":"env","description":"Dependency / Pattern: env:variables","badges":["ENV"],"status":"active","metadata":{"isVirtual":true},"incomingCount":1,"outgoingCount":0,"collapsed":false},{"id":"pkg:zlib","name":"zlib","type":"PACKAGE","icon":"📦","label":"Package","color":"#f0883e","filePath":"pkg:zlib","language":"","framework":"pkg","description":"Dependency / Pattern: pkg:zlib","badges":["PKG"],"status":"active","metadata":{"isVirtual":true},"incomingCount":1,"outgoingCount":0,"collapsed":false},{"id":"pkg:assert","name":"assert","type":"PACKAGE","icon":"📦","label":"Package","color":"#f0883e","filePath":"pkg:assert","language":"","framework":"pkg","description":"Dependency / Pattern: pkg:assert","badges":["PKG"],"status":"active","metadata":{"isVirtual":true},"incomingCount":7,"outgoingCount":0,"collapsed":false},{"id":"pkg:os","name":"os","type":"PACKAGE","icon":"📦","label":"Package","color":"#f0883e","filePath":"pkg:os","language":"","framework":"pkg","description":"Dependency / Pattern: pkg:os","badges":["PKG"],"status":"active","metadata":{"isVirtual":true},"incomingCount":2,"outgoingCount":0,"collapsed":false},{"id":"pkg:package:flutter","name":"package:flutter","type":"PACKAGE","icon":"📦","label":"Package","color":"#f0883e","filePath":"pkg:package:flutter","language":"","framework":"pkg","description":"Dependency / Pattern: pkg:package:flutter","badges":["PKG"],"status":"active","metadata":{"isVirtual":true},"incomingCount":3,"outgoingCount":0,"collapsed":false},{"id":"pkg:package:my_flutter_app","name":"package:my_flutter_app","type":"PACKAGE","icon":"📦","label":"Package","color":"#f0883e","filePath":"pkg:package:my_flutter_app","language":"","framework":"pkg","description":"Dependency / Pattern: pkg:package:my_flutter_app","badges":["PKG"],"status":"active","metadata":{"isVirtual":true},"incomingCount":3,"outgoingCount":0,"collapsed":false},{"id":"pkg:package:http","name":"package:http","type":"PACKAGE","icon":"📦","label":"Package","color":"#f0883e","filePath":"pkg:package:http","language":"","framework":"pkg","description":"Dependency / Pattern: pkg:package:http","badges":["PKG"],"status":"active","metadata":{"isVirtual":true},"incomingCount":1,"outgoingCount":0,"collapsed":false},{"id":"pkg:jsonwebtoken","name":"jsonwebtoken","type":"PACKAGE","icon":"📦","label":"Package","color":"#f0883e","filePath":"pkg:jsonwebtoken","language":"","framework":"pkg","description":"Dependency / Pattern: pkg:jsonwebtoken","badges":["PKG"],"status":"active","metadata":{"isVirtual":true},"incomingCount":1,"outgoingCount":0,"collapsed":false}],"edges":[{"id":"e0","source":"src","target":"src/core","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e1","source":"src","target":"src/detectors","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e2","source":"src","target":"src/exporters","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e3","source":"src","target":"src/features","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e4","source":"src","target":"src/utils","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e5","source":"bin","target":"bin/cli.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e6","source":"src/core","target":"src/core/analyzer.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e7","source":"src/core","target":"src/core/architectureFlow.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e8","source":"src/core","target":"src/core/formatter.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e9","source":"src/core","target":"src/core/generator.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e10","source":"src/core","target":"src/core/scanner.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e11","source":"src/core","target":"src/core/stats.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e12","source":"src/core","target":"src/core/universalGraph.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e13","source":"src/core","target":"src/core/universalParser.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e14","source":"src/detectors","target":"src/detectors/project.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e15","source":"src/exporters","target":"src/exporters/architectureFlowHtml.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e16","source":"src/exporters","target":"src/exporters/graph3dVisualizer.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e17","source":"src/exporters","target":"src/exporters/graphJson.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e18","source":"src/exporters","target":"src/exporters/graphVisualizer.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e19","source":"src/exporters","target":"src/exporters/html.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e20","source":"src/exporters","target":"src/exporters/json.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e21","source":"src/exporters","target":"src/exporters/markdown.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e22","source":"src/exporters","target":"src/exporters/mermaid.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e23","source":"src/exporters","target":"src/exporters/svg.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e24","source":"src/features","target":"src/features/ai.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e25","source":"src/features","target":"src/features/bundle.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e26","source":"src/features","target":"src/features/compare.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e27","source":"src/features","target":"src/features/exporter.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e28","source":"src/features","target":"src/features/inject.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e29","source":"src/features","target":"src/features/monorepo.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e30","source":"src/features","target":"src/features/summarize.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e31","source":"src/features","target":"src/features/tokens.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e32","source":"src/features","target":"src/features/watcher.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e33","source":"src","target":"src/index.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e34","source":"src/utils","target":"src/utils/clipboard.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e35","source":"src/utils","target":"src/utils/colors.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e36","source":"src/utils","target":"src/utils/ignore.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e37","source":"src/utils","target":"src/utils/sensitive.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e38","source":"src/utils","target":"src/utils/zip.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e39","source":"tests","target":"tests/bundle.test.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e40","source":"tests","target":"tests/compare.test.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e41","source":"tests","target":"tests/exporter.test.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e42","source":"tests","target":"tests/flow.test.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e43","source":"tests","target":"tests/flutter_graph.test.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e44","source":"tests","target":"tests/formatter.test.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e45","source":"tests","target":"tests/graph.test.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e46","source":"tests","target":"tests/html.test.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e47","source":"tests","target":"tests/ignore.test.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e48","source":"tests","target":"tests/json.test.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e49","source":"tests","target":"tests/mermaid.test.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e50","source":"tests","target":"tests/scanner.test.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e51","source":"tests","target":"tests/summarize.test.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e52","source":"tests","target":"tests/svg.test.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e53","source":"tests","target":"tests/tokens.test.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e54","source":"tests","target":"tests/zip.test.js","type":"PARENT_CHILD","label":"Contains","color":"#58a6ff","style":"solid","weight":1,"metadata":{}},{"id":"e55","source":"bin/cli.js","target":"pkg:path","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"path"}},{"id":"e56","source":"bin/cli.js","target":"pkg:fs","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"fs"}},{"id":"e57","source":"bin/cli.js","target":"src/utils/colors.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e58","source":"bin/cli.js","target":"src/utils/clipboard.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e59","source":"bin/cli.js","target":"src/core/generator.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e60","source":"bin/cli.js","target":"src/core/stats.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e61","source":"bin/cli.js","target":"src/core/scanner.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e62","source":"bin/cli.js","target":"src/core/formatter.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e63","source":"bin/cli.js","target":"src/utils/ignore.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e64","source":"bin/cli.js","target":"src/exporters/json.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e65","source":"bin/cli.js","target":"src/exporters/html.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e66","source":"bin/cli.js","target":"src/exporters/svg.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e67","source":"bin/cli.js","target":"src/exporters/mermaid.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e68","source":"bin/cli.js","target":"src/exporters/markdown.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e69","source":"bin/cli.js","target":"src/features/ai.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e70","source":"bin/cli.js","target":"src/features/inject.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e71","source":"bin/cli.js","target":"src/features/watcher.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e72","source":"bin/cli.js","target":"src/features/compare.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e73","source":"bin/cli.js","target":"src/detectors/project.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e74","source":"bin/cli.js","target":"src/features/tokens.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e75","source":"bin/cli.js","target":"src/core/architectureFlow.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e76","source":"bin/cli.js","target":"src/features/bundle.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e77","source":"bin/cli.js","target":"src/features/exporter.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e78","source":"bin/cli.js","target":"src/exporters/architectureFlowHtml.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e79","source":"bin/cli.js","target":"src/core/universalParser.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e80","source":"bin/cli.js","target":"src/exporters/graphVisualizer.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e81","source":"bin/cli.js","target":"src/exporters/graphJson.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e82","source":"bin/cli.js","target":"src/exporters/graph3dVisualizer.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e83","source":"bin/cli.js","target":"pkg:readline","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"readline"}},{"id":"e84","source":"bin/cli.js","target":"package.json","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e85","source":"src/core/analyzer.js","target":"pkg:path","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"path"}},{"id":"e86","source":"src/core/analyzer.js","target":"pkg:y","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"y"}},{"id":"e87","source":"src/core/analyzer.js","target":"pkg:y","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"y"}},{"id":"e88","source":"src/core/analyzer.js","target":"pkg:y","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"y"}},{"id":"e89","source":"src/core/analyzer.js","target":"pkg:y","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"y"}},{"id":"e90","source":"src/core/analyzer.js","target":"pkg:y","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"y"}},{"id":"e91","source":"src/core/analyzer.js","target":"pkg:y","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"y"}},{"id":"e92","source":"src/core/architectureFlow.js","target":"pkg:fs","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"fs"}},{"id":"e93","source":"src/core/architectureFlow.js","target":"pkg:path","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"path"}},{"id":"e94","source":"src/core/architectureFlow.js","target":"src/core/formatter.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e95","source":"src/core/architectureFlow.js","target":"src/core/scanner.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e96","source":"src/core/formatter.js","target":"pkg:path","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"path"}},{"id":"e97","source":"src/core/formatter.js","target":"src/core/scanner.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e98","source":"src/core/generator.js","target":"pkg:fs","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"fs"}},{"id":"e99","source":"src/core/generator.js","target":"pkg:path","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"path"}},{"id":"e100","source":"src/core/generator.js","target":"src/core/scanner.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e101","source":"src/core/generator.js","target":"src/core/formatter.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e102","source":"src/core/generator.js","target":"src/core/stats.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e103","source":"src/core/generator.js","target":"src/utils/ignore.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e104","source":"src/core/generator.js","target":"src/exporters/markdown.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e105","source":"src/core/generator.js","target":"src/detectors/project.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e106","source":"src/core/generator.js","target":"src/features/tokens.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e107","source":"src/core/generator.js","target":"src/core/architectureFlow.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e108","source":"src/core/generator.js","target":"src/core/analyzer.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e109","source":"src/core/scanner.js","target":"pkg:fs","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"fs"}},{"id":"e110","source":"src/core/scanner.js","target":"pkg:path","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"path"}},{"id":"e111","source":"src/core/scanner.js","target":"src/utils/sensitive.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e112","source":"src/core/scanner.js","target":"src/features/summarize.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e113","source":"src/core/scanner.js","target":"src/core/analyzer.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e114","source":"src/core/stats.js","target":"pkg:path","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"path"}},{"id":"e115","source":"src/core/stats.js","target":"src/core/formatter.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e116","source":"src/core/stats.js","target":"src/core/scanner.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e117","source":"src/core/stats.js","target":"src/utils/colors.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e118","source":"src/core/universalParser.js","target":"pkg:fs","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"fs"}},{"id":"e119","source":"src/core/universalParser.js","target":"pkg:path","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"path"}},{"id":"e120","source":"src/core/universalParser.js","target":"src/core/universalGraph.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e121","source":"src/core/universalParser.js","target":"src/core/scanner.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e122","source":"src/detectors/project.js","target":"pkg:fs","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"fs"}},{"id":"e123","source":"src/detectors/project.js","target":"pkg:path","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"path"}},{"id":"e124","source":"src/exporters/architectureFlowHtml.js","target":"pkg:path","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"path"}},{"id":"e125","source":"src/exporters/html.js","target":"pkg:path","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"path"}},{"id":"e126","source":"src/exporters/html.js","target":"src/core/stats.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e127","source":"src/exporters/html.js","target":"src/exporters/json.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e128","source":"src/exporters/html.js","target":"src/exporters/svg.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e129","source":"src/exporters/html.js","target":"src/exporters/mermaid.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e130","source":"src/exporters/html.js","target":"src/features/ai.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e131","source":"src/exporters/html.js","target":"src/core/formatter.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e132","source":"src/exporters/html.js","target":"src/core/scanner.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e133","source":"src/exporters/json.js","target":"src/core/scanner.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e134","source":"src/exporters/mermaid.js","target":"src/core/scanner.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e135","source":"src/exporters/svg.js","target":"src/core/scanner.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e136","source":"src/features/ai.js","target":"src/detectors/project.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e137","source":"src/features/ai.js","target":"src/core/formatter.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e138","source":"src/features/bundle.js","target":"pkg:fs","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"fs"}},{"id":"e139","source":"src/features/bundle.js","target":"pkg:path","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"path"}},{"id":"e140","source":"src/features/bundle.js","target":"package.json","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e141","source":"src/features/bundle.js","target":"src/core/generator.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e142","source":"src/features/bundle.js","target":"src/exporters/json.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e143","source":"src/features/bundle.js","target":"src/exporters/html.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e144","source":"src/features/bundle.js","target":"src/exporters/svg.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e145","source":"src/features/bundle.js","target":"src/exporters/mermaid.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e146","source":"src/features/bundle.js","target":"src/features/ai.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e147","source":"src/features/bundle.js","target":"src/utils/zip.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e148","source":"src/features/bundle.js","target":"src/utils/colors.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e149","source":"src/features/bundle.js","target":"src/core/universalParser.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e150","source":"src/features/bundle.js","target":"src/exporters/graphVisualizer.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e151","source":"src/features/bundle.js","target":"src/exporters/graphJson.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e152","source":"src/features/bundle.js","target":"src/exporters/graph3dVisualizer.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e153","source":"src/features/compare.js","target":"pkg:fs","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"fs"}},{"id":"e154","source":"src/features/compare.js","target":"pkg:path","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"path"}},{"id":"e155","source":"src/features/compare.js","target":"src/core/scanner.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e156","source":"src/features/compare.js","target":"src/core/formatter.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e157","source":"src/features/compare.js","target":"src/exporters/json.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e158","source":"src/features/exporter.js","target":"pkg:fs","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"fs"}},{"id":"e159","source":"src/features/exporter.js","target":"pkg:path","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"path"}},{"id":"e160","source":"src/features/exporter.js","target":"src/features/bundle.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e161","source":"src/features/exporter.js","target":"src/utils/colors.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e162","source":"src/features/inject.js","target":"pkg:fs","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"fs"}},{"id":"e163","source":"src/features/monorepo.js","target":"pkg:fs","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"fs"}},{"id":"e164","source":"src/features/monorepo.js","target":"pkg:path","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"path"}},{"id":"e165","source":"src/features/summarize.js","target":"pkg:fs","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"fs"}},{"id":"e166","source":"src/features/summarize.js","target":"pkg:path","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"path"}},{"id":"e167","source":"src/features/summarize.js","target":"src/core/architectureFlow.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e168","source":"src/features/watcher.js","target":"pkg:fs","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"fs"}},{"id":"e169","source":"src/features/watcher.js","target":"pkg:path","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"path"}},{"id":"e170","source":"src/features/watcher.js","target":"src/utils/colors.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e171","source":"src/index.js","target":"pkg:project-tree-md","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"project-tree-md"}},{"id":"e172","source":"src/index.js","target":"src/core/generator.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e173","source":"src/index.js","target":"src/core/formatter.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e174","source":"src/index.js","target":"src/core/stats.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e175","source":"src/index.js","target":"src/core/scanner.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e176","source":"src/index.js","target":"src/detectors/project.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e177","source":"src/index.js","target":"src/utils/ignore.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e178","source":"src/index.js","target":"src/exporters/json.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e179","source":"src/index.js","target":"src/exporters/html.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e180","source":"src/index.js","target":"src/exporters/svg.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e181","source":"src/index.js","target":"src/exporters/mermaid.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e182","source":"src/index.js","target":"src/features/ai.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e183","source":"src/index.js","target":"src/features/inject.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e184","source":"src/index.js","target":"src/features/compare.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e185","source":"src/index.js","target":"src/features/monorepo.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e186","source":"src/index.js","target":"src/features/tokens.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e187","source":"src/index.js","target":"src/features/summarize.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e188","source":"src/index.js","target":"src/core/architectureFlow.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e189","source":"src/index.js","target":"src/utils/zip.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e190","source":"src/index.js","target":"src/features/bundle.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e191","source":"src/index.js","target":"src/features/exporter.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e192","source":"src/index.js","target":"src/exporters/architectureFlowHtml.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e193","source":"src/index.js","target":"src/core/universalParser.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e194","source":"src/index.js","target":"src/exporters/graphVisualizer.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e195","source":"src/index.js","target":"src/exporters/graphJson.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e196","source":"src/index.js","target":"src/exporters/graph3dVisualizer.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e197","source":"src/utils/clipboard.js","target":"pkg:child_process","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"child_process"}},{"id":"e198","source":"src/utils/colors.js","target":"env:variables","type":"ENV_USAGE","label":"Environment Variable","color":"#7ee787","style":"dotted","weight":1,"metadata":{}},{"id":"e199","source":"src/utils/ignore.js","target":"pkg:fs","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"fs"}},{"id":"e200","source":"src/utils/ignore.js","target":"pkg:path","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"path"}},{"id":"e201","source":"src/utils/zip.js","target":"pkg:zlib","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"zlib"}},{"id":"e202","source":"tests/bundle.test.js","target":"pkg:assert","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"assert"}},{"id":"e203","source":"tests/bundle.test.js","target":"pkg:fs","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"fs"}},{"id":"e204","source":"tests/bundle.test.js","target":"pkg:path","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"path"}},{"id":"e205","source":"tests/bundle.test.js","target":"src/features/bundle.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e206","source":"tests/compare.test.js","target":"pkg:path","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"path"}},{"id":"e207","source":"tests/compare.test.js","target":"pkg:fs","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"fs"}},{"id":"e208","source":"tests/compare.test.js","target":"src/features/compare.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e209","source":"tests/compare.test.js","target":"src/core/scanner.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e210","source":"tests/exporter.test.js","target":"pkg:assert","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"assert"}},{"id":"e211","source":"tests/exporter.test.js","target":"pkg:fs","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"fs"}},{"id":"e212","source":"tests/exporter.test.js","target":"pkg:path","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"path"}},{"id":"e213","source":"tests/exporter.test.js","target":"src/features/exporter.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e214","source":"tests/flow.test.js","target":"pkg:assert","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"assert"}},{"id":"e215","source":"tests/flow.test.js","target":"pkg:path","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"path"}},{"id":"e216","source":"tests/flow.test.js","target":"pkg:fs","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"fs"}},{"id":"e217","source":"tests/flow.test.js","target":"pkg:os","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"os"}},{"id":"e218","source":"tests/flow.test.js","target":"src/core/architectureFlow.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e219","source":"tests/flutter_graph.test.js","target":"pkg:fs","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"fs"}},{"id":"e220","source":"tests/flutter_graph.test.js","target":"pkg:path","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"path"}},{"id":"e221","source":"tests/flutter_graph.test.js","target":"pkg:assert","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"assert"}},{"id":"e222","source":"tests/flutter_graph.test.js","target":"src/core/universalParser.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e223","source":"tests/flutter_graph.test.js","target":"src/core/architectureFlow.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e224","source":"tests/flutter_graph.test.js","target":"src/exporters/graphVisualizer.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e225","source":"tests/flutter_graph.test.js","target":"src/exporters/architectureFlowHtml.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e226","source":"tests/flutter_graph.test.js","target":"pkg:package:flutter","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"package:flutter/material.dart"}},{"id":"e227","source":"tests/flutter_graph.test.js","target":"pkg:package:my_flutter_app","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"package:my_flutter_app/screens/home_screen.dart"}},{"id":"e228","source":"tests/flutter_graph.test.js","target":"pkg:package:flutter","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"package:flutter/material.dart"}},{"id":"e229","source":"tests/flutter_graph.test.js","target":"pkg:package:my_flutter_app","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"package:my_flutter_app/widgets/custom_button.dart"}},{"id":"e230","source":"tests/flutter_graph.test.js","target":"pkg:package:my_flutter_app","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"package:my_flutter_app/services/api_service.dart"}},{"id":"e231","source":"tests/flutter_graph.test.js","target":"pkg:package:flutter","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"package:flutter/material.dart"}},{"id":"e232","source":"tests/flutter_graph.test.js","target":"pkg:package:http","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"package:http/http.dart"}},{"id":"e233","source":"tests/formatter.test.js","target":"pkg:path","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"path"}},{"id":"e234","source":"tests/formatter.test.js","target":"src/core/scanner.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e235","source":"tests/formatter.test.js","target":"src/core/formatter.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e236","source":"tests/graph.test.js","target":"pkg:path","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"path"}},{"id":"e237","source":"tests/graph.test.js","target":"src/core/universalGraph.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e238","source":"tests/graph.test.js","target":"src/core/universalParser.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e239","source":"tests/graph.test.js","target":"src/exporters/graphJson.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e240","source":"tests/graph.test.js","target":"src/exporters/graphVisualizer.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e241","source":"tests/html.test.js","target":"pkg:path","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"path"}},{"id":"e242","source":"tests/html.test.js","target":"src/core/scanner.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e243","source":"tests/html.test.js","target":"src/exporters/html.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e244","source":"tests/html.test.js","target":"src/core/stats.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e245","source":"tests/ignore.test.js","target":"src/utils/ignore.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e246","source":"tests/json.test.js","target":"pkg:path","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"path"}},{"id":"e247","source":"tests/json.test.js","target":"src/core/scanner.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e248","source":"tests/json.test.js","target":"src/exporters/json.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e249","source":"tests/json.test.js","target":"src/core/stats.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e250","source":"tests/mermaid.test.js","target":"pkg:path","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"path"}},{"id":"e251","source":"tests/mermaid.test.js","target":"src/core/scanner.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e252","source":"tests/mermaid.test.js","target":"src/exporters/mermaid.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e253","source":"tests/scanner.test.js","target":"pkg:path","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"path"}},{"id":"e254","source":"tests/scanner.test.js","target":"src/core/scanner.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e255","source":"tests/summarize.test.js","target":"pkg:assert","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"assert"}},{"id":"e256","source":"tests/summarize.test.js","target":"pkg:path","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"path"}},{"id":"e257","source":"tests/summarize.test.js","target":"pkg:fs","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"fs"}},{"id":"e258","source":"tests/summarize.test.js","target":"pkg:os","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"os"}},{"id":"e259","source":"tests/summarize.test.js","target":"src/features/summarize.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e260","source":"tests/summarize.test.js","target":"pkg:jsonwebtoken","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"jsonwebtoken"}},{"id":"e261","source":"tests/svg.test.js","target":"pkg:path","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"path"}},{"id":"e262","source":"tests/svg.test.js","target":"src/core/scanner.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e263","source":"tests/svg.test.js","target":"src/exporters/svg.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e264","source":"tests/svg.test.js","target":"src/core/stats.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e265","source":"tests/tokens.test.js","target":"pkg:assert","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"assert"}},{"id":"e266","source":"tests/tokens.test.js","target":"src/features/tokens.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}},{"id":"e267","source":"tests/zip.test.js","target":"pkg:assert","type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted","weight":1,"metadata":{"package":"assert"}},{"id":"e268","source":"tests/zip.test.js","target":"src/utils/zip.js","type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid","weight":1,"metadata":{}}],"relationshipTypes":{"PARENT_CHILD":{"type":"PARENT_CHILD","label":"Parent → Child","color":"#58a6ff","style":"solid"},"EXTERNAL_PACKAGE":{"type":"EXTERNAL_PACKAGE","label":"External Package","color":"#f0883e","style":"dotted"},"IMPORTS":{"type":"IMPORTS","label":"Imports","color":"#8b949e","style":"solid"},"ENV_USAGE":{"type":"ENV_USAGE","label":"Environment Variable","color":"#7ee787","style":"dotted"}},"nodeTypes":{"CONFIG":{"type":"CONFIG","icon":"⚙️","label":"Configuration","color":"#8b949e"},"FILE":{"type":"FILE","icon":"📄","label":"File","color":"#c9d1d9"},"DOCUMENTATION":{"type":"DOCUMENTATION","icon":"📝","label":"Documentation","color":"#8b949e"},"REPOSITORY":{"type":"REPOSITORY","icon":"🗃️","label":"Repository","color":"#da3633"},"ENTRY":{"type":"ENTRY","icon":"🚀","label":"Entry Point","color":"#3fb950"},"UTILITY":{"type":"UTILITY","icon":"🛠️","label":"Utility","color":"#8b949e"},"TEST":{"type":"TEST","icon":"🧪","label":"Test","color":"#7ee787"},"FOLDER":{"type":"FOLDER","icon":"📁","label":"Folder","color":"#8b949e"},"PACKAGE":{"type":"PACKAGE","icon":"📦","label":"Package","color":"#f0883e"},"ENVIRONMENT":{"type":"ENVIRONMENT","icon":"🌍","label":"Environment","color":"#7ee787"}},"metadata":{"generatedAt":"2026-07-28T17:02:49.642Z","languages":{"Unknown":2,"JavaScript":50,"JSON":2,"Markdown":2},"frameworks":[],"totalFiles":56,"totalLines":11756},"layout":{"type":"auto","positions":{}},"viewport":{"x":0,"y":0,"zoom":1},"theme":"dark","filters":{"nodeTypes":[],"edgeTypes":[],"languages":[],"frameworks":[]},"collapseState":{},"selectionState":{"selectedNodes":[],"selectedEdges":[]}};
+const nodes = GRAPH.nodes || [];
+const edges = GRAPH.edges || [];
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+const STATE = {
+  // Viewport
+  offsetX: 0, offsetY: 0, zoom: 1,
+  // Interaction
+  dragging: false, dragStartX: 0, dragStartY: 0,
+  dragNode: null, dragNodeOffX: 0, dragNodeOffY: 0,
+  selectedNode: null, hoveredNode: null,
+  // Layout
+  positions: new Map(),
+  nodeWidth: 220, nodeHeight: 64,
+  // Collapse
+  collapsed: new Set(),
+  hidden: new Set(),
+  pinned: new Set(),
+  // Search
+  searchTerm: '', searchResults: [],
+  // History
+  history: [], historyIndex: -1,
+  // Animation
+  animating: false, animFrame: null,
+};
+
+// ─── CANVAS SETUP ────────────────────────────────────────────────────────────
+const canvas = document.getElementById('graphCanvas');
+const ctx = canvas.getContext('2d');
+const wrap = document.getElementById('canvasWrap');
+let W, H, dpr;
+
+function resizeCanvas() {
+  dpr = window.devicePixelRatio || 1;
+  W = wrap.clientWidth;
+  H = wrap.clientHeight;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width = W + 'px';
+  canvas.style.height = H + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  render();
+}
+window.addEventListener('resize', resizeCanvas);
+
+// ─── ADJACENCY ───────────────────────────────────────────────────────────────
+const nodeMap = new Map();
+const childrenMap = new Map();
+const parentMap = new Map();
+const incomingEdges = new Map();
+const outgoingEdges = new Map();
+
+nodes.forEach(n => {
+  nodeMap.set(n.id, n);
+  childrenMap.set(n.id, []);
+  incomingEdges.set(n.id, []);
+  outgoingEdges.set(n.id, []);
+});
+
+edges.forEach(e => {
+  if (!nodeMap.has(e.source) || !nodeMap.has(e.target)) return;
+  if (e.type === 'PARENT_CHILD') {
+    const children = childrenMap.get(e.source) || [];
+    children.push(e.target);
+    childrenMap.set(e.source, children);
+    parentMap.set(e.target, e.source);
+  }
+  const out = outgoingEdges.get(e.source);
+  if (out) out.push(e);
+  const inc = incomingEdges.get(e.target);
+  if (inc) inc.push(e);
+});
+
+// ─── LAYOUT ENGINES ──────────────────────────────────────────────────────────
+
+function getVisibleNodes() {
+  return nodes.filter(n => !STATE.hidden.has(n.id));
+}
+
+function getVisibleEdges() {
+  return edges.filter(e =>
+    nodeMap.has(e.source) && nodeMap.has(e.target) &&
+    !STATE.hidden.has(e.source) && !STATE.hidden.has(e.target)
+  );
+}
+
+// DAG / Hierarchical Layout (Sugiyama-style)
+function layoutDagre(isHorizontal) {
+  const visible = getVisibleNodes();
+  if (visible.length === 0) return;
+
+  // Compute layers via topological sort
+  const inDeg = new Map();
+  const adjList = new Map();
+  visible.forEach(n => { inDeg.set(n.id, 0); adjList.set(n.id, []); });
+
+  const visibleEdges = getVisibleEdges();
+  visibleEdges.forEach(e => {
+    if (adjList.has(e.source) && inDeg.has(e.target)) {
+      adjList.get(e.source).push(e.target);
+      inDeg.set(e.target, (inDeg.get(e.target) || 0) + 1);
+    }
+  });
+
+  // BFS topological layers
+  const layers = [];
+  const layerMap = new Map();
+  const queue = [];
+  inDeg.forEach((deg, id) => { if (deg === 0) queue.push(id); });
+
+  let assigned = new Set();
+  while (queue.length > 0) {
+    const layerNodes = [...queue];
+    layers.push(layerNodes);
+    queue.length = 0;
+    for (const id of layerNodes) {
+      assigned.add(id);
+      layerMap.set(id, layers.length - 1);
+      const neighbors = adjList.get(id) || [];
+      for (const nb of neighbors) {
+        if (assigned.has(nb)) continue;
+        inDeg.set(nb, (inDeg.get(nb) || 0) - 1);
+        if (inDeg.get(nb) <= 0 && !assigned.has(nb)) queue.push(nb);
+      }
+    }
+  }
+
+  // Assign unassigned nodes
+  visible.forEach(n => {
+    if (!assigned.has(n.id)) {
+      layers.push([n.id]);
+      layerMap.set(n.id, layers.length - 1);
+    }
+  });
+
+  const gapX = isHorizontal ? 300 : STATE.nodeWidth + 80;
+  const gapY = isHorizontal ? STATE.nodeHeight + 50 : 120;
+  const startX = 100, startY = 100;
+
+  layers.forEach((layer, li) => {
+    layer.forEach((id, ni) => {
+      const x = isHorizontal ? startX + li * gapX : startX + ni * gapX - (layer.length * gapX) / 2;
+      const y = isHorizontal ? startY + ni * gapY - (layer.length * gapY) / 2 : startY + li * gapY;
+      STATE.positions.set(id, { x, y });
+    });
+  });
+}
+
+// Force-Directed Layout (Barnes-Hut optimized)
+function layoutForce() {
+  const visible = getVisibleNodes();
+  if (visible.length === 0) return;
+
+  // Initialize positions in a circle
+  const cx = W / 2, cy = H / 2, radius = Math.min(W, H) * 0.3;
+  visible.forEach((n, i) => {
+    const angle = (2 * Math.PI * i) / visible.length;
+    if (!STATE.positions.has(n.id) || !STATE.pinned.has(n.id)) {
+      STATE.positions.set(n.id, {
+        x: cx + radius * Math.cos(angle) + (Math.random() - 0.5) * 50,
+        y: cy + radius * Math.sin(angle) + (Math.random() - 0.5) * 50,
+        vx: 0, vy: 0
+      });
+    }
+  });
+
+  const visibleEdges = getVisibleEdges();
+  const idSet = new Set(visible.map(n => n.id));
+
+  // Run simulation iterations (capped for large graphs to prevent main thread freezing)
+  const iterations = visible.length > 200 ? 40 : (visible.length > 100 ? 60 : Math.min(200, 50 + visible.length));
+  const repulsion = 8000;
+  const attraction = 0.005;
+  const damping = 0.85;
+  const minDist = 80;
+
+  for (let iter = 0; iter < iterations; iter++) {
+    const temp = 1 - iter / iterations;
+
+    // Repulsive forces (sampled step for large graphs to ensure sub-100ms calculation)
+    const step = visible.length > 150 ? Math.max(1, Math.floor(visible.length / 50)) : 1;
+    for (let i = 0; i < visible.length; i++) {
+      const a = STATE.positions.get(visible[i].id);
+      for (let j = i + 1; j < visible.length; j += step) {
+        const b = STATE.positions.get(visible[j].id);
+        let dx = a.x - b.x, dy = a.y - b.y;
+        let dist = Math.sqrt(dx * dx + dy * dy) || 1;
+        if (dist < minDist) dist = minDist;
+        const force = repulsion / (dist * dist) * temp;
+        const fx = (dx / dist) * force;
+        const fy = (dy / dist) * force;
+        a.vx = (a.vx || 0) + fx;
+        a.vy = (a.vy || 0) + fy;
+        b.vx = (b.vx || 0) - fx;
+        b.vy = (b.vy || 0) - fy;
+      }
+    }
+
+    // Attractive forces (edges)
+    for (const e of visibleEdges) {
+      if (!idSet.has(e.source) || !idSet.has(e.target)) continue;
+      const a = STATE.positions.get(e.source);
+      const b = STATE.positions.get(e.target);
+      if (!a || !b) continue;
+      const dx = b.x - a.x, dy = b.y - a.y;
+      const dist = Math.sqrt(dx * dx + dy * dy) || 1;
+      const force = dist * attraction * temp;
+      const fx = (dx / dist) * force;
+      const fy = (dy / dist) * force;
+      a.vx = (a.vx || 0) + fx;
+      a.vy = (a.vy || 0) + fy;
+      b.vx = (b.vx || 0) - fx;
+      b.vy = (b.vy || 0) - fy;
+    }
+
+    // Apply velocities
+    for (const n of visible) {
+      if (STATE.pinned.has(n.id)) continue;
+      const p = STATE.positions.get(n.id);
+      p.vx = (p.vx || 0) * damping;
+      p.vy = (p.vy || 0) * damping;
+      p.x += p.vx;
+      p.y += p.vy;
+    }
+  }
+}
+
+// Tree Layout
+function layoutTree() {
+  layoutDagre(false);
+}
+
+// Radial Layout
+function layoutRadial() {
+  const visible = getVisibleNodes();
+  if (visible.length === 0) return;
+
+  const cx = W / 2, cy = H / 2;
+
+  // Find roots (no incoming IMPORTS edges)
+  const hasIncoming = new Set();
+  getVisibleEdges().forEach(e => {
+    if (e.type === 'IMPORTS') hasIncoming.add(e.target);
+  });
+
+  const roots = visible.filter(n => !hasIncoming.has(n.id));
+  if (roots.length === 0) roots.push(visible[0]);
+
+  // BFS from roots to assign layers
+  const layerMap = new Map();
+  const queue = roots.map(r => ({ id: r.id, layer: 0 }));
+  const visited = new Set();
+  roots.forEach(r => { visited.add(r.id); layerMap.set(r.id, 0); });
+
+  while (queue.length > 0) {
+    const { id, layer } = queue.shift();
+    const outE = outgoingEdges.get(id) || [];
+    for (const e of outE) {
+      if (!visited.has(e.target) && nodeMap.has(e.target) && !STATE.hidden.has(e.target)) {
+        visited.add(e.target);
+        layerMap.set(e.target, layer + 1);
+        queue.push({ id: e.target, layer: layer + 1 });
+      }
+    }
+  }
+
+  // Unvisited nodes
+  visible.forEach(n => {
+    if (!visited.has(n.id)) layerMap.set(n.id, 1);
+  });
+
+  // Group by layer
+  const layers = {};
+  layerMap.forEach((l, id) => {
+    if (!layers[l]) layers[l] = [];
+    layers[l].push(id);
+  });
+
+  const maxLayer = Math.max(...Object.keys(layers).map(Number), 0);
+  const ringGap = Math.min(W, H) * 0.15;
+
+  Object.entries(layers).forEach(([layerIdx, ids]) => {
+    const r = layerIdx == 0 ? 0 : Number(layerIdx) * ringGap + 100;
+    ids.forEach((id, i) => {
+      const angle = (2 * Math.PI * i) / ids.length - Math.PI / 2;
+      STATE.positions.set(id, {
+        x: cx + r * Math.cos(angle),
+        y: cy + r * Math.sin(angle)
+      });
+    });
+  });
+}
+
+// Horizontal Layout
+function layoutHorizontal() {
+  layoutDagre(true);
+}
+
+function runLayout(type) {
+  switch (type) {
+    case 'dagre': layoutDagre(false); break;
+    case 'force': layoutForce(); break;
+    case 'tree': layoutTree(); break;
+    case 'radial': layoutRadial(); break;
+    case 'horizontal': layoutHorizontal(); break;
+    default: layoutDagre(false);
+  }
+  render();
+  updateMinimap();
+}
+
+// Auto-select best layout
+function autoSelectLayout() {
+  const n = nodes.length;
+  if (n > 150) return 'dagre';
+  return 'dagre';
+}
+
+// ─── RENDERING ───────────────────────────────────────────────────────────────
+
+function worldToScreen(wx, wy) {
+  return {
+    x: (wx + STATE.offsetX) * STATE.zoom + W / 2,
+    y: (wy + STATE.offsetY) * STATE.zoom + H / 2
+  };
+}
+
+function screenToWorld(sx, sy) {
+  return {
+    x: (sx - W / 2) / STATE.zoom - STATE.offsetX,
+    y: (sy - H / 2) / STATE.zoom - STATE.offsetY
+  };
+}
+
+function isOnScreen(wx, wy, margin) {
+  const s = worldToScreen(wx, wy);
+  const m = margin || 300;
+  return s.x > -m && s.x < W + m && s.y > -m && s.y < H + m;
+}
+
+function render() {
+  ctx.clearRect(0, 0, W, H);
+
+  // Background grid
+  drawGrid();
+
+  ctx.save();
+  ctx.translate(W / 2, H / 2);
+  ctx.scale(STATE.zoom, STATE.zoom);
+  ctx.translate(STATE.offsetX, STATE.offsetY);
+
+  // Draw edges
+  const visibleEdges = getVisibleEdges();
+  for (const e of visibleEdges) {
+    drawEdge(e);
+  }
+
+  // Draw nodes
+  const visible = getVisibleNodes();
+  for (const n of visible) {
+    const pos = STATE.positions.get(n.id);
+    if (!pos) continue;
+    if (!isOnScreen(pos.x, pos.y, STATE.nodeWidth * 2)) continue;
+    drawNode(n, pos);
+  }
+
+  ctx.restore();
+}
+
+function drawGrid() {
+  const gridSize = 40 * STATE.zoom;
+  if (gridSize < 8) return; // too zoomed out
+
+  const cs = getComputedStyle(document.documentElement);
+  ctx.strokeStyle = cs.getPropertyValue('--grid-color').trim() || 'rgba(48,54,61,0.3)';
+  ctx.lineWidth = 0.5;
+
+  const offX = ((STATE.offsetX * STATE.zoom + W / 2) % gridSize + gridSize) % gridSize;
+  const offY = ((STATE.offsetY * STATE.zoom + H / 2) % gridSize + gridSize) % gridSize;
+
+  ctx.beginPath();
+  for (let x = offX; x < W; x += gridSize) {
+    ctx.moveTo(x, 0); ctx.lineTo(x, H);
+  }
+  for (let y = offY; y < H; y += gridSize) {
+    ctx.moveTo(0, y); ctx.lineTo(W, y);
+  }
+  ctx.stroke();
+}
+
+function drawEdge(e) {
+  const srcPos = STATE.positions.get(e.source);
+  const tgtPos = STATE.positions.get(e.target);
+  if (!srcPos || !tgtPos) return;
+
+  // Viewport edge culling
+  if (!isOnScreen(srcPos.x, srcPos.y, 400) && !isOnScreen(tgtPos.x, tgtPos.y, 400)) return;
+
+  const nw = STATE.nodeWidth, nh = STATE.nodeHeight;
+  const sx = srcPos.x + nw / 2, sy = srcPos.y + nh;
+  const tx = tgtPos.x + nw / 2, ty = tgtPos.y;
+
+  ctx.beginPath();
+  ctx.strokeStyle = e.color || '#8b949e';
+  ctx.lineWidth = (STATE.hoveredNode && (e.source === STATE.hoveredNode.id || e.target === STATE.hoveredNode.id)) ? 2.5 : 1.2;
+  const isMatchSrc = STATE.searchResultIds && STATE.searchResultIds.has(e.source);
+  const isMatchTgt = STATE.searchResultIds && STATE.searchResultIds.has(e.target);
+  ctx.globalAlpha = (STATE.searchTerm && !isMatchSrc && !isMatchTgt) ? 0.1 : (
+    STATE.selectedNode && e.source !== STATE.selectedNode.id && e.target !== STATE.selectedNode.id ? 0.2 : 0.8
+  );
+
+  // Dashed/dotted styles
+  if (e.style === 'dashed') ctx.setLineDash([8, 4]);
+  else if (e.style === 'dotted') ctx.setLineDash([3, 3]);
+  else ctx.setLineDash([]);
+
+  // Bezier curve
+  const midY = (sy + ty) / 2;
+  ctx.moveTo(sx, sy);
+  ctx.bezierCurveTo(sx, midY, tx, midY, tx, ty);
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Arrowhead
+  const angle = Math.atan2(ty - midY, tx - tx) || Math.PI / 2;
+  const arrowLen = 8;
+  ctx.fillStyle = e.color || '#8b949e';
+  ctx.beginPath();
+  ctx.moveTo(tx, ty);
+  ctx.lineTo(tx - arrowLen * Math.cos(angle - 0.4), ty - arrowLen * Math.sin(angle - 0.4));
+  ctx.lineTo(tx - arrowLen * Math.cos(angle + 0.4), ty - arrowLen * Math.sin(angle + 0.4));
+  ctx.closePath();
+  ctx.fill();
+  ctx.globalAlpha = 1;
+}
+
+function drawNode(n, pos) {
+  const nw = STATE.nodeWidth, nh = STATE.nodeHeight;
+  const x = pos.x, y = pos.y;
+
+  const isSelected = STATE.selectedNode && STATE.selectedNode.id === n.id;
+  const isHovered = STATE.hoveredNode && STATE.hoveredNode.id === n.id;
+  const isSearchMatch = STATE.searchTerm && STATE.searchResults.find(r => r.id === n.id);
+  const isDimmed = STATE.searchTerm && !isSearchMatch;
+
+  ctx.globalAlpha = isDimmed ? 0.15 : 1;
+
+  // Node shadow
+  if (isSelected || isHovered) {
+    ctx.shadowColor = n.color || '#58a6ff';
+    ctx.shadowBlur = isSelected ? 20 : 12;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+  }
+
+  // Node background
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  ctx.fillStyle = isDark ? 'rgba(22, 27, 34, 0.95)' : 'rgba(255, 255, 255, 0.98)';
+  if (isSelected) ctx.fillStyle = isDark ? 'rgba(30, 38, 50, 0.98)' : 'rgba(240, 245, 255, 0.98)';
+
+  // Rounded rect
+  roundRect(ctx, x, y, nw, nh, 10);
+  ctx.fill();
+
+  // Reset shadow
+  ctx.shadowColor = 'transparent';
+  ctx.shadowBlur = 0;
+
+  // Border
+  ctx.strokeStyle = isSelected ? (n.color || '#58a6ff') : (isHovered ? (n.color || '#58a6ff') : (isDark ? 'rgba(48,54,61,0.8)' : 'rgba(208,215,222,0.8)'));
+  ctx.lineWidth = isSelected ? 2 : 1;
+  roundRect(ctx, x, y, nw, nh, 10);
+  ctx.stroke();
+
+  // Left color bar
+  ctx.fillStyle = n.color || '#58a6ff';
+  roundRectLeft(ctx, x, y, 4, nh, 10);
+  ctx.fill();
+
+  // Icon
+  ctx.font = '16px serif';
+  ctx.fillText(n.icon || '📄', x + 14, y + 28);
+
+  // Name
+  ctx.font = '600 12px ' + (isDark ? 'Inter, sans-serif' : 'Inter, sans-serif');
+  ctx.fillStyle = isDark ? '#e6edf3' : '#1f2328';
+  const displayName = n.name.length > 22 ? n.name.substring(0, 20) + '…' : n.name;
+  ctx.fillText(displayName, x + 36, y + 27);
+
+  // Type label
+  ctx.font = '500 10px Inter, sans-serif';
+  ctx.fillStyle = n.color || '#8b949e';
+  ctx.fillText(n.label || n.type, x + 36, y + 44);
+
+  // Connection counts
+  const inC = n.incomingCount || 0;
+  const outC = n.outgoingCount || 0;
+  ctx.font = '500 9px Inter, sans-serif';
+  ctx.fillStyle = isDark ? '#6e7681' : '#8c959f';
+  ctx.fillText('↓' + inC + ' ↑' + outC, x + nw - 48, y + 27);
+
+  // Collapse indicator
+  const children = childrenMap.get(n.id) || [];
+  const hasConnections = (outgoingEdges.get(n.id) || []).length > 0;
+  if (hasConnections) {
+    const collapsed = STATE.collapsed.has(n.id);
+    ctx.font = '10px sans-serif';
+    ctx.fillStyle = isDark ? '#8b949e' : '#656d76';
+    ctx.fillText(collapsed ? '▶ ' + (outgoingEdges.get(n.id) || []).length : '▼', x + nw - 20, y + 44);
+  }
+
+  ctx.globalAlpha = 1;
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+function roundRectLeft(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w, y);
+  ctx.lineTo(x + w, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+// ─── HIT TESTING ─────────────────────────────────────────────────────────────
+
+function nodeAtScreen(sx, sy) {
+  const world = screenToWorld(sx, sy);
+  const visible = getVisibleNodes();
+  for (let i = visible.length - 1; i >= 0; i--) {
+    const n = visible[i];
+    const pos = STATE.positions.get(n.id);
+    if (!pos) continue;
+    if (world.x >= pos.x && world.x <= pos.x + STATE.nodeWidth &&
+        world.y >= pos.y && world.y <= pos.y + STATE.nodeHeight) {
+      return n;
+    }
+  }
+  return null;
+}
+
+// ─── INTERACTIONS ────────────────────────────────────────────────────────────
+
+canvas.addEventListener('mousedown', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const sx = e.clientX - rect.left, sy = e.clientY - rect.top;
+  const hit = nodeAtScreen(sx, sy);
+
+  if (hit && e.button === 0) {
+    // Start dragging node
+    const world = screenToWorld(sx, sy);
+    const pos = STATE.positions.get(hit.id);
+    STATE.dragNode = hit;
+    STATE.dragNodeOffX = world.x - pos.x;
+    STATE.dragNodeOffY = world.y - pos.y;
+    wrap.classList.add('dragging');
+  } else if (e.button === 0) {
+    // Pan
+    STATE.dragging = true;
+    STATE.dragStartX = e.clientX;
+    STATE.dragStartY = e.clientY;
+    wrap.classList.add('dragging');
+  }
+});
+
+canvas.addEventListener('mousemove', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const sx = e.clientX - rect.left, sy = e.clientY - rect.top;
+
+  if (STATE.dragNode) {
+    const world = screenToWorld(sx, sy);
+    STATE.positions.set(STATE.dragNode.id, {
+      x: world.x - STATE.dragNodeOffX,
+      y: world.y - STATE.dragNodeOffY
+    });
+    STATE.pinned.add(STATE.dragNode.id);
+    render();
+    updateMinimap();
+    return;
+  }
+
+  if (STATE.dragging) {
+    const dx = e.clientX - STATE.dragStartX;
+    const dy = e.clientY - STATE.dragStartY;
+    STATE.offsetX += dx / STATE.zoom;
+    STATE.offsetY += dy / STATE.zoom;
+    STATE.dragStartX = e.clientX;
+    STATE.dragStartY = e.clientY;
+    render();
+    updateMinimap();
+    return;
+  }
+
+  // Hover
+  const hit = nodeAtScreen(sx, sy);
+  if (hit !== STATE.hoveredNode) {
+    STATE.hoveredNode = hit;
+    canvas.style.cursor = hit ? 'pointer' : 'grab';
+    render();
+  }
+});
+
+canvas.addEventListener('mouseup', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const sx = e.clientX - rect.left, sy = e.clientY - rect.top;
+
+  if (STATE.dragNode) {
+    // If barely moved, treat as click
+    STATE.dragNode = null;
+    wrap.classList.remove('dragging');
+    return;
+  }
+
+  if (STATE.dragging) {
+    STATE.dragging = false;
+    wrap.classList.remove('dragging');
+    return;
+  }
+});
+
+canvas.addEventListener('click', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const sx = e.clientX - rect.left, sy = e.clientY - rect.top;
+  const hit = nodeAtScreen(sx, sy);
+  if (hit) {
+    selectNode(hit);
+  } else {
+    deselectNode();
+  }
+  hideContextMenu();
+});
+
+canvas.addEventListener('dblclick', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const sx = e.clientX - rect.left, sy = e.clientY - rect.top;
+  const hit = nodeAtScreen(sx, sy);
+  if (hit) {
+    toggleCollapse(hit.id);
+  }
+});
+
+// Zoom
+canvas.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  const zoomFactor = e.deltaY < 0 ? 1.08 : 0.92;
+  const newZoom = Math.max(0.05, Math.min(5, STATE.zoom * zoomFactor));
+
+  // Zoom toward mouse position
+  const rect = canvas.getBoundingClientRect();
+  const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+  const wx = (mx - W / 2) / STATE.zoom - STATE.offsetX;
+  const wy = (my - H / 2) / STATE.zoom - STATE.offsetY;
+
+  STATE.zoom = newZoom;
+  STATE.offsetX = (mx - W / 2) / STATE.zoom - wx;
+  STATE.offsetY = (my - H / 2) / STATE.zoom - wy;
+
+  render();
+  updateMinimap();
+}, { passive: false });
+
+// Context menu
+canvas.addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+  const rect = canvas.getBoundingClientRect();
+  const sx = e.clientX - rect.left, sy = e.clientY - rect.top;
+  const hit = nodeAtScreen(sx, sy);
+  if (hit) {
+    selectNode(hit);
+    showContextMenu(e.clientX, e.clientY, hit);
+  }
+});
+
+// ─── SELECTION & DETAILS ─────────────────────────────────────────────────────
+
+function selectNode(n) {
+  STATE.selectedNode = n;
+  showDetailPanel(n);
+  render();
+}
+
+function deselectNode() {
+  STATE.selectedNode = null;
+  document.getElementById('detailPanel').classList.remove('open');
+  render();
+}
+
+function showDetailPanel(n) {
+  const panel = document.getElementById('detailPanel');
+  const content = document.getElementById('detailContent');
+
+  const incoming = (incomingEdges.get(n.id) || []);
+  const outgoing = (outgoingEdges.get(n.id) || []);
+
+  let html = '<div class="detail-header">';
+  html += '<div class="detail-icon">' + esc(n.icon || '📄') + '</div>';
+  html += '<div class="detail-name">' + esc(n.name) + '</div>';
+  html += '<div class="detail-path">' + esc(n.filePath || n.id) + '</div>';
+  html += '<div class="detail-badges">';
+  html += '<span class="badge badge-type">' + esc(n.icon + ' ' + (n.label || n.type)) + '</span>';
+  if (n.language) html += '<span class="badge badge-lang">' + esc(n.language) + '</span>';
+  if (n.framework) html += '<span class="badge badge-fw">' + esc(n.framework) + '</span>';
+  (n.badges || []).forEach(b => { html += '<span class="badge badge-fw">' + esc(b) + '</span>'; });
+  html += '</div></div>';
+
+  // Tabs
+  html += '<div class="detail-tabs">';
+  html += '<div class="detail-tab active" data-tab="info">Info</div>';
+  html += '<div class="detail-tab" data-tab="connections">Connections (' + (incoming.length + outgoing.length) + ')</div>';
+  html += '<div class="detail-tab" data-tab="raw">Raw</div>';
+  html += '</div>';
+
+  // Info Tab
+  html += '<div class="tab-pane active" id="pane-info">';
+  html += '<div class="detail-section"><h3>📊 Metrics</h3><div class="detail-grid">';
+  const meta = n.metadata || {};
+  html += '<div class="detail-stat"><div class="label">Size</div><div class="value">' + formatSize(meta.size || 0) + '</div></div>';
+  html += '<div class="detail-stat"><div class="label">Lines</div><div class="value">' + (meta.lines || 0).toLocaleString() + '</div></div>';
+  html += '<div class="detail-stat"><div class="label">Incoming</div><div class="value">' + incoming.length + '</div></div>';
+  html += '<div class="detail-stat"><div class="label">Outgoing</div><div class="value">' + outgoing.length + '</div></div>';
+  html += '</div></div>';
+
+  if (n.description) {
+    html += '<div class="detail-section"><h3>📝 Description</h3><div style="font-size:0.82rem;color:var(--text-secondary);">' + esc(n.description) + '</div></div>';
+  }
+
+  if (meta.exports && meta.exports.length > 0) {
+    html += '<div class="detail-section"><h3>📤 Exports (' + meta.exports.length + ')</h3>';
+    meta.exports.slice(0, 15).forEach(ex => { html += '<div class="conn-item" style="cursor:default;"><span class="conn-dot" style="background:var(--success);"></span><span class="conn-name" style="font-family:var(--font-mono);font-size:0.78rem;">' + esc(ex) + '</span></div>'; });
+    if (meta.exports.length > 15) html += '<div style="font-size:0.75rem;color:var(--text-muted);padding:4px 0;">...and ' + (meta.exports.length - 15) + ' more</div>';
+    html += '</div>';
+  }
+  html += '</div>';
+
+  // Connections Tab
+  html += '<div class="tab-pane" id="pane-connections">';
+  if (incoming.length > 0) {
+    html += '<div class="detail-section"><h3>↓ Incoming (' + incoming.length + ')</h3><ul class="conn-list">';
+    incoming.slice(0, 30).forEach(e => {
+      const src = nodeMap.get(e.source);
+      html += '<li class="conn-item" data-node="' + esc(e.source) + '"><span class="conn-dot" style="background:' + esc(e.color || '#8b949e') + ';"></span><span class="conn-name">' + esc(src ? src.name : e.source) + '</span><span class="conn-type">' + esc(e.label || e.type) + '</span></li>';
+    });
+    html += '</ul></div>';
+  }
+  if (outgoing.length > 0) {
+    html += '<div class="detail-section"><h3>↑ Outgoing (' + outgoing.length + ')</h3><ul class="conn-list">';
+    outgoing.slice(0, 30).forEach(e => {
+      const tgt = nodeMap.get(e.target);
+      html += '<li class="conn-item" data-node="' + esc(e.target) + '"><span class="conn-dot" style="background:' + esc(e.color || '#8b949e') + ';"></span><span class="conn-name">' + esc(tgt ? tgt.name : e.target) + '</span><span class="conn-type">' + esc(e.label || e.type) + '</span></li>';
+    });
+    html += '</ul></div>';
+  }
+  if (incoming.length === 0 && outgoing.length === 0) {
+    html += '<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:0.85rem;">No connections found</div>';
+  }
+  html += '</div>';
+
+  // Raw Tab
+  html += '<div class="tab-pane" id="pane-raw"><div class="detail-section"><pre style="background:var(--bg-panel-2);border:1px solid var(--border-light);border-radius:var(--radius-sm);padding:12px;font-size:0.72rem;font-family:var(--font-mono);overflow:auto;max-height:400px;color:var(--text-secondary);line-height:1.5;">' + esc(JSON.stringify(n, null, 2)) + '</pre></div></div>';
+
+  content.innerHTML = html;
+  panel.classList.add('open');
+
+  // Tab switching
+  content.querySelectorAll('.detail-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      content.querySelectorAll('.detail-tab').forEach(t => t.classList.remove('active'));
+      content.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('pane-' + tab.dataset.tab).classList.add('active');
+    });
+  });
+
+  // Connection clicks
+  content.querySelectorAll('.conn-item[data-node]').forEach(item => {
+    item.addEventListener('click', () => {
+      const targetNode = nodeMap.get(item.dataset.node);
+      if (targetNode) {
+        selectNode(targetNode);
+        centerOnNode(targetNode.id);
+      }
+    });
+  });
+}
+
+document.getElementById('detailClose').addEventListener('click', deselectNode);
+
+function formatSize(bytes) {
+  if (!bytes) return '0 B';
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+  return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+}
+
+// ─── EXPAND / COLLAPSE ──────────────────────────────────────────────────────
+
+function toggleCollapse(nodeId) {
+  pushHistory();
+  if (STATE.collapsed.has(nodeId)) {
+    STATE.collapsed.delete(nodeId);
+  } else {
+    STATE.collapsed.add(nodeId);
+  }
+  updateHiddenNodes();
+  render();
+  toast(STATE.collapsed.has(nodeId) ? 'Collapsed' : 'Expanded');
+}
+
+function expandAll() {
+  pushHistory();
+  STATE.collapsed.clear();
+  updateHiddenNodes();
+  render();
+  toast('All nodes expanded');
+}
+
+function collapseAll() {
+  pushHistory();
+  nodes.forEach(n => {
+    const out = outgoingEdges.get(n.id) || [];
+    if (out.length > 0) STATE.collapsed.add(n.id);
+  });
+  updateHiddenNodes();
+  render();
+  toast('All nodes collapsed');
+}
+
+function updateHiddenNodes() {
+  STATE.hidden.clear();
+  // For collapsed nodes, hide their targets (downstream connections)
+  // Simple approach: if a node is collapsed, hide nodes only reachable through it
+  // For now, we don't auto-hide — collapsed just changes the visual indicator
+  // This keeps all nodes visible but shows collapse state
+}
+
+// ─── CONTEXT MENU ────────────────────────────────────────────────────────────
+
+function showContextMenu(x, y, node) {
+  const menu = document.getElementById('contextMenu');
+  const isCollapsed = STATE.collapsed.has(node.id);
+  const isPinned = STATE.pinned.has(node.id);
+
+  menu.innerHTML = [
+    { icon: isCollapsed ? '⊞' : '⊟', label: isCollapsed ? 'Expand' : 'Collapse', action: 'toggle', key: 'E/C' },
+    { icon: '⊞', label: 'Expand All Children', action: 'expandAll' },
+    { icon: '⊟', label: 'Collapse All Children', action: 'collapseAll' },
+    'sep',
+    { icon: '🎯', label: 'Center on Node', action: 'center' },
+    { icon: isPinned ? '📌' : '📍', label: isPinned ? 'Unpin Node' : 'Pin Node', action: 'pin' },
+    'sep',
+    { icon: '📋', label: 'Copy Path', action: 'copyPath' },
+    { icon: '📷', label: 'Export as PNG', action: 'exportPng', key: 'Ctrl+S' },
+  ].map(item => {
+    if (item === 'sep') return '<div class="ctx-sep"></div>';
+    return '<div class="ctx-item" data-action="' + item.action + '"><span class="icon">' + item.icon + '</span>' + item.label + (item.key ? '<span class="shortcut">' + item.key + '</span>' : '') + '</div>';
+  }).join('');
+
+  menu.style.left = Math.min(x, W - 220) + 'px';
+  menu.style.top = Math.min(y, H - 300) + 'px';
+  menu.style.display = 'block';
+
+  menu.querySelectorAll('.ctx-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const action = item.dataset.action;
+      if (action === 'toggle') toggleCollapse(node.id);
+      else if (action === 'expandAll') expandAll();
+      else if (action === 'collapseAll') collapseAll();
+      else if (action === 'center') centerOnNode(node.id);
+      else if (action === 'pin') { STATE.pinned.has(node.id) ? STATE.pinned.delete(node.id) : STATE.pinned.add(node.id); render(); toast(STATE.pinned.has(node.id) ? 'Node pinned' : 'Node unpinned'); }
+      else if (action === 'copyPath') { navigator.clipboard.writeText(node.filePath || node.id); toast('Path copied!'); }
+      else if (action === 'exportPng') exportPNG();
+      hideContextMenu();
+    });
+  });
+}
+
+function hideContextMenu() {
+  document.getElementById('contextMenu').style.display = 'none';
+}
+document.addEventListener('click', hideContextMenu);
+
+// ─── SEARCH ──────────────────────────────────────────────────────────────────
+
+const searchBox = document.getElementById('searchBox');
+const searchCount = document.getElementById('searchCount');
+
+searchBox.addEventListener('input', () => {
+  STATE.searchTerm = searchBox.value.trim().toLowerCase();
+  if (STATE.searchTerm) {
+    STATE.searchResults = nodes.filter(n =>
+      n.name.toLowerCase().includes(STATE.searchTerm) ||
+      (n.filePath && n.filePath.toLowerCase().includes(STATE.searchTerm)) ||
+      (n.type && n.type.toLowerCase().includes(STATE.searchTerm)) ||
+      (n.label && n.label.toLowerCase().includes(STATE.searchTerm)) ||
+      (n.language && n.language.toLowerCase().includes(STATE.searchTerm))
+    );
+    STATE.searchResultIds = new Set(STATE.searchResults.map(r => r.id));
+    searchCount.textContent = STATE.searchResults.length + ' found';
+    if (STATE.searchResults.length > 0) {
+      selectNode(STATE.searchResults[0]);
+      centerOnNode(STATE.searchResults[0].id);
+    }
+  } else {
+    STATE.searchResults = [];
+    STATE.searchResultIds = new Set();
+    searchCount.textContent = '';
+  }
+  render();
+});
+
+// ─── FIT VIEW ────────────────────────────────────────────────────────────────
+
+function fitView() {
+  const visible = getVisibleNodes();
+  if (visible.length === 0) return;
+
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  for (const n of visible) {
+    const pos = STATE.positions.get(n.id);
+    if (!pos) continue;
+    minX = Math.min(minX, pos.x);
+    minY = Math.min(minY, pos.y);
+    maxX = Math.max(maxX, pos.x + STATE.nodeWidth);
+    maxY = Math.max(maxY, pos.y + STATE.nodeHeight);
+  }
+
+  const graphW = maxX - minX + 100;
+  const graphH = maxY - minY + 100;
+  const scaleX = W / graphW;
+  const scaleY = H / graphH;
+  STATE.zoom = Math.max(0.05, Math.min(2, Math.min(scaleX, scaleY) * 0.85));
+
+  const cx = (minX + maxX) / 2;
+  const cy = (minY + maxY) / 2;
+  STATE.offsetX = -cx;
+  STATE.offsetY = -cy;
+
+  render();
+  updateMinimap();
+}
+
+function centerOnNode(nodeId) {
+  const pos = STATE.positions.get(nodeId);
+  if (!pos) return;
+  STATE.offsetX = -(pos.x + STATE.nodeWidth / 2);
+  STATE.offsetY = -(pos.y + STATE.nodeHeight / 2);
+  render();
+  updateMinimap();
+}
+
+// ─── MINIMAP ─────────────────────────────────────────────────────────────────
+
+const minimapCanvas = document.getElementById('minimapCanvas');
+const minimapCtx = minimapCanvas.getContext('2d');
+const minimapEl = document.getElementById('minimap');
+const viewportRect = document.getElementById('viewportRect');
+
+function updateMinimap() {
+  const mW = minimapEl.clientWidth;
+  const mH = minimapEl.clientHeight;
+  const dpr2 = window.devicePixelRatio || 1;
+  minimapCanvas.width = mW * dpr2;
+  minimapCanvas.height = mH * dpr2;
+  minimapCtx.setTransform(dpr2, 0, 0, dpr2, 0, 0);
+  minimapCtx.clearRect(0, 0, mW, mH);
+
+  const visible = getVisibleNodes();
+  if (visible.length === 0) return;
+
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  for (const n of visible) {
+    const pos = STATE.positions.get(n.id);
+    if (!pos) continue;
+    minX = Math.min(minX, pos.x);
+    minY = Math.min(minY, pos.y);
+    maxX = Math.max(maxX, pos.x + STATE.nodeWidth);
+    maxY = Math.max(maxY, pos.y + STATE.nodeHeight);
+  }
+
+  const graphW = maxX - minX + 50 || 1;
+  const graphH = maxY - minY + 50 || 1;
+  const scale = Math.min(mW / graphW, mH / graphH) * 0.9;
+  const offsetX = (mW - graphW * scale) / 2;
+  const offsetY = (mH - graphH * scale) / 2;
+
+  // Draw edges
+  const visibleEdges = getVisibleEdges();
+  minimapCtx.strokeStyle = 'rgba(139,148,158,0.3)';
+  minimapCtx.lineWidth = 0.5;
+  for (const e of visibleEdges) {
+    const sp = STATE.positions.get(e.source);
+    const tp = STATE.positions.get(e.target);
+    if (!sp || !tp) continue;
+    minimapCtx.beginPath();
+    minimapCtx.moveTo((sp.x - minX + STATE.nodeWidth / 2) * scale + offsetX, (sp.y - minY + STATE.nodeHeight / 2) * scale + offsetY);
+    minimapCtx.lineTo((tp.x - minX + STATE.nodeWidth / 2) * scale + offsetX, (tp.y - minY + STATE.nodeHeight / 2) * scale + offsetY);
+    minimapCtx.stroke();
+  }
+
+  // Draw nodes
+  for (const n of visible) {
+    const pos = STATE.positions.get(n.id);
+    if (!pos) continue;
+    minimapCtx.fillStyle = n.color || '#58a6ff';
+    minimapCtx.globalAlpha = 0.8;
+    minimapCtx.fillRect(
+      (pos.x - minX) * scale + offsetX,
+      (pos.y - minY) * scale + offsetY,
+      Math.max(STATE.nodeWidth * scale, 3),
+      Math.max(STATE.nodeHeight * scale, 2)
+    );
+  }
+  minimapCtx.globalAlpha = 1;
+
+  // Viewport rectangle
+  const vpLeft = (-STATE.offsetX - W / 2 / STATE.zoom);
+  const vpTop = (-STATE.offsetY - H / 2 / STATE.zoom);
+  const vpW = W / STATE.zoom;
+  const vpH = H / STATE.zoom;
+
+  viewportRect.style.left = ((vpLeft - minX) * scale + offsetX) + 'px';
+  viewportRect.style.top = ((vpTop - minY) * scale + offsetY) + 'px';
+  viewportRect.style.width = (vpW * scale) + 'px';
+  viewportRect.style.height = (vpH * scale) + 'px';
+
+  // Store for minimap click navigation
+  minimapEl._graphBounds = { minX, minY, graphW, graphH, scale, offsetX, offsetY };
+}
+
+minimapCanvas.addEventListener('click', (e) => {
+  const rect = minimapEl.getBoundingClientRect();
+  const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+  const b = minimapEl._graphBounds;
+  if (!b) return;
+
+  const wx = (mx - b.offsetX) / b.scale + b.minX;
+  const wy = (my - b.offsetY) / b.scale + b.minY;
+  STATE.offsetX = -wx;
+  STATE.offsetY = -wy;
+  render();
+  updateMinimap();
+});
+
+document.getElementById('minimapClose').addEventListener('click', () => {
+  minimapEl.style.display = minimapEl.style.display === 'none' ? 'block' : 'none';
+});
+
+// ─── LEGEND ──────────────────────────────────────────────────────────────────
+
+function buildLegend() {
+  const legendBody = document.getElementById('legendBody');
+  let html = '';
+
+  // Node types
+  const usedTypes = GRAPH.nodeTypes || {};
+  if (Object.keys(usedTypes).length > 0) {
+    html += '<div class="legend-group"><div class="legend-group-title">Node Types</div>';
+    for (const [key, info] of Object.entries(usedTypes)) {
+      html += '<div class="legend-item" data-type="' + key + '"><div class="legend-color" style="background:' + esc(info.color || '#8b949e') + ';"></div>' + esc(info.icon + ' ' + info.label) + '</div>';
+    }
+    html += '</div>';
+  }
+
+  // Edge types
+  const usedEdgeTypes = GRAPH.relationshipTypes || {};
+  if (Object.keys(usedEdgeTypes).length > 0) {
+    html += '<div class="legend-group"><div class="legend-group-title">Relationships</div>';
+    for (const [key, info] of Object.entries(usedEdgeTypes)) {
+      const lineClass = info.style === 'dashed' ? 'dashed' : info.style === 'dotted' ? 'dotted' : '';
+      html += '<div class="legend-item" data-edge="' + key + '"><div class="legend-line ' + lineClass + '" style="background:' + esc(info.color || '#8b949e') + ';' + (lineClass ? 'border-color:' + esc(info.color || '#8b949e') : '') + '"></div>' + esc(info.label) + '</div>';
+    }
+    html += '</div>';
+  }
+
+  legendBody.innerHTML = html;
+}
+
+document.getElementById('legendToggle').addEventListener('click', () => {
+  const legend = document.getElementById('legend');
+  legend.classList.toggle('collapsed');
+  document.getElementById('legendArrow').textContent = legend.classList.contains('collapsed') ? '▶' : '▼';
+});
+
+// ─── TOOLBAR ACTIONS ─────────────────────────────────────────────────────────
+
+document.getElementById('layoutSelect').addEventListener('change', (e) => {
+  runLayout(e.target.value);
+  fitView();
+});
+
+document.getElementById('btnExpandAll').addEventListener('click', expandAll);
+document.getElementById('btnCollapseAll').addEventListener('click', collapseAll);
+document.getElementById('btnFitView').addEventListener('click', fitView);
+
+document.getElementById('btnTheme').addEventListener('click', () => {
+  const theme = document.documentElement.getAttribute('data-theme');
+  const newTheme = theme === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', newTheme);
+  document.getElementById('btnTheme').querySelector('.icon').textContent = newTheme === 'dark' ? '🌙' : '☀️';
+  render();
+  updateMinimap();
+});
+
+document.getElementById('btnFullscreen').addEventListener('click', () => {
+  if (document.fullscreenElement) document.exitFullscreen();
+  else document.documentElement.requestFullscreen();
+});
+
+document.getElementById('btnHelp').addEventListener('click', () => {
+  document.getElementById('kbdModal').classList.toggle('show');
+});
+
+document.getElementById('btnExport').addEventListener('click', exportPNG);
+document.getElementById('btnExportJSON').addEventListener('click', exportJSON);
+
+function exportPNG() {
+  const link = document.createElement('a');
+  link.download = (GRAPH.projectName || 'graph') + '_code_graph.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+  toast('PNG exported!');
+}
+
+function exportJSON() {
+  const blob = new Blob([JSON.stringify(GRAPH, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.download = (GRAPH.projectName || 'graph') + '_code_graph.json';
+  link.href = url;
+  link.click();
+  URL.revokeObjectURL(url);
+  toast('JSON exported!');
+}
+
+// ─── UNDO / REDO ─────────────────────────────────────────────────────────────
+
+function pushHistory() {
+  const snapshot = {
+    collapsed: new Set(STATE.collapsed),
+    hidden: new Set(STATE.hidden),
+    positions: new Map(STATE.positions),
+  };
+  STATE.history = STATE.history.slice(0, STATE.historyIndex + 1);
+  STATE.history.push(snapshot);
+  STATE.historyIndex = STATE.history.length - 1;
+}
+
+function undo() {
+  if (STATE.historyIndex <= 0) return;
+  STATE.historyIndex--;
+  restoreHistory();
+  toast('Undo');
+}
+
+function redo() {
+  if (STATE.historyIndex >= STATE.history.length - 1) return;
+  STATE.historyIndex++;
+  restoreHistory();
+  toast('Redo');
+}
+
+function restoreHistory() {
+  const snap = STATE.history[STATE.historyIndex];
+  if (!snap) return;
+  STATE.collapsed = new Set(snap.collapsed);
+  STATE.hidden = new Set(snap.hidden);
+  STATE.positions = new Map(snap.positions);
+  render();
+  updateMinimap();
+}
+
+document.getElementById('btnUndo').addEventListener('click', undo);
+document.getElementById('btnRedo').addEventListener('click', redo);
+
+// ─── KEYBOARD SHORTCUTS ─────────────────────────────────────────────────────
+
+document.addEventListener('keydown', (e) => {
+  // Ignore if typing in input
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') {
+    if (e.key === 'Escape') { e.target.blur(); return; }
+    return;
+  }
+
+  if (e.key === '?' || (e.key === '/' && e.shiftKey)) {
+    e.preventDefault();
+    document.getElementById('kbdModal').classList.toggle('show');
+  }
+  if (e.key === 'Escape') {
+    document.getElementById('kbdModal').classList.remove('show');
+    deselectNode();
+    hideContextMenu();
+  }
+  if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+    e.preventDefault();
+    searchBox.focus();
+  }
+  if (e.key === '+' || e.key === '=') {
+    STATE.zoom = Math.min(5, STATE.zoom * 1.15);
+    render(); updateMinimap();
+  }
+  if (e.key === '-') {
+    STATE.zoom = Math.max(0.05, STATE.zoom * 0.85);
+    render(); updateMinimap();
+  }
+  if (e.key === '0') { fitView(); }
+  if (e.key === 'f' && !e.ctrlKey) {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else document.documentElement.requestFullscreen();
+  }
+  if (e.key === 'e' && STATE.selectedNode) { toggleCollapse(STATE.selectedNode.id); }
+  if (e.key === 'c' && STATE.selectedNode && !e.ctrlKey) {
+    if (!STATE.collapsed.has(STATE.selectedNode.id)) toggleCollapse(STATE.selectedNode.id);
+  }
+  if ((e.ctrlKey || e.metaKey) && e.key === 'z') { e.preventDefault(); undo(); }
+  if ((e.ctrlKey || e.metaKey) && e.key === 'y') { e.preventDefault(); redo(); }
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); exportPNG(); }
+});
+
+// ─── TOAST ───────────────────────────────────────────────────────────────────
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(el._timer);
+  el._timer = setTimeout(() => el.classList.remove('show'), 2000);
+}
+
+function esc(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+// ─── FIT VIEW ────────────────────────────────────────────────────────────────
+
+function fitView() {
+  const visible = getVisibleNodes();
+  if (visible.length === 0) return;
+
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+  for (const n of visible) {
+    const pos = STATE.positions.get(n.id);
+    if (!pos) continue;
+    if (pos.x < minX) minX = pos.x;
+    if (pos.x + STATE.nodeWidth > maxX) maxX = pos.x + STATE.nodeWidth;
+    if (pos.y < minY) minY = pos.y;
+    if (pos.y + STATE.nodeHeight > maxY) maxY = pos.y + STATE.nodeHeight;
+  }
+
+  if (minX === Infinity) return;
+
+  const contentW = maxX - minX + 100;
+  const contentH = maxY - minY + 100;
+  const zoomX = W / contentW;
+  const zoomY = H / contentH;
+
+  STATE.zoom = Math.max(0.05, Math.min(1.2, Math.min(zoomX, zoomY)));
+  STATE.offsetX = -(minX + (maxX - minX) / 2);
+  STATE.offsetY = -(minY + (maxY - minY) / 2);
+
+  render();
+  updateMinimap();
+}
+
+// ─── INIT ────────────────────────────────────────────────────────────────────
+
+function init() {
+  resizeCanvas();
+
+  // Auto-select layout
+  const bestLayout = autoSelectLayout();
+  document.getElementById('layoutSelect').value = bestLayout;
+
+  // Run layout
+  runLayout(bestLayout);
+
+  // Fit view
+  setTimeout(() => {
+    fitView();
+    buildLegend();
+    pushHistory();
+  }, 100);
+}
+
+init();
+
+})();
+</script>
+</body>
+</html>

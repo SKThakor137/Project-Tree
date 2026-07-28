@@ -32,6 +32,7 @@ const { toArchitectureFlowHtml } = require('./exporters/architectureFlowHtml.js'
 const { generateUniversalGraph } = require('./core/universalParser.js');
 const { toGraphVisualizerHtml } = require('./exporters/graphVisualizer.js');
 const { toGraphJson, fromGraphJson } = require('./exporters/graphJson.js');
+const { toGraph3dVisualizerHtml } = require('./exporters/graph3dVisualizer.js');
 
 module.exports = {
   // Core (backward-compatible)
@@ -53,9 +54,10 @@ module.exports = {
   toMermaid,
   toArchitectureFlowHtml,
 
-  // Universal Code Relationship Graph
+  // Universal Code Relationship Graph (2D & 3D)
   generateUniversalGraph,
   toGraphVisualizerHtml,
+  toGraph3dVisualizerHtml,
   toGraphJson,
   fromGraphJson,
 

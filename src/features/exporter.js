@@ -29,6 +29,10 @@ const EXPORT_MAP = {
   framework: ['FRAMEWORK_INFO.json'],
   language: ['LANGUAGE_BREAKDOWN.json'],
   readme: ['README_ANALYSIS.md'],
+  graph: ['CODE_GRAPH.html', 'CODE_GRAPH.json', 'CODE_GRAPH_3D.html'],
+  '3d-graph': ['CODE_GRAPH_3D.html'],
+  'graph-3d': ['CODE_GRAPH_3D.html'],
+  'visualize-3d': ['CODE_GRAPH_3D.html'],
 };
 
 /**

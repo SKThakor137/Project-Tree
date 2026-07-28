@@ -17,6 +17,7 @@ const colors = require('../utils/colors.js');
 const { generateUniversalGraph } = require('../core/universalParser.js');
 const { toGraphVisualizerHtml } = require('../exporters/graphVisualizer.js');
 const { toGraphJson } = require('../exporters/graphJson.js');
+const { toGraph3dVisualizerHtml } = require('../exporters/graph3dVisualizer.js');
 
 const REPORT_ALIAS_MAP = {
   md: ['PROJECT_STRUCTURE.md'],
@@ -37,6 +38,9 @@ const REPORT_ALIAS_MAP = {
   language: ['LANGUAGE_BREAKDOWN.json'],
   readme: ['README_ANALYSIS.md'],
   graph: ['CODE_GRAPH.html', 'CODE_GRAPH.json'],
+  '3d-graph': ['CODE_GRAPH_3D.html'],
+  'graph-3d': ['CODE_GRAPH_3D.html'],
+  'visualize-3d': ['CODE_GRAPH_3D.html'],
   visualize: ['CODE_GRAPH.html'],
   'graph-json': ['CODE_GRAPH.json'],
 };
@@ -239,6 +243,7 @@ ${sortedHeatmap.slice(0, 10).map((h, i) => `${i + 1}. \`${h.file}\` — Used by 
     const graphModel = generateUniversalGraph(rootDir, tree);
     reports['CODE_GRAPH.html'] = toGraphVisualizerHtml(graphModel, tree.name);
     reports['CODE_GRAPH.json'] = toGraphJson(graphModel);
+    reports['CODE_GRAPH_3D.html'] = toGraph3dVisualizerHtml(graphModel, tree.name);
   } catch (_) {
     // Graph generation is optional — skip if it fails
   }
