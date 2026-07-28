@@ -693,11 +693,11 @@ function focusCameraOnNode(node) {
     z: nz + (nz / hyp) * distance + 30,
   };
 
-  // Smooth 3D camera transition over 1400ms
+  // Ultra smooth 3D camera flight transition over 1800ms
   Graph.cameraPosition(
     targetCamPos,
     { x: nx, y: ny, z: nz },
-    1400
+    1800
   );
 
   // Highlight connected nodes & edges
@@ -758,7 +758,56 @@ const NAV_STACK = {
   index: -1,   // Pointer in history array
 };
 
+function trigger3dNavFlowParticles(fromNode, toNode) {
+  if (!fromNode || !toNode || fromNode.id === toNode.id) return;
+  const THREE = Graph.three();
+  const scene = Graph.scene();
+  if (!THREE || !scene) return;
+
+  const startPos = new THREE.Vector3(fromNode.x || 0, fromNode.y || 0, fromNode.z || 0);
+  const endPos = new THREE.Vector3(toNode.x || 0, toNode.y || 0, toNode.z || 0);
+
+  // Create 3D flow connection line & sliding energy particle
+  const curve = new THREE.LineCurve3(startPos, endPos);
+  const lineGeo = new THREE.BufferGeometry().setFromPoints(curve.getPoints(20));
+  const lineMat = new THREE.LineBasicMaterial({ color: 0x58a6ff, linewidth: 3.5, transparent: true, opacity: 0.9 });
+  const flowLine = new THREE.Line(lineGeo, lineMat);
+  scene.add(flowLine);
+
+  const pGeo = new THREE.SphereGeometry(4.5, 16, 16);
+  const pMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+  const pMesh = new THREE.Mesh(pGeo, pMat);
+  scene.add(pMesh);
+
+  const startTime = performance.now();
+  const duration = 1600; // Ultra smooth 1.6s 3D particle flow
+
+  function anim3dFlow(now) {
+    const elapsed = now - startTime;
+    const rawProgress = Math.min(1, elapsed / duration);
+    const progress = rawProgress < 0.5 ? 4 * rawProgress * rawProgress * rawProgress : 1 - Math.pow(-2 * rawProgress + 2, 3) / 2;
+
+    const currentPos = new THREE.Vector3().lerpVectors(startPos, endPos, progress);
+    pMesh.position.copy(currentPos);
+    lineMat.opacity = (1 - rawProgress * 0.7);
+
+    if (rawProgress < 1) {
+      requestAnimationFrame(anim3dFlow);
+    } else {
+      scene.remove(flowLine);
+      scene.remove(pMesh);
+      lineGeo.dispose();
+      lineMat.dispose();
+      pGeo.dispose();
+      pMat.dispose();
+    }
+  }
+
+  requestAnimationFrame(anim3dFlow);
+}
+
 function selectNode(node, pushHist = true) {
+  const prevNode = selectedNode;
   selectedNode = node;
   if (!node) { closeDetailPanel(); return; }
 
@@ -770,6 +819,10 @@ function selectNode(node, pushHist = true) {
       NAV_STACK.history.push(node.id);
       NAV_STACK.index = NAV_STACK.history.length - 1;
     }
+  }
+
+  if (prevNode && prevNode.id !== node.id) {
+    trigger3dNavFlowParticles(prevNode, node);
   }
 
   showDetailPanel3d(node);
@@ -835,7 +888,7 @@ function toggleConnectionPicker3d(connections) {
     return;
   }
 
-  let html = '<div class="conn-picker-title"><span>Kahan jana chahte hain?</span><span style="font-size:0.65rem;color:var(--text-muted);">' + connections.length + ' connections</span></div>';
+  let html = '<div class="conn-picker-title"><span>Where do you want to go?</span><span style="font-size:0.65rem;color:var(--text-muted);">' + connections.length + ' connections</span></div>';
   connections.forEach(c => {
     html += '<div class="conn-picker-item" data-pick-node="' + escHtml(c.id) + '">';
     html += '<span>' + escHtml(c.icon) + '</span>';

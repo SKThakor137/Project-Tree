@@ -894,6 +894,9 @@ function render() {
     drawEdge(e);
   }
 
+  // Animated flow particle along connection line during navigation
+  drawNavFlowParticle();
+
   // Draw nodes
   const visible = getVisibleNodes();
   for (const n of visible) {
@@ -1274,6 +1277,10 @@ function triggerNodePulse(nodeId) {
   pulseAnimFrame = requestAnimationFrame(animatePulse);
 }
 
+function easeInOutCubic(t) {
+  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+}
+
 function smoothCenterOnNode(nodeId) {
   const pos = STATE.positions.get(nodeId);
   if (!pos) return;
@@ -1287,14 +1294,14 @@ function smoothCenterOnNode(nodeId) {
   const startZoom = STATE.zoom;
 
   const startTime = performance.now();
-  const duration = 400;
+  const duration = 1200; // Ultra smooth 1.2s pan & zoom
 
   if (animFocusFrame) cancelAnimationFrame(animFocusFrame);
 
   function step(now) {
     const elapsed = now - startTime;
     const progress = Math.min(1, elapsed / duration);
-    const ease = 1 - Math.pow(1 - progress, 3); // Ease-out cubic
+    const ease = easeInOutCubic(progress);
 
     STATE.offsetX = startOffsetX + (targetOffsetX - startOffsetX) * ease;
     STATE.offsetY = startOffsetY + (targetOffsetY - startOffsetY) * ease;
@@ -1313,8 +1320,92 @@ function smoothCenterOnNode(nodeId) {
   animFocusFrame = requestAnimationFrame(step);
 }
 
+let navFlowAnim = null; // { fromId, toId, startTime, duration: 1500 }
+
+function triggerNavFlowAnimation(fromId, toId) {
+  if (!fromId || !toId || fromId === toId) return;
+  navFlowAnim = {
+    fromId,
+    toId,
+    startTime: performance.now(),
+    duration: 1500 // Ultra smooth 1.5s gliding flow
+  };
+}
+
+function getBezierPoint(sx, sy, midY, tx, ty, t) {
+  const u = 1 - t;
+  const px = u*u*u*sx + 3*u*u*t*sx + 3*u*t*t*tx + t*t*t*tx;
+  const py = u*u*u*sy + 3*u*u*t*midY + 3*u*t*t*midY + t*t*t*ty;
+  return { x: px, y: py };
+}
+
+function drawNavFlowParticle() {
+  if (!navFlowAnim) return;
+  const elapsed = performance.now() - navFlowAnim.startTime;
+  const rawProgress = Math.min(1, elapsed / navFlowAnim.duration);
+  const progress = easeInOutCubic(rawProgress);
+
+  const srcPos = STATE.positions.get(navFlowAnim.fromId);
+  const tgtPos = STATE.positions.get(navFlowAnim.toId);
+
+  if (srcPos && tgtPos) {
+    const nw = STATE.nodeWidth, nh = STATE.nodeHeight;
+    const sx = srcPos.x + nw / 2, sy = srcPos.y + nh / 2;
+    const tx = tgtPos.x + nw / 2, ty = tgtPos.y + nh / 2;
+    const midY = (sy + ty) / 2;
+
+    ctx.save();
+
+    // Glowing flow connection line
+    ctx.beginPath();
+    ctx.strokeStyle = '#58a6ff';
+    ctx.lineWidth = 4;
+    ctx.shadowColor = '#58a6ff';
+    ctx.shadowBlur = 16;
+    ctx.moveTo(sx, sy);
+    ctx.bezierCurveTo(sx, midY, tx, midY, tx, ty);
+    ctx.stroke();
+
+    // Draw multi-particle trailing tail (shooting star effect)
+    const tailSteps = [0, 0.03, 0.07, 0.12];
+    tailSteps.forEach((offset, idx) => {
+      const trailT = Math.max(0, progress - offset);
+      if (trailT <= 0 && idx > 0) return;
+
+      const pt = getBezierPoint(sx, sy, midY, tx, ty, trailT);
+      const alpha = 1 - (idx / tailSteps.length) * 0.75;
+      const radius = idx === 0 ? 6.5 : Math.max(2, 5.5 - idx * 1.2);
+
+      ctx.globalAlpha = alpha;
+      ctx.beginPath();
+      ctx.fillStyle = idx === 0 ? '#ffffff' : '#79c0ff';
+      ctx.shadowColor = '#58a6ff';
+      ctx.shadowBlur = idx === 0 ? 20 : 10;
+      ctx.arc(pt.x, pt.y, radius, 0, Math.PI * 2);
+      ctx.fill();
+
+      if (idx === 0) {
+        ctx.beginPath();
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 2;
+        ctx.arc(pt.x, pt.y, 12, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+    });
+
+    ctx.restore();
+  }
+
+  if (rawProgress < 1) {
+    requestAnimationFrame(() => render());
+  } else {
+    navFlowAnim = null;
+  }
+}
+
 function selectNode(n, pushHist = true) {
   if (!n) return;
+  const prevNode = STATE.selectedNode;
   STATE.selectedNode = n;
 
   if (pushHist) {
@@ -1325,6 +1416,10 @@ function selectNode(n, pushHist = true) {
       NAV_STACK.history.push(n.id);
       NAV_STACK.index = NAV_STACK.history.length - 1;
     }
+  }
+
+  if (prevNode && prevNode.id !== n.id) {
+    triggerNavFlowAnimation(prevNode.id, n.id);
   }
 
   showDetailPanel(n);
@@ -1404,7 +1499,7 @@ function toggleConnectionPicker(connections) {
     return;
   }
 
-  let html = '<div class="conn-picker-title"><span>Kahan jana chahte hain?</span><span style="font-size:0.65rem;color:var(--text-muted);">' + connections.length + ' connections</span></div>';
+  let html = '<div class="conn-picker-title"><span>Where do you want to go?</span><span style="font-size:0.65rem;color:var(--text-muted);">' + connections.length + ' connections</span></div>';
   connections.forEach(c => {
     html += '<div class="conn-picker-item" data-pick-node="' + esc(c.id) + '">';
     html += '<span>' + esc(c.icon) + '</span>';
