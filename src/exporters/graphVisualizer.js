@@ -142,24 +142,25 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--fon
   color: var(--accent); white-space: nowrap; margin-right: 8px;
 }
 .toolbar-brand span { font-size: 1.2rem; }
-.toolbar-sep { width: 1px; height: 28px; background: var(--border); margin: 0 4px; flex-shrink: 0; }
+.toolbar-sep { width: 1px; height: 22px; background: var(--border); margin: 0 6px; flex-shrink: 0; display: inline-block; vertical-align: middle; }
+.tb-group { display: inline-flex; align-items: center; gap: 6px; }
 .tb-btn {
-  display: inline-flex; align-items: center; gap: 4px; padding: 6px 10px;
-  background: transparent; border: 1px solid transparent; border-radius: var(--radius-sm);
+  display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px;
+  background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius-sm);
   color: var(--text-secondary); font-size: 0.8rem; font-family: var(--font-sans);
-  cursor: pointer; transition: var(--transition); white-space: nowrap;
+  cursor: pointer; transition: var(--transition); white-space: nowrap; line-height: 1.2;
 }
-.tb-btn:hover { background: var(--bg-hover); color: var(--text); border-color: var(--border); }
-.tb-btn.active { background: var(--accent-bg); color: var(--accent); border-color: var(--accent); }
+.tb-btn:hover { background: var(--bg-hover); color: var(--text); border-color: var(--accent); }
+.tb-btn.active { background: var(--accent-bg); color: var(--accent); border-color: var(--accent); font-weight: 600; }
 .tb-btn .icon { font-size: 1rem; line-height: 1; }
 .tb-select {
-  padding: 5px 8px; background: var(--bg-panel); border: 1px solid var(--border);
+  padding: 5px 10px; height: 30px; background: var(--bg-panel); border: 1px solid var(--border);
   border-radius: var(--radius-sm); color: var(--text); font-size: 0.8rem;
-  font-family: var(--font-sans); cursor: pointer; outline: none;
+  font-family: var(--font-sans); cursor: pointer; outline: none; transition: var(--transition);
 }
 .tb-select:focus { border-color: var(--accent); }
 #searchBox {
-  padding: 6px 12px 6px 32px; width: 220px; background: var(--bg-panel);
+  padding: 6px 12px 6px 32px; width: 220px; height: 30px; background: var(--bg-panel);
   border: 1px solid var(--border); border-radius: var(--radius); color: var(--text);
   font-size: 0.82rem; font-family: var(--font-sans); outline: none; transition: var(--transition);
 }
@@ -167,7 +168,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--fon
 .search-wrap { position: relative; display: flex; align-items: center; }
 .search-wrap::before { content: '🔍'; position: absolute; left: 10px; font-size: 0.8rem; pointer-events: none; }
 .search-results-count { position: absolute; right: 8px; font-size: 0.7rem; color: var(--text-muted); pointer-events: none; }
-.toolbar-right { margin-left: auto; display: flex; align-items: center; gap: 4px; }
+.toolbar-right { margin-left: auto; display: flex; align-items: center; gap: 6px; }
 
 /* ═══════════════════════════════════════════════════════════════════════════
    CANVAS AREA
@@ -400,6 +401,38 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--fon
 .conn-picker-badge.out { background: rgba(63,185,80,0.15); color: var(--success); }
 
 /* ═══════════════════════════════════════════════════════════════════════════
+   MODE SWITCHER (2D / 3D)
+   ═══════════════════════════════════════════════════════════════════════════ */
+.mode-toggle-group {
+  display: inline-flex; align-items: center; background: var(--bg-panel-2);
+  border: 1px solid var(--border); border-radius: var(--radius); padding: 2px;
+  gap: 2px; margin-right: 4px;
+}
+.mode-toggle-btn {
+  display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px;
+  border: none; border-radius: var(--radius-sm); background: transparent;
+  color: var(--text-secondary); font-size: 0.78rem; font-weight: 600;
+  font-family: var(--font-sans); cursor: pointer; transition: var(--transition);
+  user-select: none;
+}
+.mode-toggle-btn:hover { color: var(--text); }
+.mode-toggle-btn.active {
+  background: var(--accent); color: #ffffff; box-shadow: var(--shadow-sm);
+}
+
+#graph3dContainer {
+  display: none;
+  position: fixed;
+  top: 56px;
+  left: 0;
+  width: 100vw;
+  height: calc(100vh - 56px);
+  z-index: 5;
+  background: var(--bg-canvas);
+  overflow: hidden;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
    SCROLLBAR
    ═══════════════════════════════════════════════════════════════════════════ */
 ::-webkit-scrollbar { width: 6px; }
@@ -432,23 +465,43 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--fon
 <!-- ═══ TOOLBAR ═══ -->
 <div id="toolbar">
   <div class="toolbar-brand"><span>◈</span> ${esc(name)}</div>
-  <div class="toolbar-sep"></div>
+  <span class="toolbar-sep"></span>
 
-  <select class="tb-select" id="layoutSelect" title="Layout">
-    <option value="dagre">DAG</option>
-    <option value="force">Force Directed</option>
-    <option value="tree">Tree</option>
-    <option value="radial">Radial</option>
-    <option value="horizontal">Horizontal</option>
-  </select>
+  <div class="mode-toggle-group">
+    <button class="mode-toggle-btn active" id="btnMode2D" title="2D Flat Canvas View">🎨 2D</button>
+    <button class="mode-toggle-btn" id="btnMode3D" title="3D Interactive Sphere View">🌐 3D</button>
+  </div>
 
-  <div class="toolbar-sep"></div>
+  <span class="toolbar-sep"></span>
 
-  <button class="tb-btn" id="btnExpandAll" title="Expand All"><span class="icon">⊞</span><span class="tb-label">Expand</span></button>
-  <button class="tb-btn" id="btnCollapseAll" title="Collapse All"><span class="icon">⊟</span><span class="tb-label">Collapse</span></button>
-  <button class="tb-btn" id="btnFitView" title="Fit View"><span class="icon">⊡</span><span class="tb-label">Fit</span></button>
+  <!-- 2D-ONLY CONTROLS (hidden in 3D mode) -->
+  <div class="tb-group" id="controls2dOnly">
+    <select class="tb-select" id="layoutSelect" title="Layout">
+      <option value="dagre">DAG</option>
+      <option value="force">Force Directed</option>
+      <option value="tree">Tree</option>
+      <option value="radial">Radial</option>
+      <option value="horizontal">Horizontal</option>
+    </select>
 
-  <div class="toolbar-sep"></div>
+    <span class="toolbar-sep"></span>
+
+    <button class="tb-btn" id="btnExpandAll" title="Expand All"><span class="icon">⊞</span><span class="tb-label">Expand</span></button>
+    <button class="tb-btn" id="btnCollapseAll" title="Collapse All"><span class="icon">⊟</span><span class="tb-label">Collapse</span></button>
+    <button class="tb-btn" id="btnFitView" title="Fit View"><span class="icon">⊡</span><span class="tb-label">Fit</span></button>
+
+    <span class="toolbar-sep"></span>
+  </div>
+
+  <!-- 3D-ONLY CONTROLS (hidden in 2D mode) -->
+  <div class="tb-group" id="controls3dOnly" style="display:none;">
+    <button class="tb-btn" id="btnZoomFit3D" title="Zoom to Fit All Nodes"><span class="icon">⊡</span><span class="tb-label">Fit</span></button>
+    <button class="tb-btn" id="btnResetCamera" title="Reset Camera Position"><span class="icon">🎯</span><span class="tb-label">Reset</span></button>
+    <span class="toolbar-sep"></span>
+    <button class="tb-btn active" id="btnToggleLabels" title="Toggle Labels"><span class="icon">🏷️</span><span class="tb-label">Labels</span></button>
+    <button class="tb-btn active" id="btnToggleParticles" title="Toggle Particles"><span class="icon">✨</span><span class="tb-label">Particles</span></button>
+    <span class="toolbar-sep"></span>
+  </div>
 
   <div class="search-wrap">
     <input type="text" id="searchBox" placeholder="Search nodes... (Ctrl+F)" autocomplete="off">
@@ -456,21 +509,38 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--fon
   </div>
 
   <div class="toolbar-right">
-    <button class="tb-btn" id="btnUndo" title="Undo (Ctrl+Z)"><span class="icon">↩</span></button>
-    <button class="tb-btn" id="btnRedo" title="Redo (Ctrl+Y)"><span class="icon">↪</span></button>
-    <div class="toolbar-sep"></div>
+    <!-- 2D-ONLY: Undo/Redo -->
+    <div class="tb-group" id="undoRedo2dOnly">
+      <button class="tb-btn" id="btnUndo" title="Undo (Ctrl+Z)"><span class="icon">↩</span></button>
+      <button class="tb-btn" id="btnRedo" title="Redo (Ctrl+Y)"><span class="icon">↪</span></button>
+      <span class="toolbar-sep"></span>
+    </div>
     <button class="tb-btn" id="btnExport" title="Export PNG"><span class="icon">📷</span><span class="tb-label">Export</span></button>
     <button class="tb-btn" id="btnExportJSON" title="Export JSON"><span class="icon">{ }</span></button>
-    <div class="toolbar-sep"></div>
+    <span class="toolbar-sep"></span>
     <button class="tb-btn" id="btnTheme" title="Toggle Theme"><span class="icon">🌙</span></button>
     <button class="tb-btn" id="btnFullscreen" title="Fullscreen (F)"><span class="icon">⛶</span></button>
     <button class="tb-btn" id="btnHelp" title="Shortcuts (?)"><span class="icon">?</span></button>
   </div>
 </div>
 
-<!-- ═══ CANVAS ═══ -->
+<!-- ═══ 2D CANVAS CONTAINER ═══ -->
 <div id="canvasWrap">
   <canvas id="graphCanvas"></canvas>
+</div>
+
+<!-- ═══ 3D GRAPH CONTAINER (LAZY LOADED) ═══ -->
+<div id="graph3dContainer"></div>
+
+<!-- ═══ 3D TOOLTIP (follows cursor on hover) ═══ -->
+<div id="tooltip3d" style="position:fixed;z-index:150;pointer-events:none;background:var(--glass-bg);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border);border-radius:var(--radius-sm);padding:6px 12px;font-size:0.78rem;color:var(--text);box-shadow:var(--shadow-sm);display:none;white-space:nowrap;">
+  <div id="tipName" style="font-weight:600;margin-bottom:2px;"></div>
+  <div id="tipType" style="font-size:0.7rem;color:var(--text-muted);"></div>
+</div>
+
+<!-- ═══ 3D STATS BAR ═══ -->
+<div id="statsBar3d" style="display:none;position:fixed;bottom:16px;right:16px;background:var(--glass-bg);backdrop-filter:var(--glass-blur);border:1px solid var(--glass-border);border-radius:var(--radius);padding:8px 14px;z-index:80;font-size:0.72rem;color:var(--text-muted);gap:16px;box-shadow:var(--shadow-sm);">
+  <span>📊 <b id="stat3dNodes">0</b> nodes</span> · <span>🔗 <b id="stat3dEdges">0</b> edges</span>
 </div>
 
 <!-- ═══ DETAIL PANEL ═══ -->
@@ -1403,6 +1473,447 @@ function drawNavFlowParticle() {
   }
 }
 
+// ─── 2D / 3D MODE SWITCHER & LAZY LOAD ─────────────────────────────────────
+let currentViewMode = '2D';
+let graph3dInstance = null;
+let script3dLoaded = false;
+let script3dLoading = false;
+
+function setModeUIVisibility(mode) {
+  const is2D = mode === '2D';
+  // 2D-only controls
+  const c2d = document.getElementById('controls2dOnly');
+  const ur2d = document.getElementById('undoRedo2dOnly');
+  if (c2d) c2d.style.display = is2D ? 'inline-flex' : 'none';
+  if (ur2d) ur2d.style.display = is2D ? 'inline-flex' : 'none';
+  // 3D-only controls
+  const c3d = document.getElementById('controls3dOnly');
+  if (c3d) c3d.style.display = is2D ? 'none' : 'inline-flex';
+  // Canvas / 3D container
+  const canvasWrap = document.getElementById('canvasWrap');
+  const container3d = document.getElementById('graph3dContainer');
+  if (canvasWrap) canvasWrap.style.display = is2D ? 'block' : 'none';
+  if (container3d) container3d.style.display = is2D ? 'none' : 'block';
+  // Minimap (2D-only) & Legend (All Modes)
+  const minimap = document.getElementById('minimap');
+  const legend = document.getElementById('legend');
+  if (minimap) minimap.style.display = is2D ? '' : 'none';
+  if (legend) legend.style.display = '';
+  // 3D stats bar and tooltip
+  const sb3d = document.getElementById('statsBar3d');
+  const tip3d = document.getElementById('tooltip3d');
+  if (sb3d) sb3d.style.display = is2D ? 'none' : 'flex';
+  if (is2D && tip3d) tip3d.style.display = 'none';
+  // Toggle buttons
+  const btn2D = document.getElementById('btnMode2D');
+  const btn3D = document.getElementById('btnMode3D');
+  if (btn2D) btn2D.classList.toggle('active', is2D);
+  if (btn3D) btn3D.classList.toggle('active', !is2D);
+}
+
+function switchTo2D() {
+  currentViewMode = '2D';
+  setModeUIVisibility('2D');
+
+  if (STATE.selectedNode) {
+    smoothCenterOnNode(STATE.selectedNode.id);
+  }
+  resizeCanvas();
+  render();
+}
+
+function switchTo3D() {
+  currentViewMode = '3D';
+  setModeUIVisibility('3D');
+
+  if (window.ForceGraph3D) {
+    script3dLoaded = true;
+    // Use rAF so browser paints the container first → offsetWidth/Height are valid
+    if (!graph3dInstance) {
+      requestAnimationFrame(() => init3dGraphEngine());
+    } else {
+      resize3dGraph();
+      if (STATE.selectedNode) focusCameraOnNode3d(STATE.selectedNode);
+    }
+  } else {
+    if (script3dLoading) return;
+    script3dLoading = true;
+    toast('Loading 3D Engine...');
+    const script = document.createElement('script');
+    script.src = 'https://unpkg.com/3d-force-graph@1';
+    script.onload = () => {
+      script3dLoaded = true;
+      script3dLoading = false;
+      // Delay init by one frame so container dimensions are computed
+      requestAnimationFrame(() => init3dGraphEngine());
+    };
+    script.onerror = () => {
+      script3dLoading = false;
+      toast('Failed to load 3D engine. Check internet connection.');
+      switchTo2D();
+    };
+    document.head.appendChild(script);
+  }
+}
+
+function resize3dGraph() {
+  if (!graph3dInstance) return;
+  const container3d = document.getElementById('graph3dContainer');
+  if (!container3d) return;
+  const w = container3d.clientWidth || window.innerWidth;
+  const h = container3d.clientHeight || (window.innerHeight - 56);
+  graph3dInstance.width(w).height(h);
+}
+
+function zoomToFit3D() {
+  if (!graph3dInstance) return;
+  graph3dInstance.zoomToFit(800, 40);
+}
+
+function resetCamera3D() {
+  if (!graph3dInstance) return;
+  graph3dInstance.cameraPosition({ x: 0, y: 0, z: 500 }, { x: 0, y: 0, z: 0 }, 1200);
+}
+
+function update3dTheme() {
+  if (!graph3dInstance) return;
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  graph3dInstance.backgroundColor(isDark ? '#0a0e14' : '#ffffff');
+}
+
+function search3dHighlight(term) {
+  if (!graph3dInstance) return;
+  const data = graph3dInstance.graphData();
+  if (!data || !data.nodes) return;
+  const lowerTerm = (term || '').toLowerCase();
+  data.nodes.forEach(n => {
+    if (lowerTerm && n.name && n.name.toLowerCase().includes(lowerTerm)) {
+      n.__highlighted = true;
+    } else {
+      n.__highlighted = false;
+    }
+  });
+  // Update node colors to reflect search highlights
+  graph3dInstance
+    .nodeColor(n => n.__highlighted ? '#ffffff' : (n.color || '#58a6ff'))
+    .nodeOpacity(n => (!lowerTerm || n.__highlighted) ? 0.92 : 0.25);
+}
+
+// Resize handler for 3D view
+window.addEventListener('resize', () => {
+  if (currentViewMode === '3D') resize3dGraph();
+});
+
+let show3dLabels = true;
+let show3dParticles = true;
+let highlight3dNodes = new Set();
+let highlight3dLinks = new Set();
+
+function createTextTexture3d(text, color) {
+  const T = window.THREE;
+  if (!T) return null;
+  const cvs = document.createElement('canvas');
+  const c = cvs.getContext('2d');
+  const fontSize = 48;
+  c.font = '600 ' + fontSize + 'px Inter, sans-serif';
+  const tw = c.measureText(text).width;
+  cvs.width = Math.min(tw + 24, 1024);
+  cvs.height = fontSize + 16;
+  c.font = '600 ' + fontSize + 'px Inter, sans-serif';
+  c.textAlign = 'center';
+  c.textBaseline = 'middle';
+  c.shadowColor = 'rgba(0,0,0,0.6)';
+  c.shadowBlur = 6;
+  c.shadowOffsetY = 2;
+  c.fillStyle = color || '#e6edf3';
+  c.fillText(text, cvs.width / 2, cvs.height / 2, cvs.width - 12);
+  const texture = new T.CanvasTexture(cvs);
+  texture.minFilter = T.LinearFilter;
+  return texture;
+}
+
+function init3dGraphEngine() {
+  const container3d = document.getElementById('graph3dContainer');
+  if (!window.ForceGraph3D || !container3d) return;
+
+  container3d.innerHTML = '';
+
+  const isDark = () => document.documentElement.getAttribute('data-theme') === 'dark';
+  const cw = container3d.clientWidth || window.innerWidth;
+  const ch = container3d.clientHeight || (window.innerHeight - 56);
+
+  const g3dNodes = nodes.map(n => ({
+    id: n.id, name: n.name, type: n.type, icon: n.icon || '📄',
+    label: n.label || n.type, color: n.color || '#58a6ff',
+    filePath: n.filePath || n.id, language: n.language || '',
+    framework: n.framework || '', metadata: n.metadata || {},
+    incomingCount: n.incomingCount || 0, outgoingCount: n.outgoingCount || 0,
+    val: Math.max(2, (n.incomingCount || 0) + (n.outgoingCount || 0) + 1)
+  }));
+
+  const g3dLinks = edges.map(e => ({
+    source: e.source, target: e.target, type: e.type,
+    label: e.label || e.type, color: e.color || '#8b949e', style: e.style
+  }));
+
+  graph3dInstance = ForceGraph3D()(container3d)
+    .graphData({ nodes: g3dNodes, links: g3dLinks })
+    .backgroundColor(isDark() ? '#0a0e14' : '#ffffff')
+    .showNavInfo(false)
+    .width(cw).height(ch)
+    .nodeVal(n => n.val)
+    .nodeColor(n => {
+      if (highlight3dNodes.size > 0 && !highlight3dNodes.has(n)) return isDark() ? '#1c2128' : '#d0d7de';
+      return n.color;
+    })
+    .nodeOpacity(0.92)
+    .nodeResolution(16)
+    .nodeLabel(() => '')
+    .nodeThreeObjectExtend(true)
+    .nodeThreeObject(n => {
+      if (!show3dLabels) return undefined;
+      const T = window.THREE;
+      if (!T) return undefined;
+      const texture = createTextTexture3d(n.name, n.color);
+      if (!texture) return undefined;
+      const sprite = new T.Sprite(new T.SpriteMaterial({ map: texture, transparent: true, depthWrite: false }));
+      const scale = Math.max(6, 3 + n.val * 0.5);
+      sprite.scale.set(scale * 4, scale, 1);
+      sprite.position.set(0, Math.max(4, 2 + n.val * 0.3), 0);
+      sprite.renderOrder = 999;
+      return sprite;
+    })
+    .linkColor(l => {
+      if (highlight3dLinks.size > 0 && !highlight3dLinks.has(l)) return isDark() ? 'rgba(48,54,61,0.15)' : 'rgba(208,215,222,0.15)';
+      return l.color || (isDark() ? 'rgba(139,148,158,0.4)' : 'rgba(101,109,118,0.4)');
+    })
+    .linkWidth(l => highlight3dLinks.has(l) ? 2 : 0.5)
+    .linkOpacity(0.6)
+    .linkDirectionalParticles(l => show3dParticles ? (highlight3dLinks.has(l) ? 6 : 2) : 0)
+    .linkDirectionalParticleWidth(l => highlight3dLinks.has(l) ? 2.5 : 1.2)
+    .linkDirectionalParticleSpeed(0.005)
+    .linkDirectionalParticleColor(l => l.color || (isDark() ? '#58a6ff' : '#0969da'))
+    .linkDirectionalArrowLength(3)
+    .linkDirectionalArrowRelPos(1)
+    .linkDirectionalArrowColor(l => l.color || (isDark() ? '#58a6ff' : '#0969da'))
+    .linkCurvature(0.15)
+    .onNodeClick(n => {
+      const origNode = nodeMap.get(n.id);
+      if (origNode) selectNode(origNode, true);
+    })
+    .onNodeHover(n => {
+      container3d.style.cursor = n ? 'pointer' : 'grab';
+      updateTooltip3d(n);
+      highlight3dNodes.clear();
+      highlight3dLinks.clear();
+      if (n) {
+        highlight3dNodes.add(n);
+        const links = graph3dInstance.graphData().links;
+        links.forEach(l => {
+          const src = typeof l.source === 'object' ? l.source : null;
+          const tgt = typeof l.target === 'object' ? l.target : null;
+          if (src === n || tgt === n) {
+            highlight3dLinks.add(l);
+            if (src) highlight3dNodes.add(src);
+            if (tgt) highlight3dNodes.add(tgt);
+          }
+        });
+      }
+      graph3dInstance.nodeColor(graph3dInstance.nodeColor())
+        .linkColor(graph3dInstance.linkColor())
+        .linkWidth(graph3dInstance.linkWidth())
+        .linkDirectionalParticles(graph3dInstance.linkDirectionalParticles());
+    })
+    .onBackgroundClick(() => {
+      highlight3dNodes.clear();
+      highlight3dLinks.clear();
+      graph3dInstance.nodeColor(graph3dInstance.nodeColor())
+        .linkColor(graph3dInstance.linkColor())
+        .linkWidth(graph3dInstance.linkWidth());
+      deselectNode();
+    })
+    .d3AlphaDecay(0.02)
+    .d3VelocityDecay(0.3)
+    .warmupTicks(80)
+    .cooldownTicks(200);
+
+  // Stats bar
+  const sb = document.getElementById('statsBar3d');
+  if (sb) {
+    sb.style.display = 'flex';
+    const sn = document.getElementById('stat3dNodes');
+    const se = document.getElementById('stat3dEdges');
+    if (sn) sn.textContent = g3dNodes.length;
+    if (se) se.textContent = g3dLinks.length;
+  }
+
+  // Tooltip mouse tracker
+  container3d.addEventListener('mousemove', (e) => {
+    const tip = document.getElementById('tooltip3d');
+    if (tip && tip.style.display === 'block') {
+      tip.style.left = (e.clientX + 16) + 'px';
+      tip.style.top = (e.clientY + 16) + 'px';
+    }
+  });
+
+  toast('3D Engine loaded (' + g3dNodes.length + ' nodes, ' + g3dLinks.length + ' edges)');
+
+  if (STATE.selectedNode) {
+    setTimeout(() => focusCameraOnNode3d(STATE.selectedNode), 500);
+  }
+}
+
+function updateTooltip3d(n) {
+  const tip = document.getElementById('tooltip3d');
+  const tipName = document.getElementById('tipName');
+  const tipType = document.getElementById('tipType');
+  if (!tip) return;
+  if (!n) { tip.style.display = 'none'; return; }
+  if (tipName) tipName.textContent = (n.icon || '📄') + ' ' + n.name;
+  if (tipType) tipType.textContent = (n.label || n.type) + (n.language ? ' • ' + n.language : '');
+  tip.style.display = 'block';
+}
+
+function toggleLabels3D() {
+  show3dLabels = !show3dLabels;
+  const btn = document.getElementById('btnToggleLabels');
+  if (btn) btn.classList.toggle('active', show3dLabels);
+  if (graph3dInstance) {
+    graph3dInstance.nodeThreeObject(graph3dInstance.nodeThreeObject());
+  }
+}
+
+function toggleParticles3D() {
+  show3dParticles = !show3dParticles;
+  const btn = document.getElementById('btnToggleParticles');
+  if (btn) btn.classList.toggle('active', show3dParticles);
+  if (graph3dInstance) {
+    graph3dInstance.linkDirectionalParticles(graph3dInstance.linkDirectionalParticles());
+  }
+}
+
+function focusCameraOnNode3d(node) {
+  if (!graph3dInstance || !node) return;
+  const g3dData = graph3dInstance.graphData();
+  const gNode = g3dData.nodes ? g3dData.nodes.find(n => n.id === node.id) : null;
+  if (!gNode) return;
+
+  const nx = gNode.x || 0, ny = gNode.y || 0, nz = gNode.z || 0;
+  const dist = 140;
+  const hyp = Math.hypot(nx, ny, nz) || 1;
+  graph3dInstance.cameraPosition(
+    { x: nx + (nx / hyp) * dist, y: ny + (ny / hyp) * dist + 20, z: nz + (nz / hyp) * dist + 30 },
+    { x: nx, y: ny, z: nz },
+    1800
+  );
+
+  // Highlight connected on click too
+  highlight3dNodes.clear();
+  highlight3dLinks.clear();
+  highlight3dNodes.add(gNode);
+  const links = graph3dInstance.graphData().links;
+  links.forEach(l => {
+    const src = typeof l.source === 'object' ? l.source : null;
+    const tgt = typeof l.target === 'object' ? l.target : null;
+    if (src === gNode || tgt === gNode) {
+      highlight3dLinks.add(l);
+      if (src) highlight3dNodes.add(src);
+      if (tgt) highlight3dNodes.add(tgt);
+    }
+  });
+  graph3dInstance.nodeColor(graph3dInstance.nodeColor())
+    .linkColor(graph3dInstance.linkColor())
+    .linkWidth(graph3dInstance.linkWidth())
+    .linkDirectionalParticles(graph3dInstance.linkDirectionalParticles());
+
+  trigger3dNodePulse(gNode);
+}
+
+function trigger3dNodePulse(gNode) {
+  if (!graph3dInstance || !gNode) return;
+  const T = window.THREE;
+  let scene;
+  try { scene = graph3dInstance.scene(); } catch(e) { return; }
+  if (!T || !scene) return;
+
+  const baseSize = Math.max(6, (gNode.val || 2) * 2.5);
+  const geo = new T.SphereGeometry(baseSize, 24, 24);
+  const mat = new T.MeshBasicMaterial({ color: gNode.color || '#58a6ff', wireframe: true, transparent: true, opacity: 0.9 });
+  const mesh = new T.Mesh(geo, mat);
+  mesh.position.set(gNode.x || 0, gNode.y || 0, gNode.z || 0);
+  scene.add(mesh);
+
+  const startTime = performance.now();
+  function animPulse(now) {
+    const elapsed = now - startTime;
+    const progress = Math.min(1, elapsed / 1200);
+    if (progress < 1) {
+      const scale = 1 + progress * 2.5;
+      mesh.scale.set(scale, scale, scale);
+      mat.opacity = (1 - progress) * 0.9;
+      mesh.position.set(gNode.x || 0, gNode.y || 0, gNode.z || 0);
+      requestAnimationFrame(animPulse);
+    } else {
+      scene.remove(mesh);
+      geo.dispose();
+      mat.dispose();
+    }
+  }
+  requestAnimationFrame(animPulse);
+}
+
+function trigger3dNavFlowParticlesEngine(fromNode, toNode) {
+  if (!graph3dInstance || !fromNode || !toNode || fromNode.id === toNode.id) return;
+  const T = window.THREE;
+  let scene;
+  try { scene = graph3dInstance.scene(); } catch(e) { return; }
+  if (!T || !scene) return;
+
+  const gNodes = graph3dInstance.graphData().nodes || [];
+  const gFrom = gNodes.find(n => n.id === fromNode.id);
+  const gTo = gNodes.find(n => n.id === toNode.id);
+  if (!gFrom || !gTo) return;
+
+  const startPos = new T.Vector3(gFrom.x || 0, gFrom.y || 0, gFrom.z || 0);
+  const endPos = new T.Vector3(gTo.x || 0, gTo.y || 0, gTo.z || 0);
+
+  const curve = new T.LineCurve3(startPos, endPos);
+  const lineGeo = new T.BufferGeometry().setFromPoints(curve.getPoints(20));
+  const lineMat = new T.LineBasicMaterial({ color: 0x58a6ff, linewidth: 3.5, transparent: true, opacity: 0.9 });
+  const flowLine = new T.Line(lineGeo, lineMat);
+  scene.add(flowLine);
+
+  const pGeo = new T.SphereGeometry(4.5, 16, 16);
+  const pMat = new T.MeshBasicMaterial({ color: 0xffffff });
+  const pMesh = new T.Mesh(pGeo, pMat);
+  scene.add(pMesh);
+
+  const startTime = performance.now();
+  const duration = 1600;
+
+  function anim3dFlow(now) {
+    const elapsed = now - startTime;
+    const rawProgress = Math.min(1, elapsed / duration);
+    const progress = easeInOutCubic(rawProgress);
+
+    const currentPos = new T.Vector3().lerpVectors(startPos, endPos, progress);
+    pMesh.position.copy(currentPos);
+    lineMat.opacity = (1 - rawProgress * 0.7);
+
+    if (rawProgress < 1) {
+      requestAnimationFrame(anim3dFlow);
+    } else {
+      scene.remove(flowLine);
+      scene.remove(pMesh);
+      lineGeo.dispose();
+      lineMat.dispose();
+      pGeo.dispose();
+      pMat.dispose();
+    }
+  }
+  requestAnimationFrame(anim3dFlow);
+}
+
 function selectNode(n, pushHist = true) {
   if (!n) return;
   const prevNode = STATE.selectedNode;
@@ -1419,19 +1930,28 @@ function selectNode(n, pushHist = true) {
   }
 
   if (prevNode && prevNode.id !== n.id) {
-    triggerNavFlowAnimation(prevNode.id, n.id);
+    if (currentViewMode === '2D') {
+      triggerNavFlowAnimation(prevNode.id, n.id);
+    } else if (currentViewMode === '3D') {
+      trigger3dNavFlowParticlesEngine(prevNode, n);
+    }
   }
 
   showDetailPanel(n);
-  smoothCenterOnNode(n.id);
-  triggerNodePulse(n.id);
-  render();
+
+  if (currentViewMode === '2D') {
+    smoothCenterOnNode(n.id);
+    triggerNodePulse(n.id);
+    render();
+  } else {
+    focusCameraOnNode3d(n);
+  }
 }
 
 function deselectNode() {
   STATE.selectedNode = null;
   document.getElementById('detailPanel').classList.remove('open');
-  render();
+  if (currentViewMode === '2D') render();
 }
 
 function navGoBack() {
@@ -1753,14 +2273,20 @@ searchBox.addEventListener('input', () => {
     searchCount.textContent = STATE.searchResults.length + ' found';
     if (STATE.searchResults.length > 0) {
       selectNode(STATE.searchResults[0]);
-      centerOnNode(STATE.searchResults[0].id);
+      if (currentViewMode === '2D') {
+        centerOnNode(STATE.searchResults[0].id);
+      }
     }
   } else {
     STATE.searchResults = [];
     STATE.searchResultIds = new Set();
     searchCount.textContent = '';
   }
-  render();
+  if (currentViewMode === '2D') {
+    render();
+  } else {
+    search3dHighlight(STATE.searchTerm);
+  }
 });
 
 // ─── FIT VIEW ────────────────────────────────────────────────────────────────
@@ -1954,6 +2480,8 @@ document.getElementById('btnTheme').addEventListener('click', () => {
   document.getElementById('btnTheme').querySelector('.icon').textContent = newTheme === 'dark' ? '🌙' : '☀️';
   render();
   updateMinimap();
+  // Sync 3D background color
+  if (currentViewMode === '3D') update3dTheme();
 });
 
 document.getElementById('btnFullscreen').addEventListener('click', () => {
@@ -2122,6 +2650,22 @@ function fitView() {
 
 function init() {
   resizeCanvas();
+
+  // Mode switcher
+  const btn2D = document.getElementById('btnMode2D');
+  const btn3D = document.getElementById('btnMode3D');
+  if (btn2D) btn2D.addEventListener('click', switchTo2D);
+  if (btn3D) btn3D.addEventListener('click', switchTo3D);
+
+  // 3D-only buttons
+  const btnFit3D = document.getElementById('btnZoomFit3D');
+  const btnReset3D = document.getElementById('btnResetCamera');
+  const btnLabels3D = document.getElementById('btnToggleLabels');
+  const btnParticles3D = document.getElementById('btnToggleParticles');
+  if (btnFit3D) btnFit3D.addEventListener('click', zoomToFit3D);
+  if (btnReset3D) btnReset3D.addEventListener('click', resetCamera3D);
+  if (btnLabels3D) btnLabels3D.addEventListener('click', toggleLabels3D);
+  if (btnParticles3D) btnParticles3D.addEventListener('click', toggleParticles3D);
 
   // Auto-select layout
   const bestLayout = autoSelectLayout();
