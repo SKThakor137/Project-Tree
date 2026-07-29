@@ -170,8 +170,7 @@ ${colors.bold('Output Options:')}
   --details               Show file size & extension
   --summarize             Extract & show inline file comment summaries
   --flow                  Generate architecture execution flow & role map
-  --visualize             Generate interactive 2D code relationship graph HTML
-  --visualize-3d          Generate interactive 3D code relationship graph HTML
+  --visualize, --graph    Generate 2D & 3D interactive code relationship graph HTML
   --graph-json            Export universal graph model as JSON
   --compress              Compress single-child dirs
   --collapse <n>          Collapse dirs with >n files

@@ -32,29 +32,20 @@
 Run a complete codebase analysis and generate `PROJECT_STRUCTURE.md` immediately in any repository:
 
 ```bash
-npx project-tree-md
-# or use ultra-short aliases:
 npx ptree
-npx tree-md
 ```
 
-Generate a 2D **Interactive Code Relationship Graph HTML** (`CODE_GRAPH.html`):
+Generate **2D & 3D Interactive Code Relationship Graph HTML** (`CODE_GRAPH.html`):
 
 ```bash
 npx ptree --visualize
 ```
 
-Generate a 3D **WebGL Immersive Code Relationship Graph HTML** (`CODE_GRAPH_3D.html`):
-
-```bash
-npx ptree --visualize-3d
-```
-
 ---
 
-## 🌐 Universal 2D & 3D Code Relationship Visualizers (`--visualize`, `--visualize-3d`)
+## 🌐 Universal 2D & 3D Code Relationship Visualizer (`--visualize`)
 
-Transform any codebase into dynamic, interactive 2D canvas & 3D WebGL graphs showing complete architecture, dependency graphs, state flows, hooks, models, and service relationships!
+Transform any codebase into dynamic, interactive 2D canvas & 3D WebGL graphs showing complete architecture, dependency graphs, state flows, hooks, models, and service relationships — all in a single HTML file (`CODE_GRAPH.html`) with instant mode switching (`🎨 2D | 🌐 3D`)!
 
 ```
                      App.jsx (React)
@@ -69,31 +60,15 @@ Transform any codebase into dynamic, interactive 2D canvas & 3D WebGL graphs sho
                                 userService.js (API)
 ```
 
-### 🎨 2D Interactive Canvas Visualizer (`--visualize`)
+### ⚡ Visualizer Capabilities (`npx ptree --visualize`)
 
-```bash
-npx project-tree-md --visualize
-```
-
-Generates high-performance 2D canvas visualizer (`CODE_GRAPH.html`):
-* 🎨 **5 Layout Engines**: Switch on-the-fly between **DAG (Sugiyama)**, **Force-Directed (Barnes-Hut)**, **Tree**, **Radial**, and **Horizontal Flow**.
+* 🎨 **Instant 2D & 3D Mode Switcher**: Toggle seamlessly between **2D Flat Canvas** and **3D WebGL Spatial Sphere** views right from the toolbar.
+* 🎨 **5 Layout Engines (2D)**: Switch on-the-fly between **DAG (Sugiyama)**, **Force-Directed (Barnes-Hut)**, **Tree**, **Radial**, and **Horizontal Flow**.
+* 🌌 **3D Force & Particle Link Beams**: Full 3D camera orbit, rotation, pan, zoom, glowing nodes, and directional particle animation flows.
 * 🚀 **Multi-Language Support**: Framework-agnostic parsing for **20+ languages and frameworks** (React, Next.js, Vue, Angular, Svelte, Laravel, PHP, Node.js, Express, NestJS, Flutter, Dart, React Native, Python, Django, FastAPI, Java, Spring Boot, .NET/C#, Go, Rust).
-* ⚡ **High-Performance Canvas Rendering**: Virtual viewport rendering scales smoothly to 10,000+ nodes at 60 FPS.
 * 🔍 **Real-Time Instant Search & Minimap**: Live query filtering with auto-centering (`Ctrl+F`) and draggable minimap.
 * 📑 **Slide-out Detail Panel**: Inspect code metrics, file size, line counts, incoming imports, outgoing exports, and dependencies.
 * 📷 **PNG & JSON Export**: Export high-res vector PNG diagrams or raw `CODE_GRAPH.json` models.
-
-### 🧊 3D WebGL Immersive Visualizer (`--visualize-3d`)
-
-```bash
-npx project-tree-md --visualize-3d
-```
-
-Generates immersive 3D force-directed WebGL visualizer (`CODE_GRAPH_3D.html`):
-* 🌌 **Interactive 3D Sphere & Force Spatial Engine**: Explore project architecture in full 3D space with particle link effects and dynamic node spheres.
-* 🕹️ **Full Camera Navigation & Orbit Controls**: Rotate, zoom, pan, and focus in 3D perspective or orthographic view modes.
-* 💡 **Dynamic 3D Lighting & Shading**: Dark/Light mode with glowing status nodes, directional light sources, and particle beams.
-* 🎯 **3D Node Inspection & Focus**: Click any 3D node to smoothly focus camera and inspect dependency subtrees and code metrics.
 
 ---
 
