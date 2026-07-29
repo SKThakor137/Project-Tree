@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/SKThakor137/Project-Tree">
-    <img src="https://raw.githubusercontent.com/SKThakor137/Project-Tree/main/assets/banner.png" alt="project-tree-md Banner" width="100%" onerror="this.style.display='none'" />
+    <img src="assets/banner.svg" alt="project-tree-md Banner" width="100%" />
   </a>
   <h1 align="center">🌳 project-tree-md</h1>
   <p align="center">
