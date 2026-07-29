@@ -33,18 +33,21 @@ Run a complete codebase analysis and generate `PROJECT_STRUCTURE.md` immediately
 
 ```bash
 npx project-tree-md
+# or use ultra-short aliases:
+npx ptree
+npx tree-md
 ```
 
 Generate a 2D **Interactive Code Relationship Graph HTML** (`CODE_GRAPH.html`):
 
 ```bash
-npx project-tree-md --visualize
+npx ptree --visualize
 ```
 
 Generate a 3D **WebGL Immersive Code Relationship Graph HTML** (`CODE_GRAPH_3D.html`):
 
 ```bash
-npx project-tree-md --visualize-3d
+npx ptree --visualize-3d
 ```
 
 ---

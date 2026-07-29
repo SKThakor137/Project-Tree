@@ -4,7 +4,9 @@
   "description": "The ultimate AI-ready project analysis, architecture & visualizer suite. Generates interactive Code Relationship Graphs (HTML/Canvas), Markdown, JSON, HTML, SVG, Mermaid, ZIP bundles, AI context, dependency graphs, dead code reports, and HTML Download Center. Zero dependencies.",
   "main": "src/index.js",
   "bin": {
-    "project-tree-md": "bin/cli.js"
+    "project-tree-md": "bin/cli.js",
+    "ptree": "bin/cli.js",
+    "tree-md": "bin/cli.js"
   },
   "files": [
     "bin",
