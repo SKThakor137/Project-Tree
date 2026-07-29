@@ -4,15 +4,15 @@
   </a>
   <h1 align="center">🌳 project-tree-md</h1>
   <p align="center">
-    <strong>The Ultimate AI-Ready Project Analysis, Architecture & Visualizer Suite</strong><br>
-    <em>Generate 2D & 3D Interactive Code Graphs, Markdown, JSON, HTML, SVG, Mermaid, ZIP Bundles & AI Context in 1-Second. Zero Dependencies.</em>
+    <strong>The Ultimate AI-Ready Project Intelligence & 2D/3D Code Visualizer Suite</strong><br>
+    <em>Instantly map codebases for Cursor, Claude, ChatGPT & Developers. Generates 2D & 3D Interactive Code Graphs, Markdown, JSON, HTML, SVG, Mermaid & ZIP Bundles in 1-Second. Zero Dependencies.</em>
   </p>
   <p align="center">
     <a href="https://www.npmjs.com/package/project-tree-md"><img src="https://img.shields.io/npm/v/project-tree-md.svg?style=for-the-badge&color=58a6ff" alt="npm version" /></a>
     <a href="https://www.npmjs.com/package/project-tree-md"><img src="https://img.shields.io/npm/dm/project-tree-md.svg?style=for-the-badge&color=3fb950" alt="npm downloads" /></a>
+    <a href="https://github.com/SKThakor137/Project-Tree/stargazers"><img src="https://img.shields.io/github/stars/SKThakor137/Project-Tree?style=for-the-badge&color=e3b341" alt="github stars" /></a>
     <a href="https://github.com/SKThakor137/Project-Tree"><img src="https://img.shields.io/badge/dependencies-0-brightgreen?style=for-the-badge" alt="zero dependencies" /></a>
     <a href="https://github.com/SKThakor137/Project-Tree/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge" alt="license" /></a>
-    <a href="https://nodejs.org/"><img src="https://img.shields.io/badge/node-%3E%3D14-success?style=for-the-badge" alt="node version" /></a>
   </p>
 </p>
 
