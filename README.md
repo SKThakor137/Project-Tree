@@ -78,7 +78,7 @@ Most directory tree generators only print basic text folders. **`project-tree-md
 
 ```
                   ┌──────────────────────────────────────────────┐
-                  │           npx project-tree-md                │
+                  │               npx ptree                      │
                   └──────────────────────┬───────────────────────┘
                                          │
        ┌──────────────────┬──────────────┼──────────────┬──────────────────┬──────────────────┐
@@ -88,7 +88,7 @@ Most directory tree generators only print basic text folders. **`project-tree-md
 
 ### ⚡ Key Capabilities
 
-* 🌐 **Universal 2D & 3D Code Relationship Visualizers (`--visualize`, `--visualize-3d`)**: Generate standalone 2D canvas (`CODE_GRAPH.html`) and 3D WebGL (`CODE_GRAPH_3D.html`) interactive visualizers for codebases in 20+ programming languages.
+* 🌐 **Universal 2D & 3D Code Relationship Visualizer (`--visualize`)**: Generate a unified 2D canvas & 3D WebGL interactive visualizer (`CODE_GRAPH.html`) with instant mode switching for codebases in 20+ programming languages.
 * 📋 **Graph JSON Export (`--graph-json`)**: Output structured node and edge relationship models for complete graph reconstruction.
 * 📦 **ZIP Analysis Bundles (`--bundle`)**: Export up to 20 analysis reports (Markdown, Interactive Graph, JSON, HTML, SVG, Mermaid, AI Context, Health Metrics, Component Maps, Dead Code) into a single `project-analysis.zip` archive.
 * 💻 **In-Browser HTML Download Center (`--html`)**: Standalone HTML dashboard with sticky real-time search, Dark/Light mode, and 1-click browser ZIP file downloads.
@@ -123,55 +123,52 @@ Most directory tree generators only print basic text folders. **`project-tree-md
 
 ## ⚡ Quick Examples & Commands
 
-### 1. Interactive 2D & 3D Code Relationship Visualizers
+### 1. Interactive 2D & 3D Code Relationship Visualizer
 ```bash
-# Generate 2D interactive graph (CODE_GRAPH.html)
-npx project-tree-md --visualize
-
-# Generate 3D WebGL interactive graph (CODE_GRAPH_3D.html)
-npx project-tree-md --visualize-3d
+# Generate unified 2D & 3D interactive graph (CODE_GRAPH.html)
+npx ptree --visualize
 
 # Export Universal Graph Model JSON
-npx project-tree-md --graph-json
+npx ptree --graph-json
 
-# Export 2D graph, 3D graph, and JSON model together
-npx project-tree-md --visualize --visualize-3d --graph-json
+# Export graph and JSON model together
+npx ptree --visualize --graph-json
 ```
 
 ### 2. Default Run (Generates `PROJECT_STRUCTURE.md`)
 ```bash
-npx project-tree-md
+npx ptree
 ```
 
 ### 3. Generate Full ZIP Analysis Bundle
 ```bash
 # Package all reports (including CODE_GRAPH.html & JSON) into project-analysis.zip
-npx project-tree-md --bundle
+npx ptree --bundle
 
 # Custom ZIP containing only graph, HTML, JSON & SVG reports
-npx project-tree-md --bundle graph,html,json,svg
+npx ptree --bundle graph,html,json,svg
 
 # Target custom output folder
-npx project-tree-md --bundle --output-dir dist/reports/
+npx ptree --bundle --output-dir dist/reports/
 ```
 
 ### 4. Selective Format Exports
 ```bash
 # Export only HTML, JSON, and SVG files
-npx project-tree-md --export html,json,svg --output-dir reports/
+npx ptree --export html,json,svg --output-dir reports/
 
 # Export all individual reports into folder
-npx project-tree-md --export-all
+npx ptree --export-all
 ```
 
 ### 5. Architecture Execution Flow & Role Mapping
 ```bash
-npx project-tree-md --flow
+npx ptree --flow
 ```
 
 ### 6. AI LLM Context Generation & Token Estimation
 ```bash
-npx project-tree-md --ai --tokens
+npx ptree --ai --tokens
 ```
 
 ---
@@ -181,7 +178,7 @@ npx project-tree-md --ai --tokens
 Generate a comprehensive project analysis package containing up to 20 report files:
 
 ```bash
-npx project-tree-md --bundle --output-dir reports/
+npx ptree --bundle --output-dir reports/
 ```
 
 ```text
@@ -219,12 +216,11 @@ project-analysis.zip
 project-tree-md — AI-Ready Project Analysis Suite
 
 Usage:
-  npx project-tree-md [options]
-  npx project-tree-md compare <pathA> <pathB>
+  npx ptree [options]
+  npx ptree compare <pathA> <pathB>
 
 Visualizer & Graph Options:
-  --visualize, --graph        Generate interactive 2D Code Relationship Graph HTML (CODE_GRAPH.html)
-  --visualize-3d, --3d-graph  Generate interactive 3D WebGL Code Relationship Graph HTML (CODE_GRAPH_3D.html)
+  --visualize, --graph        Generate 2D & 3D Interactive Code Relationship Graph HTML (CODE_GRAPH.html)
   --graph-json                Export universal graph model JSON (CODE_GRAPH.json)
 
 Bundle & Export System:
