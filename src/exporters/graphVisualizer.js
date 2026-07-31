@@ -476,6 +476,13 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--fon
 
   <!-- 2D-ONLY CONTROLS (hidden in 3D mode) -->
   <div class="tb-group" id="controls2dOnly">
+    <div class="mode-toggle-group" style="margin-right:2px;">
+      <button class="mode-toggle-btn active" id="btnCardCompact" title="Compact Sleek Cards (175x44)">⚡ Sleek</button>
+      <button class="mode-toggle-btn" id="btnCardNormal" title="Normal Cards (205x54)">📦 Normal</button>
+    </div>
+
+    <span class="toolbar-sep"></span>
+
     <select class="tb-select" id="layoutSelect" title="Layout">
       <option value="dagre">DAG</option>
       <option value="force">Force Directed</option>
@@ -620,7 +627,8 @@ const STATE = {
   selectedNode: null, hoveredNode: null,
   // Layout
   positions: new Map(),
-  nodeWidth: 220, nodeHeight: 64,
+  cardDensity: 'compact',
+  nodeWidth: 175, nodeHeight: 44,
   // Collapse
   collapsed: new Set(),
   hidden: new Set(),
@@ -1009,8 +1017,8 @@ function drawEdge(e) {
   if (!isOnScreen(srcPos.x, srcPos.y, 400) && !isOnScreen(tgtPos.x, tgtPos.y, 400)) return;
 
   const nw = STATE.nodeWidth, nh = STATE.nodeHeight;
-  const sx = srcPos.x + nw / 2, sy = srcPos.y + nh;
-  const tx = tgtPos.x + nw / 2, ty = tgtPos.y;
+  const sx = srcPos.x + nw / 2, sy = srcPos.y + nh + 1;
+  const tx = tgtPos.x + nw / 2, ty = tgtPos.y - 1;
 
   ctx.beginPath();
   ctx.strokeStyle = e.color || '#8b949e';
@@ -1035,12 +1043,12 @@ function drawEdge(e) {
 
   // Arrowhead
   const angle = Math.atan2(ty - midY, tx - tx) || Math.PI / 2;
-  const arrowLen = 8;
+  const arrowLen = 7;
   ctx.fillStyle = e.color || '#8b949e';
   ctx.beginPath();
   ctx.moveTo(tx, ty);
-  ctx.lineTo(tx - arrowLen * Math.cos(angle - 0.4), ty - arrowLen * Math.sin(angle - 0.4));
-  ctx.lineTo(tx - arrowLen * Math.cos(angle + 0.4), ty - arrowLen * Math.sin(angle + 0.4));
+  ctx.lineTo(tx - arrowLen * Math.cos(angle - 0.45), ty - arrowLen * Math.sin(angle - 0.45));
+  ctx.lineTo(tx - arrowLen * Math.cos(angle + 0.45), ty - arrowLen * Math.sin(angle + 0.45));
   ctx.closePath();
   ctx.fill();
   ctx.globalAlpha = 1;
@@ -1049,28 +1057,52 @@ function drawEdge(e) {
 function drawNode(n, pos) {
   const nw = STATE.nodeWidth, nh = STATE.nodeHeight;
   const x = pos.x, y = pos.y;
+  const isCompact = (STATE.cardDensity || 'compact') === 'compact';
 
   const isSelected = STATE.selectedNode && STATE.selectedNode.id === n.id;
   const isHovered = STATE.hoveredNode && STATE.hoveredNode.id === n.id;
-  const isSearchMatch = STATE.searchTerm && STATE.searchResults.find(r => r.id === n.id);
+  const isSearchMatch = STATE.searchTerm && STATE.searchResults && STATE.searchResults.find(r => r.id === n.id);
   const isDimmed = STATE.searchTerm && !isSearchMatch;
 
   ctx.globalAlpha = isDimmed ? 0.15 : 1;
 
-  // Node shadow
+  // Ambient glow shadow
   if (isSelected || isHovered) {
     ctx.shadowColor = n.color || '#58a6ff';
-    ctx.shadowBlur = isSelected ? 20 : 12;
+    ctx.shadowBlur = isSelected ? 18 : 10;
     ctx.shadowOffsetX = 0;
     ctx.shadowOffsetY = 0;
   }
 
-  // Node background
+  // Card background with subtle gradient & glass effect
   const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  ctx.fillStyle = isDark ? 'rgba(22, 27, 34, 0.95)' : 'rgba(255, 255, 255, 0.98)';
-  if (isSelected) ctx.fillStyle = isDark ? 'rgba(30, 38, 50, 0.98)' : 'rgba(240, 245, 255, 0.98)';
+  const grad = ctx.createLinearGradient(x, y, x, y + nh);
+  if (isDark) {
+    if (isSelected) {
+      grad.addColorStop(0, 'rgba(32, 44, 64, 0.98)');
+      grad.addColorStop(1, 'rgba(22, 30, 44, 0.98)');
+    } else if (isHovered) {
+      grad.addColorStop(0, 'rgba(28, 35, 47, 0.96)');
+      grad.addColorStop(1, 'rgba(20, 25, 34, 0.96)');
+    } else {
+      grad.addColorStop(0, 'rgba(24, 30, 39, 0.94)');
+      grad.addColorStop(1, 'rgba(16, 20, 27, 0.94)');
+    }
+  } else {
+    if (isSelected) {
+      grad.addColorStop(0, 'rgba(235, 243, 255, 0.98)');
+      grad.addColorStop(1, 'rgba(248, 250, 255, 0.98)');
+    } else if (isHovered) {
+      grad.addColorStop(0, 'rgba(245, 248, 252, 0.98)');
+      grad.addColorStop(1, 'rgba(255, 255, 255, 0.98)');
+    } else {
+      grad.addColorStop(0, 'rgba(255, 255, 255, 0.98)');
+      grad.addColorStop(1, 'rgba(246, 248, 250, 0.98)');
+    }
+  }
+  ctx.fillStyle = grad;
 
-  // Rounded rect
+  // Rounded rect container
   roundRect(ctx, x, y, nw, nh, 10);
   ctx.fill();
 
@@ -1082,59 +1114,94 @@ function drawNode(n, pos) {
   if (pulseNodeId === n.id) {
     const elapsed = performance.now() - pulseStartTime;
     const progress = (elapsed % 600) / 600;
-    const pulseRadius = 14 * progress;
+    const pulseRadius = 12 * progress;
     const pulseAlpha = (1 - progress) * 0.85;
 
     ctx.save();
     ctx.strokeStyle = n.color || '#58a6ff';
-    ctx.lineWidth = 3;
+    ctx.lineWidth = 2.5;
     ctx.globalAlpha = pulseAlpha;
     roundRect(ctx, x - pulseRadius, y - pulseRadius, nw + pulseRadius * 2, nh + pulseRadius * 2, 12);
     ctx.stroke();
     ctx.restore();
   }
 
-  // Border
-  ctx.strokeStyle = isSelected ? (n.color || '#58a6ff') : (isHovered ? (n.color || '#58a6ff') : (isDark ? 'rgba(48,54,61,0.8)' : 'rgba(208,215,222,0.8)'));
+  // Border outline
+  ctx.strokeStyle = isSelected ? (n.color || '#58a6ff') : (isHovered ? (n.color || '#58a6ff') : (isDark ? 'rgba(48,54,61,0.75)' : 'rgba(208,215,222,0.85)'));
   ctx.lineWidth = isSelected ? 2 : 1;
   roundRect(ctx, x, y, nw, nh, 10);
   ctx.stroke();
 
-  // Left color bar
+  // Left accent color indicator bar (clipped cleanly to card bounds, preventing white corner artifacts)
+  ctx.save();
+  roundRect(ctx, x, y, nw, nh, 10);
+  ctx.clip();
   ctx.fillStyle = n.color || '#58a6ff';
-  roundRectLeft(ctx, x, y, 4, nh, 10);
-  ctx.fill();
+  ctx.fillRect(x, y, 4, nh);
+  ctx.restore();
 
   // Icon
-  ctx.font = '16px serif';
-  ctx.fillText(n.icon || '📄', x + 14, y + 28);
+  const iconSize = isCompact ? 14 : 16;
+  const iconX = x + (isCompact ? 10 : 12);
+  const iconY = y + (isCompact ? 26 : 30);
+  ctx.font = iconSize + 'px serif';
+  ctx.fillText(n.icon || '📄', iconX, iconY);
 
-  // Name
-  ctx.font = '600 12px ' + (isDark ? 'Inter, sans-serif' : 'Inter, sans-serif');
-  ctx.fillStyle = isDark ? '#e6edf3' : '#1f2328';
-  const displayName = n.name.length > 22 ? n.name.substring(0, 20) + '…' : n.name;
-  ctx.fillText(displayName, x + 36, y + 27);
+  // Text coordinates
+  const textX = x + (isCompact ? 28 : 32);
+  const nameY = y + (isCompact ? 19 : 23);
+  const typeY = y + (isCompact ? 33 : 39);
 
-  // Type label
-  ctx.font = '500 10px Inter, sans-serif';
-  ctx.fillStyle = n.color || '#8b949e';
-  ctx.fillText(n.label || n.type, x + 36, y + 44);
-
-  // Connection counts
+  // Connection count micro pill badge dimensions
   const inC = n.incomingCount || 0;
   const outC = n.outgoingCount || 0;
-  ctx.font = '500 9px Inter, sans-serif';
-  ctx.fillStyle = isDark ? '#6e7681' : '#8c959f';
-  ctx.fillText('↓' + inC + ' ↑' + outC, x + nw - 48, y + 27);
+  const connText = '↓' + inC + ' ↑' + outC;
+  const badgeW = isCompact ? 36 : 40;
+  const badgeH = isCompact ? 15 : 17;
+  const badgeX = x + nw - badgeW - (isCompact ? 8 : 10);
+  const badgeY = y + (isCompact ? 7 : 8);
+
+  // File Name with smart dynamic pixel-width truncation
+  ctx.font = '600 ' + (isCompact ? '11px' : '12px') + ' Inter, sans-serif';
+  ctx.fillStyle = isDark ? '#e6edf3' : '#1f2328';
+  const availW = badgeX - textX - 6;
+  let displayName = n.name;
+  if (ctx.measureText(displayName).width > availW) {
+    let sub = displayName;
+    while (sub.length > 0 && ctx.measureText(sub + '…').width > availW) {
+      sub = sub.substring(0, sub.length - 1);
+    }
+    displayName = sub ? sub + '…' : '';
+  }
+  ctx.fillText(displayName, textX, nameY);
+
+  // Type label
+  ctx.font = '500 ' + (isCompact ? '9px' : '9.5px') + ' Inter, sans-serif';
+  ctx.fillStyle = n.color || '#8b949e';
+  ctx.fillText(n.label || n.type, textX, typeY);
+
+  // Connection count micro pill badge
+  ctx.save();
+  ctx.fillStyle = isDark ? 'rgba(56,139,253,0.16)' : 'rgba(9,105,218,0.12)';
+  roundRect(ctx, badgeX, badgeY, badgeW, badgeH, 4);
+  ctx.fill();
+  ctx.strokeStyle = isDark ? 'rgba(56,139,253,0.3)' : 'rgba(9,105,218,0.25)';
+  ctx.lineWidth = 0.75;
+  ctx.stroke();
+
+  ctx.font = '600 ' + (isCompact ? '8.5px' : '9px') + ' Inter, sans-serif';
+  ctx.fillStyle = isDark ? '#79c0ff' : '#0969da';
+  ctx.textAlign = 'center';
+  ctx.fillText(connText, badgeX + badgeW / 2, badgeY + (isCompact ? 10.5 : 11.5));
+  ctx.restore();
 
   // Collapse indicator
-  const children = childrenMap.get(n.id) || [];
   const hasConnections = (outgoingEdges.get(n.id) || []).length > 0;
   if (hasConnections) {
     const collapsed = STATE.collapsed.has(n.id);
-    ctx.font = '10px sans-serif';
+    ctx.font = (isCompact ? '9px' : '10px') + ' sans-serif';
     ctx.fillStyle = isDark ? '#8b949e' : '#656d76';
-    ctx.fillText(collapsed ? '▶ ' + (outgoingEdges.get(n.id) || []).length : '▼', x + nw - 20, y + 44);
+    ctx.fillText(collapsed ? '▶' : '▼', x + nw - (isCompact ? 14 : 16), typeY);
   }
 
   ctx.globalAlpha = 1;
@@ -2648,8 +2715,32 @@ function fitView() {
 
 // ─── INIT ────────────────────────────────────────────────────────────────────
 
+function setCardDensity(density) {
+  STATE.cardDensity = density;
+  if (density === 'compact') {
+    STATE.nodeWidth = 175;
+    STATE.nodeHeight = 44;
+  } else {
+    STATE.nodeWidth = 205;
+    STATE.nodeHeight = 54;
+  }
+  const btnCompact = document.getElementById('btnCardCompact');
+  const btnNormal = document.getElementById('btnCardNormal');
+  if (btnCompact) btnCompact.classList.toggle('active', density === 'compact');
+  if (btnNormal) btnNormal.classList.toggle('active', density === 'normal');
+  const layoutSelect = document.getElementById('layoutSelect');
+  runLayout(layoutSelect ? layoutSelect.value : 'dagre');
+  fitView();
+}
+
 function init() {
   resizeCanvas();
+
+  // Card density switcher
+  const btnCardCompact = document.getElementById('btnCardCompact');
+  const btnCardNormal = document.getElementById('btnCardNormal');
+  if (btnCardCompact) btnCardCompact.addEventListener('click', () => setCardDensity('compact'));
+  if (btnCardNormal) btnCardNormal.addEventListener('click', () => setCardDensity('normal'));
 
   // Mode switcher
   const btn2D = document.getElementById('btnMode2D');
