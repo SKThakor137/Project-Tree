@@ -4,40 +4,8 @@
 'use strict';
 
 const path = require('path');
-
-/** @typedef {import('./scanner').ScanNode} ScanNode */
-
-// ─── Theme definitions ────────────────────────────────────────────────────────
-
-const THEMES = {
-  unicode: { pipe: '│', tee: '├', last: '└', dash: '──', indent: '    ' },
-  ascii:   { pipe: '|', tee: '+', last: '\\', dash: '--', indent: '    ' },
-  box:     { pipe: '┃', tee: '┣', last: '┗', dash: '━━', indent: '    ' },
-  emoji:   { pipe: '│', tee: '├', last: '└', dash: '──', indent: '    ' },
-  compact: { pipe: '│', tee: '├', last: '└', dash: '──', indent: '    ' },
-};
-
-// ─── File icons (emoji theme) ─────────────────────────────────────────────────
-
-const FILE_ICONS = {
-  '.js': '📄', '.mjs': '📄', '.cjs': '📄',
-  '.ts': '📘', '.tsx': '⚛️ ', '.jsx': '⚛️ ',
-  '.json': '📋', '.jsonc': '📋',
-  '.md': '📝', '.mdx': '📝',
-  '.css': '🎨', '.scss': '🎨', '.sass': '🎨', '.less': '🎨',
-  '.html': '🌐', '.htm': '🌐',
-  '.svg': '🖼️ ', '.png': '🖼️ ', '.jpg': '🖼️ ', '.jpeg': '🖼️ ', '.gif': '🖼️ ', '.webp': '🖼️ ',
-  '.env': '🔐', '.gitignore': '🙈',
-  '.yml': '⚙️ ', '.yaml': '⚙️ ',
-  '.sh': '💻', '.bash': '💻', '.zsh': '💻', '.ps1': '💻',
-  '.py': '🐍', '.go': '🐹', '.rs': '🦀', '.java': '☕',
-  '.prisma': '🔷', '.graphql': '📡', '.gql': '📡',
-  '.toml': '⚙️ ', '.lock': '🔒',
-  default: '📄',
-};
-const DIR_ICON = '📁';
-
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+const { loadTheme, PRESETS: THEMES } = require('./themeEngine.js');
+const { createIconResolver, BUILT_IN_ICONS: FILE_ICONS, DIR_ICON } = require('./iconEngine.js');
 
 /**
  * Format bytes to human-readable string.
@@ -54,36 +22,46 @@ function formatSize(bytes) {
 /**
  * Get an emoji icon for a node.
  * @param {ScanNode} node
+ * @param {Object} [options]
  * @returns {string}
  */
-function getIcon(node) {
-  if (node.children !== undefined) return `${DIR_ICON} `;
-  const icon = FILE_ICONS[node.ext || ''] || FILE_ICONS.default;
-  return `${icon} `;
+function getIcon(node, options = {}) {
+  const resolver = createIconResolver(options.icons || null);
+  return resolver.getIcon(node);
 }
 
 /**
  * Build the display name for a node.
  * @param {ScanNode} node
  * @param {Object} opts
- * @param {string}  [opts.theme]
- * @param {boolean} [opts.details]
- * @param {boolean} [opts.includeSummary]
  * @returns {string}
  */
-function renderName(node, { theme = 'unicode', details = false, includeSummary = true } = {}) {
+function renderName(node, opts = {}) {
+  const { theme = 'unicode', details = false, includeSummary = true, icons = null } = opts;
   if (node.isSensitive) return `${node.name} (hidden)`;
 
-  let name = theme === 'emoji' ? `${getIcon(node)}${node.name}` : node.name;
+  const iconStr = theme === 'emoji' ? getIcon(node, { icons }) : '';
+  let name = `${iconStr}${node.name}`;
 
   if (node.isSymlink && node.symlinkTarget) name += ` → ${node.symlinkTarget}`;
   if (node.collapsed) name += ` (${node.collapsedCount} files)`;
   if (node.isEmpty && node.children !== undefined) name += ' [empty]';
 
+  const metaParts = [];
+
   if (details && !node.children && node.size !== undefined) {
-    const parts = [formatSize(node.size)];
-    if (node.lineCount) parts.push(`${node.lineCount} lines`);
-    name += ` (${parts.join(', ')})`;
+    metaParts.push(formatSize(node.size));
+    if (node.lineCount) metaParts.push(`${node.lineCount} lines`);
+  }
+
+  if (node.permissions) metaParts.push(node.permissions);
+  if (node.owner) metaParts.push(`owner:${node.owner}`);
+  if (node.modified) metaParts.push(`mod:${node.modified}`);
+  if (node.created) metaParts.push(`created:${node.created}`);
+  if (node.hash) metaParts.push(`hash:${node.hash.slice(0, 8)}`);
+
+  if (metaParts.length > 0) {
+    name += ` (${metaParts.join(', ')})`;
   }
 
   if (includeSummary && node.summary) {
@@ -107,12 +85,12 @@ function renderName(node, { theme = 'unicode', details = false, includeSummary =
 function buildTreeText(node, options = {}, prefix = '', isLast = true, isRoot = true) {
   if (!node) return '';
   const { theme = 'unicode', details = false } = options;
-  const t = THEMES[theme] || THEMES.unicode;
+  const t = loadTheme(theme);
   const lines = [];
 
   const connector = isRoot ? '' : (isLast ? `${t.last}${t.dash} ` : `${t.tee}${t.dash} `);
-  const baseLine = `${prefix}${connector}${renderName(node, { theme, details, includeSummary: false })}`;
-  
+  const baseLine = `${prefix}${connector}${renderName(node, { ...options, includeSummary: false })}`;
+
   let line = baseLine;
   if (node.summary) {
     const padLen = Math.max(3, 40 - baseLine.length);
@@ -150,7 +128,7 @@ const C  = '\x1b[36m';  // cyan (symlink)
 function buildColoredTreeText(node, options = {}, prefix = '', isLast = true, isRoot = true) {
   if (!node) return '';
   const { theme = 'unicode', details = false } = options;
-  const t = THEMES[theme] || THEMES.unicode;
+  const t = loadTheme(theme);
   const lines = [];
 
   const connector = isRoot
@@ -160,12 +138,10 @@ function buildColoredTreeText(node, options = {}, prefix = '', isLast = true, is
       : `${G}${t.tee}${t.dash} ${R}`;
 
   // Re-colorize the pipe characters in prefix
-  const coloredPrefix = prefix.replace(
-    new RegExp(t.pipe.replace(/[|\\]/g, '\\$&'), 'g'),
-    `${G}${t.pipe}${R}`
-  );
+  const pipeRegex = t.pipe ? new RegExp(t.pipe.replace(/[|\\]/g, '\\$&'), 'g') : /\|/g;
+  const coloredPrefix = prefix.replace(pipeRegex, `${G}${t.pipe}${R}`);
 
-  const baseName = renderName(node, { theme, details, includeSummary: false });
+  const baseName = renderName(node, { ...options, includeSummary: false });
   const rawLineLength = `${prefix}${isRoot ? '' : (isLast ? `${t.last}${t.dash} ` : `${t.tee}${t.dash} `)}${baseName}`.length;
 
   let summaryStr = '';
@@ -197,4 +173,5 @@ function buildColoredTreeText(node, options = {}, prefix = '', isLast = true, is
   return lines.join('\n');
 }
 
-module.exports = { buildTreeText, buildColoredTreeText, formatSize, getIcon, renderName, THEMES };
+module.exports = { buildTreeText, buildColoredTreeText, formatSize, getIcon, renderName, THEMES, FILE_ICONS };
+

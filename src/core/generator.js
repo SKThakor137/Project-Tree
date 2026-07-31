@@ -53,9 +53,19 @@ function generateTree(options = {}) {
     summarize   = false,
     flow        = false,
     writeFile   = true,
+    modified    = false,
+    created     = false,
+    permissions = false,
+    owner       = false,
+    hash        = null,
+    sort        = null,
+    sortOrder   = 'asc',
+    icons       = null,
+    maxFiles    = Infinity,
+    maxFolders  = Infinity,
   } = options;
 
-  const ignoreFn = buildIgnoreMatcher(rootDir, undefined, noIgnore);
+  const ignoreFn = buildIgnoreMatcher(rootDir, undefined, noIgnore, { excludePattern: exclude });
   const maxSizeBytes = parseSize(maxSize);
 
   const tree = scan(rootDir, {
@@ -69,11 +79,21 @@ function generateTree(options = {}) {
     collapseThreshold,
     summarize,
     architecture: options.architecture,
+    modified,
+    created,
+    permissions,
+    owner,
+    hash,
+    sort,
+    sortOrder,
+    maxFiles,
+    maxFolders,
+    signal: options.signal,
   });
 
   if (!tree) throw new Error(`Could not read directory: ${rootDir}`);
 
-  const fmtOpts = { theme, details };
+  const fmtOpts = { theme, details, icons, modified, created, permissions, owner, hash };
   const treeText = buildTreeText(tree, fmtOpts);
   const coloredTreeText = buildColoredTreeText(tree, fmtOpts);
   const stats = computeStats(tree);

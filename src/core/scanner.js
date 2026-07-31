@@ -8,6 +8,8 @@ const path = require('path');
 const { isSensitive } = require('../utils/sensitive.js');
 const { extractFileSummary } = require('../features/summarize.js');
 const { parseFile } = require('./analyzer.js');
+const { sortTree } = require('./sorter.js');
+const { hashFileSync } = require('../utils/hasher.js');
 
 /** Default exclusion pattern (kept for backward compatibility). */
 const DEFAULT_EXCLUDE = /node_modules|\.next|\.git|dist|build|coverage|\.turbo|venv|\.venv|__pycache__|\.dart_tool|\.cache|\.pytest_cache|\.idea|\.vscode/;
@@ -82,38 +84,58 @@ function compressTree(node) {
 }
 
 /**
+ * Format file mode octal permissions to rwxr-xr-x format.
+ * @param {number} mode
+ * @returns {string}
+ */
+function formatPermissions(mode) {
+  const octal = (mode & 0o777).toString(8).padStart(3, '0');
+  const map = { '0': '---', '1': '--x', '2': '-w-', '3': '-wx', '4': 'r--', '5': 'r-x', '6': 'rw-', '7': 'rwx' };
+  return octal.split('').map(c => map[c] || '---').join('');
+}
+
+/**
  * Scan a directory tree, returning a ScanNode hierarchy.
  *
  * @param {string} rootDir
  * @param {Object} [options]
- * @param {RegExp}   [options.exclude]            Hard-exclude regex.
- * @param {number}   [options.maxDepth]           Max depth (default: Infinity).
- * @param {Function} [options.ignoreFn]           Gitignore matcher.
- * @param {boolean}  [options.includeBinary]      Include binary files.
- * @param {boolean}  [options.showSensitive]      Show sensitive files.
- * @param {number}   [options.maxSize]            Skip files larger than bytes.
- * @param {boolean}  [options.compress]           Compress single-child dirs.
- * @param {number}   [options.collapseThreshold]  Collapse dirs with > N children.
- * @param {boolean}  [options.summarize]          Extract top comment file summary.
  * @returns {ScanNode|null}
  */
 function scan(rootDir, options = {}) {
   const {
-    exclude        = DEFAULT_EXCLUDE,
-    maxDepth       = Infinity,
-    ignoreFn       = () => false,
-    includeBinary  = false,
-    showSensitive  = false,
-    maxSize        = Infinity,
-    compress       = false,
+    exclude           = DEFAULT_EXCLUDE,
+    maxDepth          = Infinity,
+    ignoreFn          = () => false,
+    includeBinary     = false,
+    showSensitive     = false,
+    maxSize           = Infinity,
+    compress          = false,
     collapseThreshold = null,
-    summarize      = false,
+    summarize         = false,
+    modified          = false,
+    created           = false,
+    permissions       = false,
+    owner             = false,
+    hash              = null,
+    sort              = null,
+    sortOrder         = 'asc',
+    maxFiles          = Infinity,
+    maxFolders        = Infinity,
+    signal            = null,
   } = options;
 
   const absoluteRoot = path.resolve(rootDir);
   if (!fs.existsSync(absoluteRoot)) return null;
 
+  const visitedInodes = new Set();
+  let fileCountAcc = 0;
+  let folderCountAcc = 0;
+
   function buildNode(itemPath, currentDepth) {
+    if (signal && signal.aborted) {
+      throw new Error('Scan aborted by AbortSignal');
+    }
+
     const name = path.basename(itemPath);
     const normalizedPath = itemPath.replace(/\\/g, '/');
 
@@ -122,7 +144,7 @@ function scan(rootDir, options = {}) {
 
     // Gitignore / ignore file check
     const relPath = path.relative(absoluteRoot, itemPath).replace(/\\/g, '/');
-    if (relPath && ignoreFn(relPath)) return null;
+    if (relPath && ignoreFn(relPath, false)) return null;
 
     // Sensitive file
     const sensitive = isSensitive(name);
@@ -136,24 +158,66 @@ function scan(rootDir, options = {}) {
     let stat;
     try { stat = fs.lstatSync(itemPath); } catch (_) { return null; }
 
+    // Cycle detection via inode
+    if (stat.ino && stat.dev) {
+      const inodeId = `${stat.dev}:${stat.ino}`;
+      if (visitedInodes.has(inodeId)) {
+        // Already visited (circular symlink)
+        return {
+          name: `${name} (circular link)`,
+          path: itemPath,
+          isSymlink: true,
+          isEmpty: true,
+          isSensitive: false,
+          isBinary: false,
+        };
+      }
+      visitedInodes.add(inodeId);
+    }
+
     const isSymlink = stat.isSymbolicLink();
     let symlinkTarget;
     if (isSymlink) {
       try { symlinkTarget = fs.readlinkSync(itemPath); } catch (_) { symlinkTarget = '?'; }
     }
 
+    // Common metadata
+    const extraMeta = {};
+    if (modified) {
+      extraMeta.modified = stat.mtime ? stat.mtime.toISOString().slice(0, 10) : undefined;
+      extraMeta.modifiedMs = stat.mtimeMs;
+    }
+    if (created) {
+      extraMeta.created = stat.birthtime ? stat.birthtime.toISOString().slice(0, 10) : undefined;
+      extraMeta.createdMs = stat.birthtimeMs;
+    }
+    if (permissions) {
+      extraMeta.permissions = formatPermissions(stat.mode);
+    }
+    if (owner && stat.uid !== undefined) {
+      extraMeta.owner = `${stat.uid}:${stat.gid}`;
+    }
+
     // File node
     if (stat.isFile() || (isSymlink && !stat.isDirectory())) {
+      if (fileCountAcc >= maxFiles) return null;
       const binary = isBinaryFile(name);
       if (binary && !includeBinary) return null;
       if (stat.size > maxSize) return null;
+
+      fileCountAcc++;
 
       const fileNode = {
         name, path: itemPath, size: stat.size,
         ext: path.extname(name).toLowerCase(),
         isSymlink, symlinkTarget,
         isEmpty: false, isSensitive: false, isBinary: binary,
+        ...extraMeta,
       };
+
+      if (hash && !binary && stat.size < 5 * 1024 * 1024) {
+        fileNode.hash = hashFileSync(itemPath, hash);
+      }
 
       // Count lines for non-binary files under 1MB (for --details display)
       if (!binary && stat.size < 1024 * 1024) {
@@ -183,7 +247,14 @@ function scan(rootDir, options = {}) {
 
     // Directory node
     if (stat.isDirectory() || isSymlink) {
-      const node = { name, path: itemPath, isSymlink, symlinkTarget, isEmpty: false, isSensitive: false, isBinary: false };
+      if (folderCountAcc >= maxFolders && currentDepth > 0) return null;
+      if (currentDepth > 0) folderCountAcc++;
+
+      const node = {
+        name, path: itemPath, isSymlink, symlinkTarget,
+        isEmpty: false, isSensitive: false, isBinary: false,
+        ...extraMeta,
+      };
 
       if (currentDepth >= maxDepth) {
         node.children = [];
@@ -216,6 +287,11 @@ function scan(rootDir, options = {}) {
   let root = buildNode(absoluteRoot, 0);
   if (!root) return null;
 
+  // Apply sorting if requested
+  if (sort) {
+    sortTree(root, sort, sortOrder);
+  }
+
   // Post-processing: compress first (merge single-child dirs), then collapse
   if (compress) root = compressTree(root);
   if (collapseThreshold !== null) root = collapseTree(root, collapseThreshold);
@@ -242,13 +318,9 @@ function countFiles(nodes) {
 function collapseTree(node, threshold) {
   if (!node.children) return node;
 
-  // Recursively collapse children first
   const processedChildren = node.children.map(c => collapseTree(c, threshold));
-
-  // Count only direct file children (not subdirectories)
   const directFileCount = processedChildren.filter(c => !c.children).length;
 
-  // Collapse if total direct children exceed threshold
   if (processedChildren.length > threshold) {
     const fileCount = countFiles(processedChildren);
     return {
@@ -263,4 +335,3 @@ function collapseTree(node, threshold) {
 }
 
 module.exports = { scan, isBinaryFile, parseSize, compressTree, collapseTree, DEFAULT_EXCLUDE, BINARY_EXTENSIONS };
-

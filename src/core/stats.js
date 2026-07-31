@@ -61,6 +61,7 @@ function getDirSize(node) {
  */
 function computeStats(root) {
   let dirs = 0, files = 0, totalSize = 0;
+  let emptyDirs = 0, emptyFiles = 0, hiddenFiles = 0, symlinkCount = 0;
   let largestFile = null;
   let maxDepth = 0, totalDepth = 0, fileCount = 0;
   const extCount = {}, langCount = {};
@@ -68,12 +69,17 @@ function computeStats(root) {
 
   function traverse(node, depth) {
     if (depth > 0) {
+      if (node.isSymlink) symlinkCount++;
+      if (node.name.startsWith('.')) hiddenFiles++;
+
       if (node.children !== undefined) {
         dirs++;
+        if (node.children.length === 0) emptyDirs++;
         dirSizes.push({ name: node.path || node.name, size: getDirSize(node) });
       } else {
         files++;
         const size = node.size || 0;
+        if (size === 0) emptyFiles++;
         totalSize += size;
         totalDepth += depth;
         fileCount++;
@@ -119,6 +125,10 @@ function computeStats(root) {
   return {
     dirs,
     files,
+    emptyDirs,
+    emptyFiles,
+    hiddenFiles,
+    symlinkCount,
     totalSize,
     totalSizeText: formatSize(totalSize),
     largestFile,

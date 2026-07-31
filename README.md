@@ -2,10 +2,10 @@
   <a href="https://github.com/SKThakor137/Project-Tree">
     <img src="assets/banner.svg" alt="project-tree-md Banner" width="100%" />
   </a>
-  <h1 align="center">🌳 project-tree-md</h1>
+  <h1 align="center">🌳 project-tree-md v3.0</h1>
   <p align="center">
-    <strong>The Ultimate AI-Ready Project Intelligence & 2D/3D Code Visualizer Suite</strong><br>
-    <em>Instantly map codebases for Cursor, Claude, ChatGPT & Developers. Generates 2D & 3D Interactive Code Graphs, Markdown, JSON, HTML, SVG, Mermaid & ZIP Bundles in 1-Second. Zero Dependencies.</em>
+    <strong>Enterprise AI-Ready Project Intelligence & 2D/3D Code Visualizer Suite</strong><br>
+    <em>Instantly map codebases for Cursor, Claude, ChatGPT & Developers. Generates 2D & 3D Interactive Code Graphs, Markdown, JSON, HTML, SVG, Mermaid, CSV, TSV, XML, YAML, PlantUML & ZIP Bundles in 1-Second. Zero Dependencies. Node.js 20+.</em>
   </p>
   <p align="center">
     <a href="https://www.npmjs.com/package/project-tree-md"><img src="https://img.shields.io/npm/v/project-tree-md.svg?style=for-the-badge&color=58a6ff" alt="npm version" /></a>
@@ -20,8 +20,8 @@
   <a href="#-quick-start">Quick Start</a> •
   <a href="#-universal-code-relationship-visualizer----visualize">Interactive Code Graph</a> •
   <a href="#-why-project-tree-md">Why Us?</a> •
+  <a href="#-v30-enterprise-features">v3.0 Features</a> •
   <a href="#-bundle-export-workflow---bundle">ZIP Bundles</a> •
-  <a href="#-architecture-flow-engine---flow">Architecture Flow</a> •
   <a href="#-programmatic-api">API Usage</a>
 </p>
 
@@ -83,21 +83,21 @@ Most directory tree generators only print basic text folders. **`project-tree-md
                                          │
        ┌──────────────────┬──────────────┼──────────────┬──────────────────┬──────────────────┐
        │                  │              │              │                  │                  │
- 🌐 Code Visualizer 📄 Markdown Tree 📊 JSON & SVG  📦 ZIP Bundle  🤖 AI Context   🌐 HTML Dashboard
+ 🌐 Code Visualizer 📄 Markdown Tree 📊 9 Export Formats 📦 ZIP Bundle  🤖 AI Context   🌐 HTML Dashboard
 ```
 
 ### ⚡ Key Capabilities
 
-* 🌐 **Universal 2D & 3D Code Relationship Visualizer (`--visualize`)**: Generate a unified 2D canvas & 3D WebGL interactive visualizer (`CODE_GRAPH.html`) with instant mode switching for codebases in 20+ programming languages.
-* 📋 **Graph JSON Export (`--graph-json`)**: Output structured node and edge relationship models for complete graph reconstruction.
-* 📦 **ZIP Analysis Bundles (`--bundle`)**: Export up to 20 analysis reports (Markdown, Interactive Graph, JSON, HTML, SVG, Mermaid, AI Context, Health Metrics, Component Maps, Dead Code) into a single `project-analysis.zip` archive.
-* 💻 **In-Browser HTML Download Center (`--html`)**: Standalone HTML dashboard with sticky real-time search, Dark/Light mode, and 1-click browser ZIP file downloads.
-* ⚡ **Architecture Flow Engine (`--flow`)**: Scans imports across JS/TS, Python, Go, PHP, C/C++, and React/Next.js to construct execution flow maps.
-* 🧹 **Dead Code & Circular Dependency Detection (`--architecture`)**: Detects unused files, dead components, cyclomatic complexity, and circular import loops.
-* 🤖 **AI-Ready Context & Token Counter (`--ai`, `--tokens`)**: Generates structured prompt documents for LLMs with token estimation and cost calculations.
-* 📝 **File Comment Summarizer (`--summarize`)**: Parses top file headers inline to describe module purposes right next to file trees.
-* 📁 **Monorepo & 30+ Stack Auto-Detection**: Native support for TurboRepo, Nx, pnpm, Yarn, Lerna, Docker, CI/CD, React, Vue, Angular, Svelte, Next.js, and more.
-* 🔒 **Gitignore & Sensitive File Shield**: Automatically respects `.gitignore`, `.npmignore`, and masks `.env`, secrets, and private keys.
+* 🌐 **Universal 2D & 3D Code Relationship Visualizer (`--visualize`)**: Generate a unified 2D canvas & 3D WebGL interactive visualizer (`CODE_GRAPH.html`) with instant mode switching.
+* 📄 **9 Export Formats**: Export as Markdown, JSON, HTML, SVG, Mermaid, **CSV**, **TSV**, **XML**, **YAML**, and **PlantUML**.
+* 🎨 **Custom Theme Engine (`--theme`)**: 12 built-in presets (`unicode`, `ascii`, `box`, `emoji`, `compact`, `rounded`, `double`, `minimal`, `classic`, `dotted`, `heavy`, `thin`) + user JSON theme loading.
+* 🎯 **Custom Icon Engine (`--icons`)**: 100+ file extensions mapped with emoji icons + custom JSON override support.
+* 🔀 **Tree Sorter Engine (`--sort`)**: 8 sorting modes (`alpha`, `folders-first`, `files-first`, `extension`, `size`, `modified`, `created`, `natural`).
+* 🔎 **Duplicate File Detector (`--duplicates`)**: Finds duplicate files across the repository by filename or content hash (`md5`, `sha1`, `sha256`).
+* ⚙️ **Config File Support**: Automatically loads settings from `project-tree.config.json`, `project-tree.config.js`, `.projecttreerc`, or `package.json#projectTree`.
+* 🔌 **Plugin API**: Extensible hooks for custom renderers, scanner transformers, and tree formatters.
+* 🛡️ **Nested `.gitignore` Shield**: Discovers nested `.gitignore` files recursively and respects subfolder ignore rules.
+* 📦 **ZIP Analysis Bundles (`--bundle`)**: Export analysis reports into a single `project-analysis.zip` archive.
 * ⚡ **Zero Runtime Dependencies**: Built 100% with Node.js standard modules. Ultra-fast, lightweight, and safe.
 
 ---
@@ -107,17 +107,15 @@ Most directory tree generators only print basic text folders. **`project-tree-md
 | Feature | `project-tree-md` | `tree` (Unix) | `tree-cli` | `directory-tree` |
 | :--- | :---: | :---: | :---: | :---: |
 | **Interactive Code Visualizer** | ✅ **2D Canvas & 3D WebGL** | ❌ No | ❌ No | ❌ No |
-| **Universal Graph JSON** | ✅ **Built-in** | ❌ No | ❌ No | ❌ No |
-| **Markdown Export** | ✅ **Built-in** | ❌ No | ❌ No | ❌ No |
+| **Export Formats** | ✅ **9 Formats** (MD, JSON, HTML, SVG, Mermaid, CSV, TSV, XML, YAML, PlantUML) | ❌ Text only | ❌ MD/JSON | ❌ JSON |
 | **Zero Dependencies** | ✅ **100% Zero** | ✅ System | ❌ Heavy | ❌ Heavy |
+| **Custom Themes & Icons** | ✅ **12 Presets + JSON** | ❌ No | ❌ No | ❌ No |
+| **Sorting Strategies** | ✅ **8 Modes** (Natural, Folders-first, Size, Dates) | ⚠️ Basic | ❌ No | ❌ No |
+| **Duplicate File Finder** | ✅ **ByName & Hash** | ❌ No | ❌ No | ❌ No |
+| **Config & Plugin System** | ✅ **JSON/JS Config + API** | ❌ No | ❌ No | ❌ No |
 | **ZIP Bundle Export** | ✅ **1-Click ZIP** | ❌ No | ❌ No | ❌ No |
-| **HTML Download Center** | ✅ **Interactive** | ❌ No | ❌ No | ❌ No |
 | **AI LLM Context & Tokens** | ✅ **Built-in** | ❌ No | ❌ No | ❌ No |
-| **Architecture Flow Engine** | ✅ **Multi-Language** | ❌ No | ❌ No | ❌ No |
-| **Dead Code & Circular Deps** | ✅ **Built-in** | ❌ No | ❌ No | ❌ No |
-| **Comment Summarizer** | ✅ **Inline Headers** | ❌ No | ❌ No | ❌ No |
-| **Gitignore Support** | ✅ **Auto-Parsed** | ❌ Manual | ⚠️ Limited | ❌ No |
-| **Project Stack Detection** | ✅ **30+ Tools** | ❌ No | ❌ No | ❌ No |
+| **Nested Gitignore Support** | ✅ **Subfolder-aware** | ❌ Manual | ⚠️ Limited | ❌ No |
 
 ---
 
@@ -130,125 +128,120 @@ npx ptree --visualize
 
 # Export Universal Graph Model JSON
 npx ptree --graph-json
-
-# Export graph and JSON model together
-npx ptree --visualize --graph-json
 ```
 
-### 2. Default Run (Generates `PROJECT_STRUCTURE.md`)
+### 2. Export Formats (CSV, TSV, XML, YAML, PlantUML)
 ```bash
-npx ptree
+# Export as CSV flat table
+npx ptree --csv
+
+# Export as YAML tree
+npx ptree --yaml
+
+# Export as PlantUML diagram
+npx ptree --plantuml
 ```
 
-### 3. Generate Full ZIP Analysis Bundle
+### 3. Tree Sorting & File Hashing
 ```bash
-# Package all reports (including CODE_GRAPH.html & JSON) into project-analysis.zip
-npx ptree --bundle
+# Sort folders first, then natural alpha
+npx ptree --sort folders-first
 
-# Custom ZIP containing only graph, HTML, JSON & SVG reports
-npx ptree --bundle graph,html,json,svg
+# Sort by file size descending
+npx ptree --sort size --sort-order desc
 
-# Target custom output folder
-npx ptree --bundle --output-dir dist/reports/
+# Include file permissions, modification date, and SHA-256 hash
+npx ptree --permissions --modified --hash sha256
 ```
 
-### 4. Selective Format Exports
+### 4. Duplicate File Detection
 ```bash
-# Export only HTML, JSON, and SVG files
-npx ptree --export html,json,svg --output-dir reports/
+# Find duplicate filenames across project
+npx ptree --duplicates
 
-# Export all individual reports into folder
-npx ptree --export-all
+# Find duplicate files by SHA-256 content hash
+npx ptree --duplicates --hash sha256
 ```
 
-### 5. Architecture Execution Flow & Role Mapping
+### 5. Custom Themes & Icons
 ```bash
-npx ptree --flow
-```
+# Use rounded box-drawing characters
+npx ptree --theme rounded
 
-### 6. AI LLM Context Generation & Token Estimation
-```bash
-npx ptree --ai --tokens
+# Use custom theme JSON
+npx ptree --theme ./my-theme.json --icons ./my-icons.json
 ```
 
 ---
 
 ## 📦 Bundle Export System (`--bundle`)
 
-Generate a comprehensive project analysis package containing up to 20 report files:
+Generate a comprehensive project analysis package containing report files:
 
 ```bash
 npx ptree --bundle --output-dir reports/
 ```
 
-```text
-project-analysis.zip
-│
-├── CODE_GRAPH.html           # 2D Interactive Code Relationship Graph Visualizer
-├── CODE_GRAPH_3D.html        # 3D WebGL Immersive Code Graph Visualizer
-├── CODE_GRAPH.json           # Universal Graph JSON Model
-├── PROJECT_STRUCTURE.md      # Standard Markdown project tree
-├── PROJECT_STRUCTURE.json    # Full JSON tree hierarchy & metadata
-├── PROJECT_STRUCTURE.html    # Interactive HTML Dashboard & Download Center
-├── PROJECT_STRUCTURE.svg     # Vector graphic visual tree diagram
-├── PROJECT_STRUCTURE.mmd     # Mermaid flowchart definition
-├── AI_CONTEXT.md             # LLM-ready context document
-├── COMPONENT_USAGE.json      # React/Vue component usage map
-├── IMPORT_GRAPH.json         # Module import dependency map
-├── EXPORT_GRAPH.json         # File export definitions map
-├── DEAD_CODE.json            # Unused files & dead code report
-├── UNUSED_COMPONENTS.json    # List of unused components
-├── CIRCULAR_DEPENDENCIES.json# Circular import loop detection
-├── PROJECT_STATS.json        # Deep codebase statistics
-├── PROJECT_HEALTH.json       # Code health metrics & grade (A-D)
-├── FRAMEWORK_INFO.json       # Project environment & stack info
-├── LANGUAGE_BREAKDOWN.json   # Language file & line breakdown
-├── DEPENDENCY_HEATMAP.json   # Most imported/used modules
-├── README_ANALYSIS.md        # Executive markdown report
-└── manifest.json             # Bundle metadata & timestamp
-```
-
 ---
 
-## 🎯 Complete CLI Options
+## 🎯 Complete CLI Options (v3.0)
 
 ```text
-project-tree-md — AI-Ready Project Analysis Suite
+project-tree-md — Enterprise AI-Ready Project Analysis Suite (v3.0)
 
 Usage:
   npx ptree [options]
   npx ptree compare <pathA> <pathB>
 
-Visualizer & Graph Options:
-  --visualize, --graph        Generate 2D & 3D Interactive Code Relationship Graph HTML (CODE_GRAPH.html)
-  --graph-json                Export universal graph model JSON (CODE_GRAPH.json)
-
 Bundle & Export System:
-  --bundle [list]         Generate ZIP package with all or selected reports (e.g. --bundle graph,html,json)
-  --export [list]         Export selected reports to directory (e.g. --export graph,html,json)
+  --bundle [list]         Generate ZIP package with all or selected reports (e.g. --bundle html,json,svg)
+  --export [list]         Export selected reports to directory (e.g. --export html,json)
   --export-all            Export all individual analysis reports
   --output-dir <dir>      Output directory for exports and ZIP bundles
   --no-write, --stdout    Print to console without writing default output files
 
-Output Options:
+Output & Tree Customization:
   -o, --out <file>        Output filename              (default: PROJECT_STRUCTURE.md)
   -L, --depth <n>         Max depth to traverse        (default: unlimited)
   -I, --exclude <regex>   Custom exclude pattern       (default: standard ignores)
-  --no-copy               Do not copy to clipboard
-  --theme <name>          Tree theme                   (unicode|ascii|emoji|box)
+  --theme <name|path>     Tree theme                   (unicode|ascii|emoji|box|rounded|double|minimal)
+  --icons <path>          Custom icons JSON file       (override extension -> icon mapping)
+  --sort <mode>           Sort entries                 (alpha|folders-first|files-first|extension|size|modified|created|natural)
+  --sort-order <asc|desc> Sort direction              (default: asc)
   --details               Show file size & extension
   --summarize             Extract & show inline file comment summaries
   --flow                  Generate architecture execution flow & role map
+  --visualize, --graph    Generate 2D & 3D Interactive Code Relationship Graph HTML
+  --graph-json            Export universal graph model as JSON
   --compress              Compress single-child dirs
   --collapse <n>          Collapse dirs with >n files
   --dashboard             Show rich stats dashboard
   --architecture          Enable advanced architecture parsing & metrics
+
+File Metadata & Hashing:
+  --hash [algo]           Compute file content hashes  (md5|sha1|sha256)
+  --permissions           Show file permissions        (rwxr-xr-x format)
+  --owner                 Show file owner UID/GID
+  --modified              Show last modified dates
+  --created               Show file creation dates
+  --duplicates            Detect & report duplicate files (by name or hash)
 
 Export Formats:
   --json                  Export as JSON
   --html                  Export as collapsible HTML with Download Center
   --svg                   Export as SVG diagram
   --mermaid               Export as Mermaid graph
+  --csv                   Export as CSV flat table
+  --tsv                   Export as TSV flat table
+  --xml                   Export as well-formed XML
+  --yaml                  Export as YAML document
+  --plantuml              Export as PlantUML diagram
+
+Limits & Controls:
+  --max-files <n>         Stop after scanning N files
+  --max-folders <n>       Stop after scanning N folders
+  --config <path>         Path to custom config file
+  --respect-ignore        Respect nested .gitignore files
 
 AI Features:
   --ai                    Generate AI context document
@@ -256,6 +249,7 @@ AI Features:
   --tokens                Output AI context token count & cost estimation
 
 Other Options:
+  -i, --interactive       Interactive guided setup
   -h, --help              Show this help
   -v, --version           Show version
 ```
@@ -271,19 +265,37 @@ const {
   generateTree,
   generateUniversalGraph,
   toGraphVisualizerHtml,
-  toGraph3dVisualizerHtml,
-  toGraphJson,
-  fromGraphJson,
-  generateBundle,
-  exportReports,
-  createZip,
-  generateArchitectureFlow,
-  estimateTokens,
+  toCsv,
+  toTsv,
+  toXml,
+  toYaml,
+  toPlantUml,
+  sortTree,
+  findDuplicatesByName,
+  findDuplicatesByHash,
+  loadConfig,
+  registerRenderer,
 } = require('project-tree-md');
 
-// 1. Generate Universal Graph Model & 2D / 3D Interactive HTML Visualizers
-const graphModel = generateUniversalGraph(process.cwd());
-const graph2dHtml = toGraphVisualizerHtml(graphModel, 'My Project');
+// 1. Generate Tree with Sorter & Metadata
+const result = generateTree({
+  rootDir: process.cwd(),
+  sort: 'folders-first',
+  modified: true,
+  permissions: true,
+  hash: 'sha256',
+});
+
+console.log(result.coloredTreeText);
+
+// 2. Export as YAML & PlantUML
+const yamlString = toYaml(result.tree, result.stats);
+const pumlString = toPlantUml(result.tree, result.stats);
+
+// 3. Find Duplicates
+const duplicates = findDuplicatesByName(result.tree);
+console.log(`Found ${duplicates.length} duplicate file groups`);
+```st graph2dHtml = toGraphVisualizerHtml(graphModel, 'My Project');
 const graph3dHtml = toGraph3dVisualizerHtml(graphModel, 'My Project');
 const graphJson = toGraphJson(graphModel);
 

@@ -26,10 +26,13 @@ const { generateArchitectureFlow } = require('../src/core/architectureFlow.js');
 const { generateBundle } = require('../src/features/bundle.js');
 const { exportReports } = require('../src/features/exporter.js');
 const { toArchitectureFlowHtml } = require('../src/exporters/architectureFlowHtml.js');
-const { generateUniversalGraph } = require('../src/core/universalParser.js');
-const { toGraphVisualizerHtml } = require('../src/exporters/graphVisualizer.js');
-const { toGraphJson } = require('../src/exporters/graphJson.js');
-const { toGraph3dVisualizerHtml } = require('../src/exporters/graph3dVisualizer.js');
+const { toCsv, toTsv } = require('../src/exporters/csv.js');
+const { toXml } = require('../src/exporters/xml.js');
+const { toYaml } = require('../src/exporters/yaml.js');
+const { toPlantUml } = require('../src/exporters/plantuml.js');
+const { loadConfig } = require('../src/core/configLoader.js');
+const { findDuplicatesByName, findDuplicatesByHash, formatDuplicateReport } = require('../src/features/duplicates.js');
+const { loadPluginsFromConfig } = require('../src/core/pluginApi.js');
 
 // ─── Arg Parser ───────────────────────────────────────────────────────────────
 
@@ -57,12 +60,33 @@ function parseArgs(argv) {
     html: false,
     svg: false,
     mermaid: false,
+    csv: false,
+    tsv: false,
+    xml: false,
+    yaml: false,
+    plantuml: false,
     watch: false,
     inject: null,
     compare: null,
     help: false,
     version: false,
     copy: true,
+
+    // New v3.0 Flags
+    sort: null,
+    sortOrder: 'asc',
+    hash: null,
+    permissions: false,
+    owner: false,
+    modified: false,
+    created: false,
+    duplicates: false,
+    icons: null,
+    maxFiles: null,
+    maxFolders: null,
+    bfs: false,
+    config: null,
+    respectIgnore: true,
   };
 
   for (let i = 0; i < argv.length; i++) {
@@ -75,6 +99,22 @@ function parseArgs(argv) {
       case '--no-copy':                args.copy = false; break;
       case '--help': case '-h':        args.help = true; break;
       case '--version': case '-v':     args.version = true; break;
+
+      // New v3.0 flags
+      case '--sort':                   args.sort = argv[++i]; break;
+      case '--sort-order':             args.sortOrder = argv[++i]; break;
+      case '--hash':                   args.hash = argv[++i] || 'sha256'; break;
+      case '--permissions':            args.permissions = true; break;
+      case '--owner':                  args.owner = true; break;
+      case '--modified':               args.modified = true; break;
+      case '--created':                args.created = true; break;
+      case '--duplicates':             args.duplicates = true; break;
+      case '--icons':                  args.icons = argv[++i]; break;
+      case '--max-files':              args.maxFiles = parseInt(argv[++i], 10); break;
+      case '--max-folders':            args.maxFolders = parseInt(argv[++i], 10); break;
+      case '--bfs':                    args.bfs = true; break;
+      case '--config':                 args.config = argv[++i]; break;
+      case '--respect-ignore':         args.respectIgnore = true; break;
 
       // Bundle & Export System Flags & Subcommands
       case 'bundle': case '--bundle': case '--zip': case '--download':
@@ -115,6 +155,11 @@ function parseArgs(argv) {
       case 'html': case '--html':                     args.html = true; break;
       case 'svg': case '--svg':                       args.svg = true; break;
       case 'mermaid': case '--mermaid':               args.mermaid = true; break;
+      case 'csv': case '--csv':                       args.csv = true; break;
+      case 'tsv': case '--tsv':                       args.tsv = true; break;
+      case 'xml': case '--xml':                       args.xml = true; break;
+      case 'yaml': case '--yaml':                     args.yaml = true; break;
+      case 'plantuml': case '--plantuml':             args.plantuml = true; break;
       case '--watch':                                 args.watch = true; break;
       case '--inject':                                args.inject = argv[++i]; break;
       case '--theme':                                 args.theme = argv[++i]; break;
@@ -148,7 +193,7 @@ function parseArgs(argv) {
 
 function printHelp() {
   console.log(`
-${colors.boldCyan('project-tree-md')} — AI-Ready Project Analysis Suite
+${colors.boldCyan('project-tree-md')} — Enterprise AI-Ready Project Analysis Suite (v3.0)
 
 ${colors.bold('Usage:')}
   npx project-tree-md [options]
@@ -161,12 +206,14 @@ ${colors.bold('Bundle & Export System:')}
   --output-dir <dir>      Output directory for exports and ZIP bundles
   --no-write, --stdout    Print to console without writing default output files
 
-${colors.bold('Output Options:')}
+${colors.bold('Output & Tree Customization:')}
   -o, --out <file>        Output filename              ${colors.gray('(default: PROJECT_STRUCTURE.md)')}
   -L, --depth <n>         Max depth to traverse        ${colors.gray('(default: unlimited)')}
   -I, --exclude <regex>   Custom exclude pattern       ${colors.gray('(default: standard ignores)')}
-  --no-copy               Do not copy to clipboard
-  --theme <name>          Tree theme                   ${colors.gray('(default: emoji) (unicode|ascii|emoji|box)')}
+  --theme <name|path>     Tree theme                   ${colors.gray('(unicode|ascii|emoji|box|rounded|double|minimal)')}
+  --icons <path>          Custom icons JSON file       ${colors.gray('(override extension -> icon mapping)')}
+  --sort <mode>           Sort entries                 ${colors.gray('(alpha|folders-first|files-first|extension|size|modified|created|natural)')}
+  --sort-order <asc|desc> Sort direction              ${colors.gray('(default: asc)')}
   --details               Show file size & extension
   --summarize             Extract & show inline file comment summaries
   --flow                  Generate architecture execution flow & role map
@@ -177,11 +224,30 @@ ${colors.bold('Output Options:')}
   --dashboard             Show rich stats dashboard
   --architecture          Enable advanced architecture parsing & metrics
 
+${colors.bold('File Metadata & Hashing:')}
+  --hash [algo]           Compute file content hashes  ${colors.gray('(md5|sha1|sha256)')}
+  --permissions           Show file permissions        ${colors.gray('(rwxr-xr-x format)')}
+  --owner                 Show file owner UID/GID
+  --modified              Show last modified dates
+  --created               Show file creation dates
+  --duplicates            Detect & report duplicate files (by name or hash)
+
 ${colors.bold('Export Formats:')}
   --json                  Export as JSON
   --html                  Export as collapsible HTML with Download Center
   --svg                   Export as SVG diagram
   --mermaid               Export as Mermaid graph
+  --csv                   Export as CSV flat table
+  --tsv                   Export as TSV flat table
+  --xml                   Export as well-formed XML
+  --yaml                  Export as YAML document
+  --plantuml              Export as PlantUML diagram
+
+${colors.bold('Limits & Controls:')}
+  --max-files <n>         Stop after scanning N files
+  --max-folders <n>       Stop after scanning N folders
+  --config <path>         Path to custom config file
+  --respect-ignore        Respect nested .gitignore files
 
 ${colors.bold('AI Features:')}
   --ai                    Generate AI context document
@@ -189,6 +255,7 @@ ${colors.bold('AI Features:')}
   --tokens                Output AI context token count & cost estimation
 
 ${colors.bold('Other Options:')}
+  -i, --interactive       Interactive guided setup
   -h, --help              Show this help
   -v, --version           Show version
 `);
@@ -231,9 +298,22 @@ function runInteractive() {
 
 // ─── Core Generate ────────────────────────────────────────────────────────────
 
-function runGenerate(args) {
+function runGenerate(cliArgs) {
   try {
-    const rootDir = args.rootDir || process.cwd();
+    const rootDir = cliArgs.rootDir || process.cwd();
+
+    // Load config (CLI args override config file)
+    const { config: mergedConfig, source: configSource } = loadConfig(rootDir, cliArgs);
+    const args = { ...mergedConfig, ...cliArgs };
+
+    if (configSource && process.env.VERBOSE) {
+      console.log(colors.dim(`Loaded config from ${configSource}`));
+    }
+
+    // Load plugins if configured
+    if (args.plugins) {
+      loadPluginsFromConfig(args.plugins, rootDir);
+    }
 
     // Preserve 100% existing functionality: PROJECT_STRUCTURE.md is always written by default unless --no-write is passed
     const shouldWriteMarkdown = !args.noWrite;
@@ -258,10 +338,29 @@ function runGenerate(args) {
       flow: args.flow,
       architecture: isArchNeeded,
       writeFile: shouldWriteMarkdown,
+      modified: args.modified,
+      created: args.created,
+      permissions: args.permissions,
+      owner: args.owner,
+      hash: args.hash,
+      sort: args.sort,
+      sortOrder: args.sortOrder,
+      icons: args.icons,
+      maxFiles: args.maxFiles,
+      maxFolders: args.maxFolders,
     });
 
     // Print colorized tree
     console.log('\n' + result.coloredTreeText + '\n');
+
+    // Duplicate Detection Report
+    if (args.duplicates) {
+      const mode = args.hash ? 'hash' : 'name';
+      const dups = mode === 'hash'
+        ? findDuplicatesByHash(result.tree, args.hash)
+        : findDuplicatesByName(result.tree);
+      console.log(formatDuplicateReport(dups, mode) + '\n');
+    }
 
     const outDir = args.outputDir
       ? (path.isAbsolute(args.outputDir) ? args.outputDir : path.join(rootDir, args.outputDir))
@@ -363,6 +462,46 @@ function runGenerate(args) {
       const content = '# Project Structure (Mermaid)\n\n```mermaid\n' + mermaidStr + '\n```\n';
       fs.writeFileSync(mermaidPath, content, 'utf8');
       console.log(colors.success(`Mermaid exported to ${path.relative(process.cwd(), mermaidPath)}`));
+    }
+
+    if (args.csv) {
+      const csvStr = toCsv(result.tree, result.stats, rootDir);
+      const csvName = baseOutName.replace(/\.md$/, '.csv');
+      const csvPath = path.join(outDir, csvName);
+      fs.writeFileSync(csvPath, csvStr, 'utf8');
+      console.log(colors.success(`CSV exported to ${path.relative(process.cwd(), csvPath)}`));
+    }
+
+    if (args.tsv) {
+      const tsvStr = toTsv(result.tree, result.stats, rootDir);
+      const tsvName = baseOutName.replace(/\.md$/, '.tsv');
+      const tsvPath = path.join(outDir, tsvName);
+      fs.writeFileSync(tsvPath, tsvStr, 'utf8');
+      console.log(colors.success(`TSV exported to ${path.relative(process.cwd(), tsvPath)}`));
+    }
+
+    if (args.xml) {
+      const xmlStr = toXml(result.tree, result.stats);
+      const xmlName = baseOutName.replace(/\.md$/, '.xml');
+      const xmlPath = path.join(outDir, xmlName);
+      fs.writeFileSync(xmlPath, xmlStr, 'utf8');
+      console.log(colors.success(`XML exported to ${path.relative(process.cwd(), xmlPath)}`));
+    }
+
+    if (args.yaml) {
+      const yamlStr = toYaml(result.tree, result.stats);
+      const yamlName = baseOutName.replace(/\.md$/, '.yaml');
+      const yamlPath = path.join(outDir, yamlName);
+      fs.writeFileSync(yamlPath, yamlStr, 'utf8');
+      console.log(colors.success(`YAML exported to ${path.relative(process.cwd(), yamlPath)}`));
+    }
+
+    if (args.plantuml) {
+      const pumlStr = toPlantUml(result.tree, result.stats);
+      const pumlName = baseOutName.replace(/\.md$/, '.puml');
+      const pumlPath = path.join(outDir, pumlName);
+      fs.writeFileSync(pumlPath, pumlStr, 'utf8');
+      console.log(colors.success(`PlantUML exported to ${path.relative(process.cwd(), pumlPath)}`));
     }
 
     // AI Context

@@ -16,6 +16,9 @@ function copyToClipboard(text) {
       const r = spawnSync('pbcopy', { input: text, encoding: 'utf8' });
       return r.status === 0;
     } else {
+      // Linux: try wl-copy (Wayland) first, then xclip, then xsel
+      const wlCopy = spawnSync('wl-copy', { input: text, encoding: 'utf8' });
+      if (wlCopy.status === 0) return true;
       const xclip = spawnSync('xclip', ['-selection', 'clipboard'], { input: text, encoding: 'utf8' });
       if (xclip.status === 0) return true;
       const xsel = spawnSync('xsel', ['--clipboard', '--input'], { input: text, encoding: 'utf8' });

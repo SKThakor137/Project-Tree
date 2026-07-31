@@ -34,6 +34,19 @@ const { toGraphVisualizerHtml } = require('./exporters/graphVisualizer.js');
 const { toGraphJson, fromGraphJson } = require('./exporters/graphJson.js');
 const { toGraph3dVisualizerHtml } = require('./exporters/graph3dVisualizer.js');
 
+// New v3.0 modules
+const { loadConfig, findConfigFile } = require('./core/configLoader.js');
+const { sortTree, getSortComparator } = require('./core/sorter.js');
+const { findDuplicatesByName, findDuplicatesByHash, formatDuplicateReport } = require('./features/duplicates.js');
+const { hashFileSync, hashData } = require('./utils/hasher.js');
+const { loadTheme, getPresetNames } = require('./core/themeEngine.js');
+const { createIconResolver } = require('./core/iconEngine.js');
+const { toCsv, toTsv } = require('./exporters/csv.js');
+const { toXml } = require('./exporters/xml.js');
+const { toYaml } = require('./exporters/yaml.js');
+const { toPlantUml } = require('./exporters/plantuml.js');
+const { registerRenderer, registerScannerHook, registerFormatter, loadPlugin } = require('./core/pluginApi.js');
+
 module.exports = {
   // Core (backward-compatible)
   generateTree,
@@ -53,6 +66,11 @@ module.exports = {
   toSvg,
   toMermaid,
   toArchitectureFlowHtml,
+  toCsv,
+  toTsv,
+  toXml,
+  toYaml,
+  toPlantUml,
 
   // Universal Code Relationship Graph (2D & 3D)
   generateUniversalGraph,
@@ -72,6 +90,26 @@ module.exports = {
   calculateCost,
   formatTokenSummary,
   extractFileSummary,
+
+  // Config & Sorter & Hashing & Duplicates (v3.0)
+  loadConfig,
+  findConfigFile,
+  sortTree,
+  getSortComparator,
+  findDuplicatesByName,
+  findDuplicatesByHash,
+  formatDuplicateReport,
+  hashFileSync,
+  hashData,
+
+  // Custom Themes & Icons & Plugins (v3.0)
+  loadTheme,
+  getPresetNames,
+  createIconResolver,
+  registerRenderer,
+  registerScannerHook,
+  registerFormatter,
+  loadPlugin,
 
   // Download & Export System
   createZip,
