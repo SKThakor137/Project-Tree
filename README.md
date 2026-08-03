@@ -27,28 +27,15 @@
 
 ---
 
-## 🚀 Instant Usage (No Install Required)
+## 🚀 Quick Start (No Install Required)
 
-### 1. Simple Markdown Tree (Default)
-Generate `PROJECT_STRUCTURE.md` and copy project tree to clipboard immediately:
+Run directly in any project folder — no global installation needed:
 
-```bash
-npx ptree
-```
-
-### 2. Interactive Horizontal Mind Map (`--mindmap`)
-Generate a dynamic, node-based interactive HTML Mind Map (`PROJECT_MINDMAP.html`):
-
-```bash
-npx ptree --mindmap
-```
-
-### 3. 2D & 3D Interactive Code Relationship Graph (`--visualize`)
-Generate 2D Canvas & 3D WebGL Code Architecture Graph (`CODE_GRAPH.html`):
-
-```bash
-npx ptree --visualize
-```
+| Feature | Command | Output File |
+| :--- | :--- | :--- |
+| 📄 **Simple Markdown Tree** *(Default)* | `npx ptree` | `PROJECT_STRUCTURE.md` *(auto-copies to clipboard)* |
+| 🧠 **Interactive Mind Map** | `npx ptree --mindmap` | `PROJECT_MINDMAP.html` |
+| 🌐 **2D & 3D Code Graph** | `npx ptree --visualize` | `CODE_GRAPH.html` |
 
 ---
 
@@ -60,7 +47,7 @@ Transform your codebase into a clean, horizontal node-based interactive Mind Map
   <img src="assets/react_demo.svg" alt="React Demo Project Tree & Mind Map Preview" width="100%" />
 </p>
 
-### ⚡ Mind Map Features:
+### ⚡ Key Features:
 * 🗺️ **Horizontal Auto-Layout**: Root node on the left, child folders and files expanding elegantly to the right.
 * ➰ **Curved Bezier Connectors**: Smooth cubic Bezier line paths connecting parent nodes to children with adaptive branch color palettes.
 * 🔍 **Pan, Zoom & Collapsible Nodes**: Smooth mouse dragging, wheel zooming, and click-to-toggle expand/collapse nodes with folder item count badges.
@@ -69,7 +56,7 @@ Transform your codebase into a clean, horizontal node-based interactive Mind Map
 
 ---
 
-## 🌐 Universal 2D & 3D Code Relationship Visualizer (`--visualize`)
+## 🌐 2D & 3D Code Architecture Graph (`--visualize`)
 
 Transform any codebase into dynamic, interactive 2D canvas & 3D WebGL graphs showing complete architecture, dependency graphs, state flows, hooks, models, and service relationships — all in a single HTML file (`CODE_GRAPH.html`) with instant mode switching (`🎨 2D | 🌐 3D`)!
 
@@ -77,8 +64,7 @@ Transform any codebase into dynamic, interactive 2D canvas & 3D WebGL graphs sho
   <img src="assets/code_graph_preview.svg" alt="2D & 3D Code Relationship Visualizer Preview" width="100%" />
 </p>
 
-### ⚡ Visualizer Capabilities (`npx ptree --visualize`)
-
+### ⚡ Key Capabilities:
 * 🎨 **Instant 2D & 3D Mode Switcher**: Toggle seamlessly between **2D Flat Canvas** and **3D WebGL Spatial Sphere** views right from the toolbar.
 * 🎨 **5 Layout Engines (2D)**: Switch on-the-fly between **DAG (Sugiyama)**, **Force-Directed (Barnes-Hut)**, **Tree**, **Radial**, and **Horizontal Flow**.
 * 🌌 **3D Force & Particle Link Beams**: Full 3D camera orbit, rotation, pan, zoom, glowing nodes, and directional particle animation flows.
