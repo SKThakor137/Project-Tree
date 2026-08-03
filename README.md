@@ -75,6 +75,10 @@ Transform any codebase into dynamic, interactive 2D canvas & 3D WebGL graphs sho
 
 ### ⚡ Visualizer Capabilities (`npx ptree --visualize`)
 
+<p align="center">
+  <img src="assets/code_graph_preview.svg" alt="2D & 3D Code Relationship Visualizer Preview" width="100%" />
+</p>
+
 * 🎨 **Instant 2D & 3D Mode Switcher**: Toggle seamlessly between **2D Flat Canvas** and **3D WebGL Spatial Sphere** views right from the toolbar.
 * 🎨 **5 Layout Engines (2D)**: Switch on-the-fly between **DAG (Sugiyama)**, **Force-Directed (Barnes-Hut)**, **Tree**, **Radial**, and **Horizontal Flow**.
 * 🌌 **3D Force & Particle Link Beams**: Full 3D camera orbit, rotation, pan, zoom, glowing nodes, and directional particle animation flows.
@@ -89,15 +93,9 @@ Transform any codebase into dynamic, interactive 2D canvas & 3D WebGL graphs sho
 
 Most directory tree generators only print basic text folders. **`project-tree-md` is a complete project intelligence suite** designed for modern developers and AI workflows (ChatGPT, Claude, Gemini, Cursor, Copilot).
 
-```
-                  ┌──────────────────────────────────────────────┐
-                  │               npx ptree                      │
-                  └──────────────────────┬───────────────────────┘
-                                         │
-       ┌──────────────────┬──────────────┼──────────────┬──────────────────┬──────────────────┐
-       │                  │              │              │                  │                  │
- 🌐 Code Visualizer 📄 Markdown Tree 📊 9 Export Formats 📦 ZIP Bundle  🤖 AI Context   🌐 HTML Dashboard
-```
+<p align="center">
+  <img src="assets/features_preview.svg" alt="Project Tree Suite Capabilities Preview" width="100%" />
+</p>
 
 ### ⚡ Key Capabilities
 

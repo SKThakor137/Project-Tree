@@ -1,0 +1,177 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 460" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradients -->
+    <linearGradient id="g-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#090d16" />
+      <stop offset="50%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#050811" />
+    </linearGradient>
+
+    <!-- Glowing Nodes & Lines Gradients -->
+    <linearGradient id="g-purple-cyan" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a855f7" />
+      <stop offset="100%" stop-color="#06b6d4" />
+    </linearGradient>
+
+    <linearGradient id="g-blue-emerald" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#10b981" />
+    </linearGradient>
+
+    <linearGradient id="g-rose-amber" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f43f5e" />
+      <stop offset="100%" stop-color="#f59e0b" />
+    </linearGradient>
+
+    <!-- Glass Cards -->
+    <linearGradient id="g-glass" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="rgba(30, 41, 59, 0.75)" />
+      <stop offset="100%" stop-color="rgba(15, 23, 42, 0.9)" />
+    </linearGradient>
+
+    <!-- Glow Filters -->
+    <filter id="glow-heavy" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    
+    <filter id="glow-subtle" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <style>
+    .t-title { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-weight: 800; fill: #f8fafc; font-size: 15px; }
+    .t-sub { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-weight: 600; fill: #94a3b8; font-size: 12px; }
+    .t-node { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-weight: 700; fill: #ffffff; font-size: 11px; }
+    .t-tag { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-weight: 800; fill: #ffffff; font-size: 9px; }
+    .t-mono { font-family: 'Fira Code', 'Consolas', monospace; font-size: 11px; fill: #cbd5e1; }
+  </style>
+
+  <!-- Background -->
+  <rect width="960" height="460" rx="16" fill="url(#g-bg)" stroke="#1e293b" stroke-width="2" />
+
+  <!-- Radial Background Glows -->
+  <circle cx="240" cy="230" r="180" fill="#6366f1" opacity="0.12" filter="url(#glow-heavy)" />
+  <circle cx="700" cy="230" r="180" fill="#06b6d4" opacity="0.12" filter="url(#glow-heavy)" />
+
+  <!-- Window Header -->
+  <rect x="24" y="20" width="912" height="44" rx="10" fill="rgba(30, 41, 59, 0.6)" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1" />
+  <circle cx="48" cy="42" r="6" fill="#ef4444" />
+  <circle cx="68" cy="42" r="6" fill="#f59e0b" />
+  <circle cx="88" cy="42" r="6" fill="#10b981" />
+  <text x="116" y="47" class="t-title">🌐 Universal 2D &amp; 3D Code Relationship Visualizer (--visualize)</text>
+
+  <!-- Toolbar Toggle Controls -->
+  <rect x="730" y="28" width="190" height="28" rx="14" fill="#0f172a" stroke="#334155" stroke-width="1" />
+  <rect x="734" y="32" width="90" height="20" rx="10" fill="url(#g-purple-cyan)" />
+  <text x="779" y="46" class="t-tag" text-anchor="middle">🎨 2D Flat Canvas</text>
+  <text x="872" y="46" class="t-tag" fill="#94a3b8" text-anchor="middle">🌐 3D Spatial</text>
+
+  <!-- LEFT PANEL: 2D Interactive Architecture Flow -->
+  <g transform="translate(24, 80)">
+    <rect width="440" height="356" rx="12" fill="url(#g-glass)" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1" />
+    <rect x="0" y="0" width="440" height="38" rx="12" fill="rgba(15, 23, 42, 0.7)" />
+    <text x="16" y="24" class="t-title" font-size="13">🎨 2D Directed Architecture Flow (Sugiyama DAG)</text>
+
+    <!-- 2D Connections -->
+    <path d="M 220 85 L 110 160" stroke="#818cf8" stroke-width="2.5" opacity="0.8" stroke-dasharray="4 2" />
+    <path d="M 220 85 L 220 160" stroke="#38bdf8" stroke-width="2.5" opacity="0.8" />
+    <path d="M 220 85 L 330 160" stroke="#34d399" stroke-width="2.5" opacity="0.8" />
+
+    <path d="M 110 195 L 110 270" stroke="#a78bfa" stroke-width="2" />
+    <path d="M 220 195 L 220 270" stroke="#38bdf8" stroke-width="2" />
+    <path d="M 330 195 L 220 270" stroke="#f43f5e" stroke-width="2" />
+    <path d="M 220 305 L 220 325" stroke="#fbbf24" stroke-width="2.5" stroke-dasharray="2 2" />
+
+    <!-- 2D Nodes -->
+    <!-- Root App.jsx -->
+    <g transform="translate(160, 60)">
+      <rect width="120" height="36" rx="10" fill="url(#g-purple-cyan)" filter="url(#glow-subtle)" />
+      <text x="60" y="22" class="t-node" text-anchor="middle">⚡ App.jsx</text>
+      <rect x="95" y="-5" width="30" height="14" rx="7" fill="#1e1b4b" stroke="#818cf8" />
+      <text x="110" y="5" class="t-tag" text-anchor="middle">ENTRY</text>
+    </g>
+
+    <!-- Level 1 Nodes -->
+    <g transform="translate(50, 160)">
+      <rect width="120" height="34" rx="8" fill="#1e1b4b" stroke="#818cf8" stroke-width="1.5" />
+      <text x="60" y="21" class="t-node" text-anchor="middle">🧩 Header.jsx</text>
+    </g>
+
+    <g transform="translate(160, 160)">
+      <rect width="120" height="34" rx="8" fill="#083344" stroke="#38bdf8" stroke-width="1.5" />
+      <text x="60" y="21" class="t-node" text-anchor="middle">📂 Sidebar.jsx</text>
+    </g>
+
+    <g transform="translate(270, 160)">
+      <rect width="120" height="34" rx="8" fill="#022c22" stroke="#34d399" stroke-width="1.5" />
+      <text x="60" y="21" class="t-node" text-anchor="middle">🛡️ AuthContext</text>
+    </g>
+
+    <!-- Level 2 Nodes -->
+    <g transform="translate(50, 270)">
+      <rect width="120" height="34" rx="8" fill="#2e1065" stroke="#a78bfa" stroke-width="1.5" />
+      <text x="60" y="21" class="t-node" text-anchor="middle">👤 UserMenu</text>
+    </g>
+
+    <g transform="translate(160, 270)">
+      <rect width="120" height="34" rx="8" fill="#4c0519" stroke="#f43f5e" stroke-width="1.5" filter="url(#glow-subtle)" />
+      <text x="60" y="21" class="t-node" text-anchor="middle">🪝 useAuth()</text>
+      <rect x="90" y="-5" width="36" height="14" rx="7" fill="#881337" />
+      <text x="108" y="5" class="t-tag" text-anchor="middle">HOOK</text>
+    </g>
+
+    <!-- Level 3 Node -->
+    <g transform="translate(160, 310)">
+      <rect width="120" height="32" rx="8" fill="#451a03" stroke="#fbbf24" stroke-width="1.5" />
+      <text x="60" y="20" class="t-node" text-anchor="middle">🌐 apiService.js</text>
+    </g>
+  </g>
+
+  <!-- RIGHT PANEL: 3D WebGL Spatial Sphere Graph -->
+  <g transform="translate(496, 80)">
+    <rect width="440" height="356" rx="12" fill="url(#g-glass)" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1" />
+    <rect x="0" y="0" width="440" height="38" rx="12" fill="rgba(15, 23, 42, 0.7)" />
+    <text x="16" y="24" class="t-title" font-size="13">🌐 3D Spatial Particle Link Beams (WebGL)</text>
+
+    <!-- 3D Orbit Rings -->
+    <ellipse cx="220" cy="200" rx="160" ry="70" fill="none" stroke="#6366f1" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.4" transform="rotate(-15 220 200)" />
+    <ellipse cx="220" cy="200" rx="140" ry="110" fill="none" stroke="#06b6d4" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.3" transform="rotate(25 220 200)" />
+
+    <!-- 3D Particle Beam Links -->
+    <line x1="220" y1="200" x2="120" y2="140" stroke="#a855f7" stroke-width="2.5" filter="url(#glow-subtle)" />
+    <circle cx="170" cy="170" r="3" fill="#ffffff" filter="url(#glow-heavy)" />
+    
+    <line x1="220" y1="200" x2="310" y2="130" stroke="#06b6d4" stroke-width="2.5" filter="url(#glow-subtle)" />
+    <circle cx="265" cy="165" r="3" fill="#ffffff" filter="url(#glow-heavy)" />
+
+    <line x1="220" y1="200" x2="130" y2="280" stroke="#34d399" stroke-width="2" />
+    <line x1="220" y1="200" x2="330" y2="270" stroke="#f43f5e" stroke-width="2" />
+    <line x1="310" y1="130" x2="330" y2="270" stroke="#fbbf24" stroke-width="1.5" stroke-dasharray="3 3" />
+
+    <!-- 3D Spherical Nodes -->
+    <!-- Center Core Sphere -->
+    <circle cx="220" cy="200" r="24" fill="url(#g-purple-cyan)" filter="url(#glow-heavy)" />
+    <circle cx="214" cy="194" r="8" fill="#ffffff" opacity="0.5" />
+    <text x="220" y="240" class="t-node" text-anchor="middle">Core AST Root</text>
+
+    <!-- Orbital Spheres -->
+    <circle cx="120" cy="140" r="16" fill="#8b5cf6" filter="url(#glow-subtle)" />
+    <text x="120" y="170" class="t-tag" text-anchor="middle">Components</text>
+
+    <circle cx="310" cy="130" r="18" fill="#06b6d4" filter="url(#glow-subtle)" />
+    <text x="310" y="162" class="t-tag" text-anchor="middle">Services API</text>
+
+    <circle cx="130" cy="280" r="14" fill="#10b981" filter="url(#glow-subtle)" />
+    <text x="130" y="308" class="t-tag" text-anchor="middle">Hooks &amp; Store</text>
+
+    <circle cx="330" cy="270" r="15" fill="#f43f5e" filter="url(#glow-subtle)" />
+    <text x="330" y="298" class="t-tag" text-anchor="middle">Router Views</text>
+
+    <!-- Mini Camera Controls Badge -->
+    <rect x="290" y="310" width="135" height="26" rx="8" fill="rgba(15, 23, 42, 0.9)" stroke="rgba(255, 255, 255, 0.15)" />
+    <text x="357" y="327" class="t-tag" fill="#cbd5e1" text-anchor="middle">🎥 Orbit • Pan • Zoom</text>
+  </g>
+</svg>
