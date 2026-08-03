@@ -5,7 +5,7 @@
   <h1 align="center">🌳 project-tree-md v3.1</h1>
   <p align="center">
     <strong>Enterprise AI-Ready Project Intelligence & 2D/3D Code Visualizer Suite</strong><br>
-    <em>Instantly map codebases for Cursor, Claude, ChatGPT & Developers. Generates Interactive Code Roadmaps, 2D/3D Code Graphs, Markdown, JSON, HTML, SVG, Mermaid, CSV, TSV, XML, YAML, PlantUML & ZIP Bundles in 1-Second. Zero Dependencies. Node.js 20+.</em>
+    <em>Instantly map codebases for Cursor, Claude, ChatGPT & Developers. Generates Interactive Mind Maps, 2D/3D Code Graphs, Markdown, JSON, HTML, SVG, Mermaid, CSV, TSV, XML, YAML, PlantUML & ZIP Bundles in 1-Second. Zero Dependencies. Node.js 20+.</em>
   </p>
   <p align="center">
     <a href="https://www.npmjs.com/package/project-tree-md"><img src="https://img.shields.io/npm/v/project-tree-md.svg?style=for-the-badge&color=58a6ff" alt="npm version" /></a>
@@ -18,7 +18,7 @@
 
 <p align="center">
   <a href="#-quick-start">Quick Start</a> •
-  <a href="#-interactive-code-architecture-roadmap----roadmap">Code Roadmap</a> •
+  <a href="#-interactive-horizontal-mind-map----mindmap">Interactive Mind Map</a> •
   <a href="#-universal-code-relationship-visualizer----visualize">Interactive Code Graph</a> •
   <a href="#-why-project-tree-md">Why Us?</a> •
   <a href="#-bundle-export-workflow---bundle">ZIP Bundles</a> •
@@ -36,11 +36,11 @@ Generate `PROJECT_STRUCTURE.md` and copy project tree to clipboard immediately:
 npx ptree
 ```
 
-### 2. Interactive Code Architecture Roadmap (`--roadmap`)
-Generate a dynamic, node-based interactive HTML Code Roadmap (`PROJECT_MINDMAP.html`):
+### 2. Interactive Horizontal Mind Map (`--mindmap`)
+Generate a dynamic, node-based interactive HTML Mind Map (`PROJECT_MINDMAP.html`):
 
 ```bash
-npx ptree --roadmap
+npx ptree --mindmap
 ```
 
 ### 3. 2D & 3D Interactive Code Relationship Graph (`--visualize`)

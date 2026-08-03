@@ -75,17 +75,17 @@
     </g>
   </g>
 
-  <!-- Card 2: ZIP Analysis Bundles -->
+  <!-- Card 2: Interactive Mind Map Engine -->
   <g transform="translate(492, 76)">
     <rect width="444" height="134" rx="12" fill="url(#glass-card)" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1" />
     <rect x="16" y="16" width="36" height="36" rx="8" fill="url(#grad-cyan-blue)" />
-    <text x="34" y="39" font-size="18" text-anchor="middle">🗺️</text>
-    <text x="64" y="32" class="f-card-title">Code Architecture Roadmap System (--roadmap)</text>
-    <text x="64" y="48" class="f-desc">Generate interactive horizontal tree roadmaps with curved Bezier connectors &amp; item count badges.</text>
+    <text x="34" y="39" font-size="18" text-anchor="middle">🧠</text>
+    <text x="64" y="32" class="f-card-title">Interactive Mind Map Engine (--mindmap)</text>
+    <text x="64" y="48" class="f-desc">Generate horizontal visual node mind maps with curved Bezier connectors &amp; item count badges.</text>
 
     <g transform="translate(16, 85)">
       <rect x="0" y="0" width="130" height="22" rx="6" fill="#0369a1" />
-      <text x="65" y="15" class="f-pill" text-anchor="middle">npx ptree --roadmap</text>
+      <text x="65" y="15" class="f-pill" text-anchor="middle">npx ptree --mindmap</text>
 
       <rect x="130" y="0" width="130" height="22" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1" />
       <text x="195" y="15" class="f-pill" text-anchor="middle">--export html,json,ai</text>
