@@ -50,9 +50,22 @@ Generate 2D Canvas & 3D WebGL Code Architecture Graph (`CODE_GRAPH.html`):
 npx ptree --visualize
 ```
 
+---
+
+## 🧠 Interactive Horizontal Mind Map (`--mindmap`)
+
+Transform your codebase into a clean, horizontal node-based interactive Mind Map (`PROJECT_MINDMAP.html`). Built with pure HTML5 SVG and Vanilla JavaScript with **zero external dependencies**.
+
 <p align="center">
-  <img src="assets/react_demo.svg" alt="React Demo Project Tree & Mindmap Preview" width="100%" />
+  <img src="assets/react_demo.svg" alt="React Demo Project Tree & Mind Map Preview" width="100%" />
 </p>
+
+### ⚡ Mind Map Features:
+* 🗺️ **Horizontal Auto-Layout**: Root node on the left, child folders and files expanding elegantly to the right.
+* ➰ **Curved Bezier Connectors**: Smooth cubic Bezier line paths connecting parent nodes to children with adaptive branch color palettes.
+* 🔍 **Pan, Zoom & Collapsible Nodes**: Smooth mouse dragging, wheel zooming, and click-to-toggle expand/collapse nodes with folder item count badges.
+* 📝 **Embedded Live Data Editor**: Built-in JSON editor drawer for real-time node editing and structure manipulation.
+* 📷 **Vector SVG Export**: Export high-resolution vector SVG diagrams of your mind map with a single click.
 
 ---
 
@@ -60,24 +73,11 @@ npx ptree --visualize
 
 Transform any codebase into dynamic, interactive 2D canvas & 3D WebGL graphs showing complete architecture, dependency graphs, state flows, hooks, models, and service relationships — all in a single HTML file (`CODE_GRAPH.html`) with instant mode switching (`🎨 2D | 🌐 3D`)!
 
-```
-                     App.jsx (React)
-                  /         |        \
-                 ▼          ▼         ▼
-             Header     Sidebar   AuthContext
-               │            │         │
-               ▼            ▼         ▼
-           UserMenu      NavList   useAuth()
-                                      │
-                                      ▼
-                                userService.js (API)
-```
-
-### ⚡ Visualizer Capabilities (`npx ptree --visualize`)
-
 <p align="center">
   <img src="assets/code_graph_preview.svg" alt="2D & 3D Code Relationship Visualizer Preview" width="100%" />
 </p>
+
+### ⚡ Visualizer Capabilities (`npx ptree --visualize`)
 
 * 🎨 **Instant 2D & 3D Mode Switcher**: Toggle seamlessly between **2D Flat Canvas** and **3D WebGL Spatial Sphere** views right from the toolbar.
 * 🎨 **5 Layout Engines (2D)**: Switch on-the-fly between **DAG (Sugiyama)**, **Force-Directed (Barnes-Hut)**, **Tree**, **Radial**, and **Horizontal Flow**.
