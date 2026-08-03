@@ -102,27 +102,25 @@ function formatPermissions(mode) {
  * @returns {ScanNode|null}
  */
 function scan(rootDir, options = {}) {
-  const {
-    exclude           = DEFAULT_EXCLUDE,
-    maxDepth          = Infinity,
-    ignoreFn          = () => false,
-    includeBinary     = false,
-    showSensitive     = false,
-    maxSize           = Infinity,
-    compress          = false,
-    collapseThreshold = null,
-    summarize         = false,
-    modified          = false,
-    created           = false,
-    permissions       = false,
-    owner             = false,
-    hash              = null,
-    sort              = null,
-    sortOrder         = 'asc',
-    maxFiles          = Infinity,
-    maxFolders        = Infinity,
-    signal            = null,
-  } = options;
+  const exclude           = (options.exclude !== null && options.exclude !== undefined) ? options.exclude : DEFAULT_EXCLUDE;
+  const maxDepth          = (options.maxDepth !== null && options.maxDepth !== undefined && !isNaN(options.maxDepth)) ? Number(options.maxDepth) : Infinity;
+  const ignoreFn          = options.ignoreFn || (() => false);
+  const includeBinary     = options.includeBinary || false;
+  const showSensitive     = options.showSensitive || false;
+  const maxSize           = (options.maxSize !== null && options.maxSize !== undefined && !isNaN(options.maxSize)) ? Number(options.maxSize) : Infinity;
+  const compress          = options.compress || false;
+  const collapseThreshold = options.collapseThreshold || null;
+  const summarize         = options.summarize || false;
+  const modified          = options.modified || false;
+  const created           = options.created || false;
+  const permissions       = options.permissions || false;
+  const owner             = options.owner || false;
+  const hash              = options.hash || null;
+  const sort              = options.sort || null;
+  const sortOrder         = options.sortOrder || 'asc';
+  const maxFiles          = (options.maxFiles !== null && options.maxFiles !== undefined && !isNaN(options.maxFiles)) ? Number(options.maxFiles) : Infinity;
+  const maxFolders        = (options.maxFolders !== null && options.maxFolders !== undefined && !isNaN(options.maxFolders)) ? Number(options.maxFolders) : Infinity;
+  const signal            = options.signal || null;
 
   const absoluteRoot = path.resolve(rootDir);
   if (!fs.existsSync(absoluteRoot)) return null;

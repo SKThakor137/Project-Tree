@@ -18,12 +18,14 @@ const { generateUniversalGraph } = require('../core/universalParser.js');
 const { toGraphVisualizerHtml } = require('../exporters/graphVisualizer.js');
 const { toGraphJson } = require('../exporters/graphJson.js');
 const { toGraph3dVisualizerHtml } = require('../exporters/graph3dVisualizer.js');
+const { toMindmapHtml } = require('../exporters/mindmap.js');
 
 const REPORT_ALIAS_MAP = {
   md: ['PROJECT_STRUCTURE.md'],
   markdown: ['PROJECT_STRUCTURE.md'],
   json: ['PROJECT_STRUCTURE.json', 'PROJECT_STATS.json'],
   html: ['PROJECT_STRUCTURE.html'],
+  mindmap: ['PROJECT_MINDMAP.html'],
   svg: ['PROJECT_STRUCTURE.svg'],
   mermaid: ['PROJECT_STRUCTURE.mmd'],
   mmd: ['PROJECT_STRUCTURE.mmd'],
@@ -83,6 +85,9 @@ function compileAllReports(options = {}) {
 
   // 3. PROJECT_STRUCTURE.html
   reports['PROJECT_STRUCTURE.html'] = toHtml(tree, stats);
+
+  // 4. PROJECT_MINDMAP.html
+  reports['PROJECT_MINDMAP.html'] = toMindmapHtml(tree, stats);
 
   // 4. PROJECT_STRUCTURE.svg
   reports['PROJECT_STRUCTURE.svg'] = toSvg(tree, stats);

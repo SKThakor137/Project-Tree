@@ -13,6 +13,7 @@ const { buildTreeText, buildColoredTreeText } = require('../src/core/formatter.j
 const { buildIgnoreMatcher } = require('../src/utils/ignore.js');
 const { toJson } = require('../src/exporters/json.js');
 const { toHtml } = require('../src/exporters/html.js');
+const { toMindmapHtml } = require('../src/exporters/mindmap.js');
 const { toSvg } = require('../src/exporters/svg.js');
 const { toMermaid } = require('../src/exporters/mermaid.js');
 const { toMarkdown } = require('../src/exporters/markdown.js');
@@ -58,6 +59,7 @@ function parseArgs(argv) {
     prompt: false,
     json: false,
     html: false,
+    mindmap: false,
     svg: false,
     mermaid: false,
     csv: false,
@@ -153,6 +155,7 @@ function parseArgs(argv) {
       case 'graph-json': case '--graph-json':         args.graphJson = true; break;
       case 'json': case '--json':                     args.json = true; break;
       case 'html': case '--html':                     args.html = true; break;
+      case 'mindmap': case '--mindmap':               args.mindmap = true; break;
       case 'svg': case '--svg':                       args.svg = true; break;
       case 'mermaid': case '--mermaid':               args.mermaid = true; break;
       case 'csv': case '--csv':                       args.csv = true; break;
@@ -235,6 +238,7 @@ ${colors.bold('File Metadata & Hashing:')}
 ${colors.bold('Export Formats:')}
   --json                  Export as JSON
   --html                  Export as collapsible HTML with Download Center
+  --mindmap               Export as interactive horizontal Mind Map HTML
   --svg                   Export as SVG diagram
   --mermaid               Export as Mermaid graph
   --csv                   Export as CSV flat table
@@ -445,6 +449,13 @@ function runGenerate(cliArgs) {
       const htmlPath = path.join(outDir, htmlName);
       fs.writeFileSync(htmlPath, htmlStr, 'utf8');
       console.log(colors.success(`HTML exported to ${path.relative(process.cwd(), htmlPath)}`));
+    }
+
+    if (args.mindmap) {
+      const mindmapStr = toMindmapHtml(result.tree, result.stats);
+      const mindmapPath = path.join(outDir, 'PROJECT_MINDMAP.html');
+      fs.writeFileSync(mindmapPath, mindmapStr, 'utf8');
+      console.log(colors.success(`Mind Map HTML exported to ${path.relative(process.cwd(), mindmapPath)}`));
     }
 
     if (args.svg) {

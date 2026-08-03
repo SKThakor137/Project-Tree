@@ -34,6 +34,8 @@ const { toGraphVisualizerHtml } = require('./exporters/graphVisualizer.js');
 const { toGraphJson, fromGraphJson } = require('./exporters/graphJson.js');
 const { toGraph3dVisualizerHtml } = require('./exporters/graph3dVisualizer.js');
 
+const { toMindmapHtml } = require('./exporters/mindmap.js');
+
 // New v3.0 modules
 const { loadConfig, findConfigFile } = require('./core/configLoader.js');
 const { sortTree, getSortComparator } = require('./core/sorter.js');
@@ -63,6 +65,7 @@ module.exports = {
   // Exporters
   toJson,
   toHtml,
+  toMindmapHtml,
   toSvg,
   toMermaid,
   toArchitectureFlowHtml,

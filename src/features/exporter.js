@@ -16,6 +16,7 @@ const EXPORT_MAP = {
   md: ['PROJECT_STRUCTURE.md'],
   json: ['PROJECT_STRUCTURE.json', 'PROJECT_STATS.json'],
   html: ['PROJECT_STRUCTURE.html'],
+  mindmap: ['PROJECT_MINDMAP.html'],
   svg: ['PROJECT_STRUCTURE.svg'],
   mermaid: ['PROJECT_STRUCTURE.mmd'],
   mmd: ['PROJECT_STRUCTURE.mmd'],
