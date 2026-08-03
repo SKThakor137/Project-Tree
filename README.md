@@ -50,6 +50,10 @@ Generate 2D Canvas & 3D WebGL Code Architecture Graph (`CODE_GRAPH.html`):
 npx ptree --visualize
 ```
 
+<p align="center">
+  <img src="assets/react_demo.svg" alt="React Demo Project Tree & Mindmap Preview" width="100%" />
+</p>
+
 ---
 
 ## 🌐 Universal 2D & 3D Code Relationship Visualizer (`--visualize`)

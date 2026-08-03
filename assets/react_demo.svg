@@ -1,0 +1,175 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 440" width="100%" height="100%">
+  <defs>
+    <!-- Background Gradients -->
+    <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b0f19" />
+      <stop offset="50%" stop-color="#111827" />
+      <stop offset="100%" stop-color="#0f172a" />
+    </linearGradient>
+
+    <!-- Card Glass Gradient -->
+    <linearGradient id="card-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="rgba(30, 41, 59, 0.7)" />
+      <stop offset="100%" stop-color="rgba(15, 23, 42, 0.85)" />
+    </linearGradient>
+
+    <!-- Accent Gradients -->
+    <linearGradient id="primary-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#a855f7" />
+    </linearGradient>
+
+    <linearGradient id="cyan-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#06b6d4" />
+      <stop offset="100%" stop-color="#3b82f6" />
+    </linearGradient>
+
+    <linearGradient id="emerald-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10b981" />
+      <stop offset="100%" stop-color="#34d399" />
+    </linearGradient>
+
+    <linearGradient id="amber-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#fbbf24" />
+    </linearGradient>
+
+    <!-- Glow Filters -->
+    <filter id="glow-indigo" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="6" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <style>
+    .title-text { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-weight: 800; fill: #f8fafc; font-size: 16px; }
+    .sub-text { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-weight: 500; fill: #94a3b8; font-size: 12px; }
+    .code-text { font-family: 'Fira Code', 'Consolas', monospace; font-size: 13px; fill: #e2e8f0; }
+    .code-muted { fill: #64748b; }
+    .code-accent { fill: #818cf8; font-weight: 600; }
+    .code-cyan { fill: #38bdf8; }
+    .code-emerald { fill: #34d399; }
+    .code-amber { fill: #fbbf24; }
+    .node-text { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 12px; font-weight: 600; fill: #ffffff; }
+    .badge-text { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 10px; font-weight: 700; fill: #ffffff; }
+  </style>
+
+  <!-- Outer Background -->
+  <rect width="960" height="440" rx="16" fill="url(#bg-grad)" stroke="#1e293b" stroke-width="2" />
+  
+  <!-- Subtle Grid Dots -->
+  <pattern id="dot-grid" width="24" height="24" patternUnits="userSpaceOnUse">
+    <circle cx="2" cy="2" r="1" fill="#334155" opacity="0.4" />
+  </pattern>
+  <rect width="960" height="440" fill="url(#dot-grid)" rx="16" />
+
+  <!-- App Header bar -->
+  <rect x="24" y="20" width="912" height="44" rx="10" fill="rgba(30, 41, 59, 0.6)" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1" />
+  <circle cx="48" cy="42" r="6" fill="#ef4444" />
+  <circle cx="68" cy="42" r="6" fill="#f59e0b" />
+  <circle cx="88" cy="42" r="6" fill="#10b981" />
+  <text x="116" y="47" class="title-text" font-size="14">⚛️ React Project Intelligence Demo — npx project-tree-md --mindmap</text>
+  <rect x="800" y="32" width="120" height="22" rx="11" fill="url(#primary-grad)" />
+  <text x="860" y="47" class="badge-text" text-anchor="middle">v3.1.0 Ready</text>
+
+  <!-- Left Card: Simple Markdown Tree Output -->
+  <g transform="translate(24, 80)">
+    <rect width="410" height="336" rx="12" fill="url(#card-grad)" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1" />
+    <rect x="0" y="0" width="410" height="38" rx="12" fill="rgba(15, 23, 42, 0.6)" />
+    <text x="16" y="24" class="title-text" font-size="13">📄 Instant Markdown Tree (npx ptree)</text>
+    
+    <!-- Code Tree Lines -->
+    <g transform="translate(20, 60)">
+      <text x="0" y="0" class="code-text code-accent">📁 my-react-app</text>
+      <text x="0" y="24" class="code-text code-muted">├── 📁 src</text>
+      <text x="0" y="48" class="code-text code-muted">│   ├── 📁 components</text>
+      <text x="0" y="72" class="code-text">│   │   ├── ⚛️ Navbar.jsx <tspan class="code-muted">(2.4 KB)</tspan></text>
+      <text x="0" y="96" class="code-text">│   │   ├── ⚛️ Sidebar.jsx <tspan class="code-muted">(3.1 KB)</tspan></text>
+      <text x="0" y="120" class="code-text">│   │   └── ⚛️ UserProfile.jsx <tspan class="code-muted">(1.8 KB)</tspan></text>
+      <text x="0" y="144" class="code-text code-muted">│   ├── 📁 hooks</text>
+      <text x="0" y="168" class="code-text">│   │   └── 🪝 useAuth.js <tspan class="code-muted">(4.2 KB)</tspan></text>
+      <text x="0" y="192" class="code-text code-muted">│   ├── 📁 services</text>
+      <text x="0" y="216" class="code-text">│   │   └── ⚡ api.js <tspan class="code-muted">(5.6 KB)</tspan></text>
+      <text x="0" y="240" class="code-text code-cyan">│   ├── 📄 App.jsx <tspan class="code-emerald"># Main Component</tspan></text>
+      <text x="0" y="264" class="code-text code-cyan">│   └── 📄 main.jsx <tspan class="code-amber"># Entry Point</tspan></text>
+    </g>
+  </g>
+
+  <!-- Right Card: Interactive Mind Map Visualizer -->
+  <g transform="translate(450, 80)">
+    <rect width="486" height="336" rx="12" fill="url(#card-grad)" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1" />
+    <rect x="0" y="0" width="486" height="38" rx="12" fill="rgba(15, 23, 42, 0.6)" />
+    <text x="16" y="24" class="title-text" font-size="13">🧠 Interactive Horizontal Mind Map (--mindmap)</text>
+
+    <!-- Connectors (Cubic Bezier Curves) -->
+    <!-- Root to src -->
+    <path d="M 125 180 C 160 180, 160 120, 190 120" fill="none" stroke="#8b5cf6" stroke-width="2.5" />
+    <!-- Root to public -->
+    <path d="M 125 180 C 160 180, 160 260, 190 260" fill="none" stroke="#06b6d4" stroke-width="2.5" />
+    
+    <!-- src to components -->
+    <path d="M 270 120 C 295 120, 295 80, 320 80" fill="none" stroke="#a78bfa" stroke-width="2" />
+    <!-- src to hooks -->
+    <path d="M 270 120 C 295 120, 295 130, 320 130" fill="none" stroke="#34d399" stroke-width="2" />
+    <!-- src to services -->
+    <path d="M 270 120 C 295 120, 295 180, 320 180" fill="none" stroke="#fbbf24" stroke-width="2" />
+
+    <!-- public to index.html -->
+    <path d="M 270 260 C 295 260, 295 260, 320 260" fill="none" stroke="#22d3ee" stroke-width="2" />
+
+    <!-- Mind Map Nodes -->
+    <!-- Root Node -->
+    <g transform="translate(15, 160)">
+      <rect width="110" height="40" rx="10" fill="url(#primary-grad)" stroke="#6366f1" stroke-width="2" filter="url(#glow-indigo)" />
+      <text x="55" y="24" class="node-text" text-anchor="middle">my-react-app</text>
+    </g>
+
+    <!-- Level 1: src -->
+    <g transform="translate(190, 102)">
+      <rect width="80" height="36" rx="8" fill="#2e1065" stroke="#8b5cf6" stroke-width="1.5" />
+      <text x="40" y="22" class="node-text" text-anchor="middle">src</text>
+      <rect x="62" y="-6" width="24" height="14" rx="7" fill="#7c3aed" />
+      <text x="74" y="5" class="badge-text" text-anchor="middle">12</text>
+    </g>
+
+    <!-- Level 1: public -->
+    <g transform="translate(190, 242)">
+      <rect width="80" height="36" rx="8" fill="#083344" stroke="#06b6d4" stroke-width="1.5" />
+      <text x="40" y="22" class="node-text" text-anchor="middle">public</text>
+      <rect x="62" y="-6" width="22" height="14" rx="7" fill="#0891b2" />
+      <text x="73" y="5" class="badge-text" text-anchor="middle">3</text>
+    </g>
+
+    <!-- Level 2: components -->
+    <g transform="translate(320, 62)">
+      <rect width="130" height="34" rx="8" fill="#1e1b4b" stroke="#a78bfa" stroke-width="1.5" />
+      <text x="12" y="21" class="node-text">components</text>
+      <rect x="95" y="9" width="26" height="16" rx="8" fill="#8b5cf6" />
+      <text x="108" y="21" class="badge-text" text-anchor="middle">3</text>
+    </g>
+
+    <!-- Level 2: hooks -->
+    <g transform="translate(320, 112)">
+      <rect width="130" height="34" rx="8" fill="#022c22" stroke="#34d399" stroke-width="1.5" />
+      <text x="12" y="21" class="node-text">hooks</text>
+      <rect x="95" y="9" width="26" height="16" rx="8" fill="#10b981" />
+      <text x="108" y="21" class="badge-text" text-anchor="middle">1</text>
+    </g>
+
+    <!-- Level 2: services -->
+    <g transform="translate(320, 162)">
+      <rect width="130" height="34" rx="8" fill="#451a03" stroke="#fbbf24" stroke-width="1.5" />
+      <text x="12" y="21" class="node-text">services</text>
+      <rect x="95" y="9" width="26" height="16" rx="8" fill="#f59e0b" />
+      <text x="108" y="21" class="badge-text" text-anchor="middle">1</text>
+    </g>
+
+    <!-- Level 2: index.html -->
+    <g transform="translate(320, 242)">
+      <rect width="130" height="34" rx="8" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5" />
+      <text x="12" y="21" class="node-text">index.html</text>
+      <rect x="85" y="9" width="38" height="16" rx="8" fill="#0284c7" />
+      <text x="104" y="21" class="badge-text" text-anchor="middle">1.2KB</text>
+    </g>
+  </g>
+</svg>
