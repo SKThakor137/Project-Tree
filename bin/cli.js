@@ -155,7 +155,10 @@ function parseArgs(argv) {
       case 'graph-json': case '--graph-json':         args.graphJson = true; break;
       case 'json': case '--json':                     args.json = true; break;
       case 'html': case '--html':                     args.html = true; break;
-      case 'mindmap': case '--mindmap':               args.mindmap = true; break;
+      case 'mindmap': case '--mindmap':               
+      case 'roadmap': case '--roadmap':
+      case 'codemap': case '--codemap':
+      case 'tree-flow': case '--tree-flow':           args.mindmap = true; break;
       case 'svg': case '--svg':                       args.svg = true; break;
       case 'mermaid': case '--mermaid':               args.mermaid = true; break;
       case 'csv': case '--csv':                       args.csv = true; break;
@@ -238,7 +241,7 @@ ${colors.bold('File Metadata & Hashing:')}
 ${colors.bold('Export Formats:')}
   --json                  Export as JSON
   --html                  Export as collapsible HTML with Download Center
-  --mindmap               Export as interactive horizontal Mind Map HTML
+  --roadmap, --codemap    Export as interactive Code Architecture Roadmap HTML
   --svg                   Export as SVG diagram
   --mermaid               Export as Mermaid graph
   --csv                   Export as CSV flat table

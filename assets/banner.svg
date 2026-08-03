@@ -59,21 +59,21 @@
   <rect x="300" y="185" width="600" height="1.5" fill="url(#line)"/>
 
   <!-- Tagline -->
-  <text x="600" y="218" text-anchor="middle" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="17" fill="#94a3b8" font-weight="500" letter-spacing="0.5">Enterprise Project Intelligence • Interactive Mind Maps • 2D/3D Code Architecture Graphs</text>
+  <text x="600" y="218" text-anchor="middle" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="17" fill="#94a3b8" font-weight="500" letter-spacing="0.5">Enterprise Project Intelligence • Code Architecture Roadmaps • 2D/3D Code Graphs</text>
 
   <!-- Centered Badges Row (5 Badges Centered Around X=600) -->
   <!-- Badge 1: Zero Dependencies -->
-  <g transform="translate(135, 248)">
+  <g transform="translate(125, 248)">
     <rect width="165" height="32" rx="16" fill="#064e3b" opacity="0.4"/>
     <rect width="165" height="32" rx="16" fill="none" stroke="#10b981" stroke-width="1.2"/>
     <text x="82.5" y="20.5" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12.5" fill="#34d399" font-weight="700">⚡ Zero Dependencies</text>
   </g>
 
-  <!-- Badge 2: Interactive MindMaps -->
-  <g transform="translate(315, 248)">
-    <rect width="175" height="32" rx="16" fill="#2e1065" opacity="0.4"/>
-    <rect width="175" height="32" rx="16" fill="none" stroke="#a78bfa" stroke-width="1.2"/>
-    <text x="87.5" y="20.5" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12.5" fill="#c4b5fd" font-weight="700">🧠 Interactive MindMaps</text>
+  <!-- Badge 2: Code Roadmaps -->
+  <g transform="translate(305, 248)">
+    <rect width="185" height="32" rx="16" fill="#2e1065" opacity="0.4"/>
+    <rect width="185" height="32" rx="16" fill="none" stroke="#a78bfa" stroke-width="1.2"/>
+    <text x="92.5" y="20.5" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12.5" fill="#c4b5fd" font-weight="700">🗺️ Code Roadmaps</text>
   </g>
 
   <!-- Badge 3: 2D & 3D Graphs -->
@@ -104,7 +104,7 @@
       <tspan fill="#64748b">$ </tspan>
       <tspan fill="#818cf8">npx </tspan>
       <tspan fill="#38bdf8">project-tree-md </tspan>
-      <tspan fill="#34d399">--mindmap</tspan>
+      <tspan fill="#34d399">--roadmap</tspan>
     </text>
   </g>
 

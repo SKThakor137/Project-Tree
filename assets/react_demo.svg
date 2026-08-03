@@ -95,11 +95,11 @@
     </g>
   </g>
 
-  <!-- Right Card: Interactive Mind Map Visualizer -->
-  <g transform="translate(450, 80)">
-    <rect width="486" height="336" rx="12" fill="url(#card-grad)" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1" />
-    <rect x="0" y="0" width="486" height="38" rx="12" fill="rgba(15, 23, 42, 0.6)" />
-    <text x="16" y="24" class="title-text" font-size="13">🧠 Interactive Horizontal Mind Map (--mindmap)</text>
+    <!-- Right Card: Interactive Code Roadmap Visualizer -->
+    <g transform="translate(450, 80)">
+      <rect width="486" height="336" rx="12" fill="url(#card-grad)" stroke="rgba(255, 255, 255, 0.1)" stroke-width="1" />
+      <rect x="0" y="0" width="486" height="38" rx="12" fill="rgba(15, 23, 42, 0.6)" />
+      <text x="16" y="24" class="title-text" font-size="13">🗺️ Interactive Code Roadmap (--roadmap)</text>
 
     <!-- Connectors (Cubic Bezier Curves) -->
     <!-- Root to src -->
