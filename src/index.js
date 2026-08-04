@@ -119,4 +119,8 @@ module.exports = {
   compileAllReports,
   generateBundle,
   exportReports,
+
+  // Shell Hook & Terminal Integration
+  ...require('./features/shellHook.js'),
 };
+

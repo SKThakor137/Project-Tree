@@ -34,6 +34,7 @@ const { toPlantUml } = require('../src/exporters/plantuml.js');
 const { loadConfig } = require('../src/core/configLoader.js');
 const { findDuplicatesByName, findDuplicatesByHash, formatDuplicateReport } = require('../src/features/duplicates.js');
 const { loadPluginsFromConfig } = require('../src/core/pluginApi.js');
+const { generateShellHook, installShellHook } = require('../src/features/shellHook.js');
 
 // ─── Arg Parser ───────────────────────────────────────────────────────────────
 
@@ -179,6 +180,14 @@ function parseArgs(argv) {
       case 'dashboard': case '--dashboard':           args.dashboard = true; break;
       case '-i': case '--interactive':                args.interactive = true; break;
 
+      // Terminal Shell Hook Integration
+      case 'init-shell': case '--init-shell':
+        args.initShell = (argv[i + 1] && !argv[i + 1].startsWith('-')) ? argv[++i] : 'powershell';
+        break;
+      case 'install-hook': case '--install-hook':
+        args.installHook = (argv[i + 1] && !argv[i + 1].startsWith('-')) ? argv[++i] : 'powershell';
+        break;
+
       // Subcommand
       case 'compare':
         args.compare = [argv[++i], argv[++i]];
@@ -261,6 +270,10 @@ ${colors.bold('AI Features:')}
   --prompt                Generate AI-ready prompt
   --tokens                Output AI context token count & cost estimation
 
+${colors.bold('Terminal Shell Integration:')}
+  --init-shell [shell]    Output shell tab hook snippet ${colors.gray('(powershell|bash|zsh|cmd)')}
+  --install-hook [shell]  Install shell hook into user profile (runs tree ONCE on 1st command)
+
 ${colors.bold('Other Options:')}
   -i, --interactive       Interactive guided setup
   -h, --help              Show this help
@@ -330,7 +343,7 @@ function runGenerate(cliArgs) {
 
     const result = generateTree({
       rootDir,
-      outputFile: args.outputFile || 'PROJECT_STRUCTURE.md',
+      outputFile: args.outputFile,
       exclude: args.exclude || DEFAULT_EXCLUDE,
       maxDepth: args.maxDepth,
       noIgnore: args.noIgnore,
@@ -435,7 +448,9 @@ function runGenerate(cliArgs) {
       console.log(`🧮 ${colors.boldCyan(summaryText)}`);
     }
 
-    const baseOutName = args.outputFile ? path.basename(args.outputFile) : 'PROJECT_STRUCTURE.md';
+    const baseOutName = result.outputPath
+      ? path.basename(result.outputPath)
+      : (args.outputFile ? path.basename(args.outputFile) : 'PROJECT_STRUCTURE.md');
 
     // Format Exports
     if (args.json) {
@@ -627,6 +642,29 @@ function main() {
     try {
       const result = compare(a, b, { exclude: args.exclude || DEFAULT_EXCLUDE });
       console.log('\n' + result.summary);
+    } catch (e) {
+      console.error(colors.error(e.message));
+      process.exit(1);
+    }
+    return;
+  }
+
+  // Shell Hook Subcommands / Flags
+  if (args.initShell) {
+    try {
+      const snippet = generateShellHook(args.initShell);
+      console.log(snippet);
+    } catch (e) {
+      console.error(colors.error(e.message));
+      process.exit(1);
+    }
+    return;
+  }
+
+  if (args.installHook) {
+    try {
+      const res = installShellHook(args.installHook);
+      console.log(colors.success(res.message));
     } catch (e) {
       console.error(colors.error(e.message));
       process.exit(1);

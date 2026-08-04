@@ -39,7 +39,6 @@ const { buildArchitectureGraph } = require('./analyzer.js');
 function generateTree(options = {}) {
   const {
     rootDir     = process.cwd(),
-    outputFile  = 'PROJECT_STRUCTURE.md',
     exclude     = DEFAULT_EXCLUDE,
     maxDepth,
     noIgnore    = false,
@@ -64,6 +63,10 @@ function generateTree(options = {}) {
     maxFiles    = Infinity,
     maxFolders  = Infinity,
   } = options;
+
+  const themeTag = (theme && theme !== 'emoji') ? path.basename(theme, path.extname(theme)).toLowerCase() : '';
+  const defaultOutputFile = themeTag ? `PROJECT_STRUCTURE_${themeTag}.md` : 'PROJECT_STRUCTURE.md';
+  const outputFile = options.outputFile || defaultOutputFile;
 
   const ignoreFn = buildIgnoreMatcher(rootDir, undefined, noIgnore, { excludePattern: exclude });
   const maxSizeBytes = parseSize(maxSize);
@@ -133,11 +136,11 @@ function generateTree(options = {}) {
     } catch (_) {}
   }
 
-  let outputPath = null;
+  const outputPath = path.isAbsolute(outputFile)
+    ? outputFile
+    : path.join(rootDir, outputFile);
+
   if (writeFile) {
-    outputPath = path.isAbsolute(outputFile)
-      ? outputFile
-      : path.join(rootDir, outputFile);
     fs.writeFileSync(outputPath, markdown, 'utf8');
   }
 

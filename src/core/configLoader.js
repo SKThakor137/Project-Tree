@@ -45,7 +45,7 @@ const DEFAULTS = {
   maxFiles: null,
   maxFolders: null,
   bfs: false,
-  outputFile: 'PROJECT_STRUCTURE.md',
+  outputFile: null,
   outputDir: null,
   noWrite: false,
 };

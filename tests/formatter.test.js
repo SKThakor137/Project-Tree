@@ -47,5 +47,12 @@ assert(THEMES.emoji !== undefined, 'Emoji theme exists');
 assert(THEMES.box !== undefined, 'Box theme exists');
 assert(THEMES.compact !== undefined, 'Compact theme exists');
 
+// Test 7: Theme-based output file naming
+const { generateTree } = require('../src/core/generator.js');
+const resAscii = generateTree({ rootDir: ROOT, theme: 'ascii', writeFile: false });
+assert(resAscii.outputPath.endsWith('PROJECT_STRUCTURE_ascii.md'), 'ASCII theme generates PROJECT_STRUCTURE_ascii.md by default');
+const resBox = generateTree({ rootDir: ROOT, theme: 'box', writeFile: false });
+assert(resBox.outputPath.endsWith('PROJECT_STRUCTURE_box.md'), 'Box theme generates PROJECT_STRUCTURE_box.md by default');
+
 console.log(`\n${passed} passed, ${failed} failed\n`);
 if (failed > 0) process.exit(1);
