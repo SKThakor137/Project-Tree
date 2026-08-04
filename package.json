@@ -1,6 +1,6 @@
 {
   "name": "project-tree-md",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "description": "Enterprise-grade AI-ready project analysis, architecture & visualizer suite. Generates interactive Code Relationship Graphs (HTML/Canvas/3D), Markdown, JSON, HTML, SVG, Mermaid, CSV, TSV, XML, YAML, PlantUML, ZIP bundles, AI context, duplicate reports, custom themes, custom icons, and plugin system. Zero dependencies. Node.js 20+.",
   "main": "src/index.js",
   "type": "commonjs",
