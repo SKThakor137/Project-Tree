@@ -513,14 +513,7 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--fon
 
   <!-- 2D-ONLY CONTROLS (hidden in 3D mode) -->
   <div class="tb-group" id="controls2dOnly">
-    <div class="mode-toggle-group" style="margin-right:2px;">
-      <button class="mode-toggle-btn active" id="btnCardCompact" title="Compact Sleek Cards (175x44)">⚡ Sleek</button>
-      <button class="mode-toggle-btn" id="btnCardNormal" title="Normal Cards (205x54)">📦 Normal</button>
-    </div>
-
-    <span class="toolbar-sep"></span>
-
-    <select class="tb-select" id="layoutSelect" title="Layout">
+    <select class="tb-select" id="layoutSelect" title="Layout Engine">
       <option value="dagre">DAG</option>
       <option value="force">Force Directed</option>
       <option value="tree">Tree</option>
@@ -530,8 +523,6 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--fon
 
     <span class="toolbar-sep"></span>
 
-    <button class="tb-btn" id="btnExpandAll" title="Expand All"><span class="icon">⊞</span><span class="tb-label">Expand</span></button>
-    <button class="tb-btn" id="btnCollapseAll" title="Collapse All"><span class="icon">⊟</span><span class="tb-label">Collapse</span></button>
     <button class="tb-btn" id="btnFitView" title="Fit View"><span class="icon">⊡</span><span class="tb-label">Fit</span></button>
 
     <span class="toolbar-sep"></span>
@@ -566,8 +557,9 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--fon
       <button class="tb-btn" id="btnRedo" title="Redo (Ctrl+Y)"><span class="icon">↪</span></button>
       <span class="toolbar-sep"></span>
     </div>
-    <button class="tb-btn" id="btnExport" title="Export PNG"><span class="icon">📷</span><span class="tb-label">Export</span></button>
-    <button class="tb-btn" id="btnExportJSON" title="Export JSON"><span class="icon">{ }</span></button>
+    <button class="tb-btn" id="btnExportPNG" title="Export PNG Image"><span class="icon">📷</span><span class="tb-label">PNG</span></button>
+    <button class="tb-btn" id="btnExportSVG" title="Export Vector SVG"><span class="icon">🎨</span><span class="tb-label">SVG</span></button>
+    <button class="tb-btn" id="btnExportJSON" title="Export JSON"><span class="icon">{ }</span><span class="tb-label">JSON</span></button>
     <span class="toolbar-sep"></span>
     <button class="tb-btn" id="btnTheme" title="Toggle Theme"><span class="icon">🌙</span></button>
     <button class="tb-btn" id="btnFullscreen" title="Fullscreen (F)"><span class="icon">⛶</span></button>
@@ -2719,8 +2711,6 @@ document.getElementById('layoutSelect').addEventListener('change', (e) => {
   fitView();
 });
 
-document.getElementById('btnExpandAll').addEventListener('click', expandAll);
-document.getElementById('btnCollapseAll').addEventListener('click', collapseAll);
 document.getElementById('btnFitView').addEventListener('click', fitView);
 
 document.getElementById('btnTheme').addEventListener('click', () => {
@@ -2743,8 +2733,12 @@ document.getElementById('btnHelp').addEventListener('click', () => {
   document.getElementById('kbdModal').classList.toggle('show');
 });
 
-document.getElementById('btnExport').addEventListener('click', exportPNG);
-document.getElementById('btnExportJSON').addEventListener('click', exportJSON);
+const btnPNG = document.getElementById('btnExportPNG');
+const btnSVG = document.getElementById('btnExportSVG');
+const btnJSON = document.getElementById('btnExportJSON');
+if (btnPNG) btnPNG.addEventListener('click', exportPNG);
+if (btnSVG) btnSVG.addEventListener('click', exportSVG);
+if (btnJSON) btnJSON.addEventListener('click', exportJSON);
 
 function exportPNG() {
   const link = document.createElement('a');
@@ -2770,6 +2764,93 @@ function exportPNG() {
 
   link.click();
   toast((currentViewMode === '3D' ? '3D' : '2D') + ' PNG exported!');
+}
+
+function exportSVG() {
+  const visibleNodes = getVisibleNodes();
+  if (visibleNodes.length === 0) return;
+
+  const visibleEdges = getVisibleEdges();
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+
+  for (const n of visibleNodes) {
+    const pos = STATE.positions.get(n.id);
+    if (!pos) continue;
+    minX = Math.min(minX, pos.x);
+    minY = Math.min(minY, pos.y);
+    maxX = Math.max(maxX, pos.x + STATE.nodeWidth);
+    maxY = Math.max(maxY, pos.y + STATE.nodeHeight);
+  }
+
+  const padding = 60;
+  const width = Math.ceil(maxX - minX + padding * 2);
+  const height = Math.ceil(maxY - minY + padding * 2);
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const bgColor = isDark ? '#0a0e14' : '#ffffff';
+  const textColor = isDark ? '#e6edf3' : '#1f2328';
+  const cardBg = isDark ? '#161b22' : '#ffffff';
+  const cardBorder = isDark ? '#30363d' : '#d0d7de';
+
+  let svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + width + ' ' + height + '" width="' + width + '" height="' + height + '">\n';
+  svg += '<style>\n';
+  svg += '  .node-title { font-family: Inter, sans-serif; font-size: 11px; font-weight: 600; fill: ' + textColor + '; }\n';
+  svg += '  .node-type { font-family: Inter, sans-serif; font-size: 9px; fill: #8b949e; }\n';
+  svg += '  .edge-line { fill: none; stroke-linecap: round; }\n';
+  svg += '</style>\n';
+  svg += '<rect width="' + width + '" height="' + height + '" fill="' + bgColor + '" />\n';
+
+  svg += '<g transform="translate(' + (-minX + padding) + ', ' + (-minY + padding) + ')">\n';
+
+  // Draw Edges
+  for (const e of visibleEdges) {
+    const sp = STATE.positions.get(e.source);
+    const tp = STATE.positions.get(e.target);
+    if (!sp || !tp) continue;
+
+    const sx = sp.x + STATE.nodeWidth / 2;
+    const sy = sp.y + STATE.nodeHeight / 2;
+    const tx = tp.x + STATE.nodeWidth / 2;
+    const ty = tp.y + STATE.nodeHeight / 2;
+
+    const color = e.color || (isDark ? '#30363d' : '#d0d7de');
+    const pathD = 'M ' + sx + ' ' + sy + ' C ' + sx + ' ' + ((sy + ty) / 2) + ', ' + tx + ' ' + ((sy + ty) / 2) + ', ' + tx + ' ' + ty;
+    svg += '  <path d="' + pathD + '" stroke="' + color + '" stroke-width="1.5" stroke-opacity="0.6" class="edge-line" />\n';
+  }
+
+  // Draw Nodes
+  for (const n of visibleNodes) {
+    const pos = STATE.positions.get(n.id);
+    if (!pos) continue;
+
+    const nx = pos.x;
+    const ny = pos.y;
+    const nw = STATE.nodeWidth;
+    const nh = STATE.nodeHeight;
+    const accentColor = n.color || '#58a6ff';
+
+    svg += '  <g transform="translate(' + nx + ', ' + ny + ')">\n';
+    svg += '    <rect width="' + nw + '" height="' + nh + '" rx="6" fill="' + cardBg + '" stroke="' + cardBorder + '" stroke-width="1" />\n';
+    svg += '    <rect x="0" y="0" width="5" height="' + nh + '" rx="2" fill="' + accentColor + '" />\n';
+    svg += '    <text x="12" y="20" class="node-title">' + escSvg(n.icon || '📄') + ' ' + escSvg(n.name) + '</text>\n';
+    svg += '    <text x="12" y="36" class="node-type">' + escSvg(n.label || n.type) + '</text>\n';
+    svg += '  </g>\n';
+  }
+
+  svg += '</g>\n';
+  svg += '</svg>';
+
+  const blob = new Blob([svg], { type: 'image/svg+xml' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.download = (GRAPH.projectName || 'graph') + '_code_graph.svg';
+  link.href = url;
+  link.click();
+  URL.revokeObjectURL(url);
+  toast('SVG exported!');
+}
+
+function escSvg(s) {
+  return String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
 function exportJSON() {
