@@ -342,8 +342,11 @@
       z-index: 100;
     }
 
-    #toast.show {
-      transform: translateX(-50%) translateY(0);
+    @media (max-width: 768px) {
+      #sidebar { width: 100vw; max-width: 100vw; }
+      #sidebar.collapsed { transform: translateX(-100vw); }
+      .floating-controls { top: 12px; right: 12px; gap: 4px; padding: 4px; }
+      .btn { padding: 6px 10px; font-size: 0.8rem; }
     }
   </style>
 </head>
@@ -405,23 +408,31 @@
   <script>
     const PROJECT_DATA = {
   "text": "project-tree-md",
-  "badge": "76 items",
+  "badge": "88 items",
   "children": [
     {
       "text": ".npmignore",
-      "badge": "73 B"
-    },
-    {
-      "text": "ARCHITECTURE_FLOW.html",
-      "badge": "104.8 KB"
+      "badge": "642 B"
     },
     {
       "text": "assets",
-      "badge": "1 item",
+      "badge": "4 items",
       "children": [
         {
           "text": "banner.svg",
-          "badge": "5 KB"
+          "badge": "5.6 KB"
+        },
+        {
+          "text": "code_graph_preview.svg",
+          "badge": "9.7 KB"
+        },
+        {
+          "text": "features_preview.svg",
+          "badge": "7.5 KB"
+        },
+        {
+          "text": "react_demo.svg",
+          "badge": "9.2 KB"
         }
       ]
     },
@@ -431,41 +442,73 @@
       "children": [
         {
           "text": "cli.js",
-          "badge": "27.4 KB"
+          "badge": "29.1 KB"
         }
       ]
     },
     {
-      "text": "CODE_GRAPH_3D.html",
-      "badge": "137.9 KB"
+      "text": "CIRCULAR_DEPENDENCIES.json",
+      "badge": "111 B"
     },
     {
-      "text": "CODE_GRAPH.html",
-      "badge": "188.8 KB"
+      "text": "COMPONENT_USAGE.json",
+      "badge": "2 B"
+    },
+    {
+      "text": "DEAD_CODE.json",
+      "badge": "737 B"
+    },
+    {
+      "text": "DEPENDENCY_HEATMAP.json",
+      "badge": "11.2 KB"
+    },
+    {
+      "text": "EXPORT_GRAPH.json",
+      "badge": "3.1 KB"
+    },
+    {
+      "text": "FRAMEWORK_INFO.json",
+      "badge": "2 KB"
+    },
+    {
+      "text": "IMPORT_GRAPH.json",
+      "badge": "9.1 KB"
+    },
+    {
+      "text": "LANGUAGE_BREAKDOWN.json",
+      "badge": "257 B"
     },
     {
       "text": "LICENSE",
       "badge": "1.1 KB"
     },
     {
-      "text": "package-lock.json",
-      "badge": "351 B"
+      "text": "manifest.json",
+      "badge": "722 B"
     },
     {
       "text": "package.json",
-      "badge": "3.5 KB"
+      "badge": "3.6 KB"
     },
     {
-      "text": "PROJECT_MINDMAP.html",
-      "badge": "28.8 KB"
+      "text": "PROJECT_HEALTH.json",
+      "badge": "149 B"
+    },
+    {
+      "text": "PROJECT_STATS.json",
+      "badge": "213 B"
+    },
+    {
+      "text": "README_ANALYSIS.md",
+      "badge": "1.9 KB"
     },
     {
       "text": "README.md",
-      "badge": "15.3 KB"
+      "badge": "15.1 KB"
     },
     {
       "text": "src",
-      "badge": "46 items",
+      "badge": "47 items",
       "children": [
         {
           "text": "core",
@@ -481,7 +524,7 @@
             },
             {
               "text": "configLoader.js",
-              "badge": "7.1 KB"
+              "badge": "7 KB"
             },
             {
               "text": "formatter.js",
@@ -489,7 +532,7 @@
             },
             {
               "text": "generator.js",
-              "badge": "4.9 KB"
+              "badge": "5.1 KB"
             },
             {
               "text": "iconEngine.js",
@@ -541,7 +584,7 @@
           "children": [
             {
               "text": "architectureFlowHtml.js",
-              "badge": "14.9 KB"
+              "badge": "15.1 KB"
             },
             {
               "text": "csv.js",
@@ -557,11 +600,11 @@
             },
             {
               "text": "graphVisualizer.js",
-              "badge": "109.6 KB"
+              "badge": "120 KB"
             },
             {
               "text": "html.js",
-              "badge": "30 KB"
+              "badge": "30.8 KB"
             },
             {
               "text": "json.js",
@@ -577,7 +620,7 @@
             },
             {
               "text": "mindmap.js",
-              "badge": "22.9 KB"
+              "badge": "23.8 KB"
             },
             {
               "text": "plantuml.js",
@@ -599,7 +642,7 @@
         },
         {
           "text": "features",
-          "badge": "10 items",
+          "badge": "11 items",
           "children": [
             {
               "text": "ai.js",
@@ -628,6 +671,10 @@
             {
               "text": "monorepo.js",
               "badge": "5.1 KB"
+            },
+            {
+              "text": "shellHook.js",
+              "badge": "5.3 KB"
             },
             {
               "text": "summarize.js",
@@ -684,12 +731,8 @@
       ]
     },
     {
-      "text": "TESTING_GUIDE.md",
-      "badge": "9.2 KB"
-    },
-    {
       "text": "tests",
-      "badge": "18 items",
+      "badge": "19 items",
       "children": [
         {
           "text": "bundle.test.js",
@@ -713,7 +756,7 @@
         },
         {
           "text": "formatter.test.js",
-          "badge": "2 KB"
+          "badge": "2.5 KB"
         },
         {
           "text": "graph.test.js",
@@ -737,11 +780,15 @@
         },
         {
           "text": "mindmap.test.js",
-          "badge": "1.1 KB"
+          "badge": "1.2 KB"
         },
         {
           "text": "scanner.test.js",
           "badge": "2 KB"
+        },
+        {
+          "text": "shellHook.test.js",
+          "badge": "2.4 KB"
         },
         {
           "text": "summarize.test.js",
@@ -764,6 +811,10 @@
           "badge": "1.4 KB"
         }
       ]
+    },
+    {
+      "text": "UNUSED_COMPONENTS.json",
+      "badge": "2 B"
     }
   ]
 };

@@ -1,0 +1,673 @@
+[
+  {
+    "file": "src/core/scanner.js",
+    "usageCount": 21,
+    "usedBy": [
+      "bin/cli.js",
+      "src/core/architectureFlow.js",
+      "src/core/generator.js",
+      "src/core/stats.js",
+      "src/core/universalParser.js",
+      "src/exporters/html.js",
+      "src/exporters/json.js",
+      "src/exporters/mermaid.js",
+      "src/exporters/mindmap.js",
+      "src/exporters/svg.js",
+      "src/features/compare.js",
+      "src/index.js",
+      "tests/compare.test.js",
+      "tests/formatter.test.js",
+      "tests/html.test.js",
+      "tests/json.test.js",
+      "tests/mermaid.test.js",
+      "tests/mindmap.test.js",
+      "tests/scanner.test.js",
+      "tests/svg.test.js",
+      "tests/v3.test.js"
+    ]
+  },
+  {
+    "file": "src/core/formatter.js",
+    "usageCount": 9,
+    "usedBy": [
+      "bin/cli.js",
+      "src/core/architectureFlow.js",
+      "src/core/generator.js",
+      "src/core/stats.js",
+      "src/exporters/html.js",
+      "src/features/ai.js",
+      "src/features/compare.js",
+      "src/index.js",
+      "tests/formatter.test.js"
+    ]
+  },
+  {
+    "file": "src/core/stats.js",
+    "usageCount": 8,
+    "usedBy": [
+      "bin/cli.js",
+      "src/core/generator.js",
+      "src/exporters/html.js",
+      "src/exporters/mindmap.js",
+      "src/index.js",
+      "tests/html.test.js",
+      "tests/json.test.js",
+      "tests/svg.test.js"
+    ]
+  },
+  {
+    "file": "src/utils/colors.js",
+    "usageCount": 6,
+    "usedBy": [
+      "bin/cli.js",
+      "src/core/stats.js",
+      "src/features/bundle.js",
+      "src/features/exporter.js",
+      "src/features/shellHook.js",
+      "src/features/watcher.js"
+    ]
+  },
+  {
+    "file": "src/exporters/json.js",
+    "usageCount": 6,
+    "usedBy": [
+      "bin/cli.js",
+      "src/exporters/html.js",
+      "src/features/bundle.js",
+      "src/features/compare.js",
+      "src/index.js",
+      "tests/json.test.js"
+    ]
+  },
+  {
+    "file": "src/core/architectureFlow.js",
+    "usageCount": 6,
+    "usedBy": [
+      "bin/cli.js",
+      "src/core/generator.js",
+      "src/features/summarize.js",
+      "src/index.js",
+      "tests/flow.test.js",
+      "tests/flutter_graph.test.js"
+    ]
+  },
+  {
+    "file": "src/exporters/graphVisualizer.js",
+    "usageCount": 6,
+    "usedBy": [
+      "bin/cli.js",
+      "src/exporters/graph3dVisualizer.js",
+      "src/features/bundle.js",
+      "src/index.js",
+      "tests/flutter_graph.test.js",
+      "tests/graph.test.js"
+    ]
+  },
+  {
+    "file": "src/exporters/svg.js",
+    "usageCount": 5,
+    "usedBy": [
+      "bin/cli.js",
+      "src/exporters/html.js",
+      "src/features/bundle.js",
+      "src/index.js",
+      "tests/svg.test.js"
+    ]
+  },
+  {
+    "file": "src/exporters/mermaid.js",
+    "usageCount": 5,
+    "usedBy": [
+      "bin/cli.js",
+      "src/exporters/html.js",
+      "src/features/bundle.js",
+      "src/index.js",
+      "tests/mermaid.test.js"
+    ]
+  },
+  {
+    "file": "src/core/universalParser.js",
+    "usageCount": 5,
+    "usedBy": [
+      "bin/cli.js",
+      "src/features/bundle.js",
+      "src/index.js",
+      "tests/flutter_graph.test.js",
+      "tests/graph.test.js"
+    ]
+  },
+  {
+    "file": "src/core/generator.js",
+    "usageCount": 4,
+    "usedBy": [
+      "bin/cli.js",
+      "src/features/bundle.js",
+      "src/index.js",
+      "tests/formatter.test.js"
+    ]
+  },
+  {
+    "file": "src/utils/ignore.js",
+    "usageCount": 4,
+    "usedBy": [
+      "bin/cli.js",
+      "src/core/generator.js",
+      "src/index.js",
+      "tests/ignore.test.js"
+    ]
+  },
+  {
+    "file": "src/exporters/html.js",
+    "usageCount": 4,
+    "usedBy": [
+      "bin/cli.js",
+      "src/features/bundle.js",
+      "src/index.js",
+      "tests/html.test.js"
+    ]
+  },
+  {
+    "file": "src/exporters/mindmap.js",
+    "usageCount": 4,
+    "usedBy": [
+      "bin/cli.js",
+      "src/features/bundle.js",
+      "src/index.js",
+      "tests/mindmap.test.js"
+    ]
+  },
+  {
+    "file": "src/features/ai.js",
+    "usageCount": 4,
+    "usedBy": [
+      "bin/cli.js",
+      "src/exporters/html.js",
+      "src/features/bundle.js",
+      "src/index.js"
+    ]
+  },
+  {
+    "file": "src/detectors/project.js",
+    "usageCount": 4,
+    "usedBy": [
+      "bin/cli.js",
+      "src/core/generator.js",
+      "src/features/ai.js",
+      "src/index.js"
+    ]
+  },
+  {
+    "file": "src/features/tokens.js",
+    "usageCount": 4,
+    "usedBy": [
+      "bin/cli.js",
+      "src/core/generator.js",
+      "src/index.js",
+      "tests/tokens.test.js"
+    ]
+  },
+  {
+    "file": "src/features/bundle.js",
+    "usageCount": 4,
+    "usedBy": [
+      "bin/cli.js",
+      "src/features/exporter.js",
+      "src/index.js",
+      "tests/bundle.test.js"
+    ]
+  },
+  {
+    "file": "src/exporters/graphJson.js",
+    "usageCount": 4,
+    "usedBy": [
+      "bin/cli.js",
+      "src/features/bundle.js",
+      "src/index.js",
+      "tests/graph.test.js"
+    ]
+  },
+  {
+    "file": "src/utils/hasher.js",
+    "usageCount": 4,
+    "usedBy": [
+      "src/core/scanner.js",
+      "src/features/duplicates.js",
+      "src/index.js",
+      "tests/v3.test.js"
+    ]
+  },
+  {
+    "file": "src/features/compare.js",
+    "usageCount": 3,
+    "usedBy": [
+      "bin/cli.js",
+      "src/index.js",
+      "tests/compare.test.js"
+    ]
+  },
+  {
+    "file": "src/features/exporter.js",
+    "usageCount": 3,
+    "usedBy": [
+      "bin/cli.js",
+      "src/index.js",
+      "tests/exporter.test.js"
+    ]
+  },
+  {
+    "file": "src/exporters/architectureFlowHtml.js",
+    "usageCount": 3,
+    "usedBy": [
+      "bin/cli.js",
+      "src/index.js",
+      "tests/flutter_graph.test.js"
+    ]
+  },
+  {
+    "file": "src/exporters/csv.js",
+    "usageCount": 3,
+    "usedBy": [
+      "bin/cli.js",
+      "src/index.js",
+      "tests/v3.test.js"
+    ]
+  },
+  {
+    "file": "src/exporters/xml.js",
+    "usageCount": 3,
+    "usedBy": [
+      "bin/cli.js",
+      "src/index.js",
+      "tests/v3.test.js"
+    ]
+  },
+  {
+    "file": "src/exporters/yaml.js",
+    "usageCount": 3,
+    "usedBy": [
+      "bin/cli.js",
+      "src/index.js",
+      "tests/v3.test.js"
+    ]
+  },
+  {
+    "file": "src/exporters/plantuml.js",
+    "usageCount": 3,
+    "usedBy": [
+      "bin/cli.js",
+      "src/index.js",
+      "tests/v3.test.js"
+    ]
+  },
+  {
+    "file": "src/core/configLoader.js",
+    "usageCount": 3,
+    "usedBy": [
+      "bin/cli.js",
+      "src/index.js",
+      "tests/v3.test.js"
+    ]
+  },
+  {
+    "file": "src/features/duplicates.js",
+    "usageCount": 3,
+    "usedBy": [
+      "bin/cli.js",
+      "src/index.js",
+      "tests/v3.test.js"
+    ]
+  },
+  {
+    "file": "src/core/pluginApi.js",
+    "usageCount": 3,
+    "usedBy": [
+      "bin/cli.js",
+      "src/index.js",
+      "tests/v3.test.js"
+    ]
+  },
+  {
+    "file": "src/features/shellHook.js",
+    "usageCount": 3,
+    "usedBy": [
+      "bin/cli.js",
+      "src/index.js",
+      "tests/shellHook.test.js"
+    ]
+  },
+  {
+    "file": "src/exporters/graph3dVisualizer.js",
+    "usageCount": 3,
+    "usedBy": [
+      "bin/cli.js",
+      "src/features/bundle.js",
+      "src/index.js"
+    ]
+  },
+  {
+    "file": "src/core/themeEngine.js",
+    "usageCount": 3,
+    "usedBy": [
+      "src/core/formatter.js",
+      "src/index.js",
+      "tests/v3.test.js"
+    ]
+  },
+  {
+    "file": "src/core/iconEngine.js",
+    "usageCount": 3,
+    "usedBy": [
+      "src/core/formatter.js",
+      "src/index.js",
+      "tests/v3.test.js"
+    ]
+  },
+  {
+    "file": "src/features/summarize.js",
+    "usageCount": 3,
+    "usedBy": [
+      "src/core/scanner.js",
+      "src/index.js",
+      "tests/summarize.test.js"
+    ]
+  },
+  {
+    "file": "src/core/sorter.js",
+    "usageCount": 3,
+    "usedBy": [
+      "src/core/scanner.js",
+      "src/index.js",
+      "tests/v3.test.js"
+    ]
+  },
+  {
+    "file": "src/utils/zip.js",
+    "usageCount": 3,
+    "usedBy": [
+      "src/features/bundle.js",
+      "src/index.js",
+      "tests/zip.test.js"
+    ]
+  },
+  {
+    "file": "src/exporters/markdown.js",
+    "usageCount": 2,
+    "usedBy": [
+      "bin/cli.js",
+      "src/core/generator.js"
+    ]
+  },
+  {
+    "file": "src/features/inject.js",
+    "usageCount": 2,
+    "usedBy": [
+      "bin/cli.js",
+      "src/index.js"
+    ]
+  },
+  {
+    "file": "package.json",
+    "usageCount": 2,
+    "usedBy": [
+      "bin/cli.js",
+      "src/features/bundle.js"
+    ]
+  },
+  {
+    "file": "src/core/analyzer.js",
+    "usageCount": 2,
+    "usedBy": [
+      "src/core/generator.js",
+      "src/core/scanner.js"
+    ]
+  },
+  {
+    "file": "src/core/universalGraph.js",
+    "usageCount": 2,
+    "usedBy": [
+      "src/core/universalParser.js",
+      "tests/graph.test.js"
+    ]
+  },
+  {
+    "file": "src/utils/globMatcher.js",
+    "usageCount": 2,
+    "usedBy": [
+      "src/utils/ignore.js",
+      "tests/v3.test.js"
+    ]
+  },
+  {
+    "file": "src/utils/clipboard.js",
+    "usageCount": 1,
+    "usedBy": [
+      "bin/cli.js"
+    ]
+  },
+  {
+    "file": "src/features/watcher.js",
+    "usageCount": 1,
+    "usedBy": [
+      "bin/cli.js"
+    ]
+  },
+  {
+    "file": "src/utils/sensitive.js",
+    "usageCount": 1,
+    "usedBy": [
+      "src/core/scanner.js"
+    ]
+  },
+  {
+    "file": "src/features/monorepo.js",
+    "usageCount": 1,
+    "usedBy": [
+      "src/index.js"
+    ]
+  },
+  {
+    "file": ".npmignore",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "assets/banner.svg",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "assets/code_graph_preview.svg",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "assets/features_preview.svg",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "assets/react_demo.svg",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "bin/cli.js",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "CIRCULAR_DEPENDENCIES.json",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "COMPONENT_USAGE.json",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "DEAD_CODE.json",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "DEPENDENCY_HEATMAP.json",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "EXPORT_GRAPH.json",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "FRAMEWORK_INFO.json",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "IMPORT_GRAPH.json",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "LANGUAGE_BREAKDOWN.json",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "LICENSE",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "manifest.json",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "PROJECT_HEALTH.json",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "PROJECT_STATS.json",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "README_ANALYSIS.md",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "README.md",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "src/index.js",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "tests/bundle.test.js",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "tests/compare.test.js",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "tests/exporter.test.js",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "tests/flow.test.js",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "tests/flutter_graph.test.js",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "tests/formatter.test.js",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "tests/graph.test.js",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "tests/html.test.js",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "tests/ignore.test.js",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "tests/json.test.js",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "tests/mermaid.test.js",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "tests/mindmap.test.js",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "tests/scanner.test.js",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "tests/shellHook.test.js",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "tests/summarize.test.js",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "tests/svg.test.js",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "tests/tokens.test.js",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "tests/v3.test.js",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "tests/zip.test.js",
+    "usageCount": 0,
+    "usedBy": []
+  },
+  {
+    "file": "UNUSED_COMPONENTS.json",
+    "usageCount": 0,
+    "usedBy": []
+  }
+]

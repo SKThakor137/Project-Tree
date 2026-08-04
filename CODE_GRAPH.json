@@ -1,0 +1,7448 @@
+{
+  "version": "1.0.0",
+  "generator": "project-tree-md",
+  "projectName": "project-tree-md",
+  "nodes": [
+    {
+      "id": ".npmignore",
+      "name": ".npmignore",
+      "type": "CONFIG",
+      "icon": "⚙️",
+      "label": "Configuration",
+      "color": "#8b949e",
+      "filePath": ".npmignore",
+      "language": "Unknown",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 642,
+        "lines": 54,
+        "exports": [],
+        "functions": [],
+        "ext": ""
+      },
+      "incomingCount": 0,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "assets/banner.svg",
+      "name": "banner.svg",
+      "type": "ASSET",
+      "icon": "🎨",
+      "label": "Asset",
+      "color": "#f778ba",
+      "filePath": "assets/banner.svg",
+      "language": "Unknown",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 5712,
+        "lines": 113,
+        "exports": [],
+        "functions": [],
+        "ext": ".svg"
+      },
+      "incomingCount": 1,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "assets/code_graph_preview.svg",
+      "name": "code_graph_preview.svg",
+      "type": "ASSET",
+      "icon": "🎨",
+      "label": "Asset",
+      "color": "#f778ba",
+      "filePath": "assets/code_graph_preview.svg",
+      "language": "Unknown",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 9941,
+        "lines": 189,
+        "exports": [],
+        "functions": [],
+        "ext": ".svg"
+      },
+      "incomingCount": 1,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "assets/features_preview.svg",
+      "name": "features_preview.svg",
+      "type": "ASSET",
+      "icon": "🎨",
+      "label": "Asset",
+      "color": "#f778ba",
+      "filePath": "assets/features_preview.svg",
+      "language": "Unknown",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 7699,
+        "lines": 138,
+        "exports": [],
+        "functions": [],
+        "ext": ".svg"
+      },
+      "incomingCount": 1,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "assets/react_demo.svg",
+      "name": "react_demo.svg",
+      "type": "ASSET",
+      "icon": "🎨",
+      "label": "Asset",
+      "color": "#f778ba",
+      "filePath": "assets/react_demo.svg",
+      "language": "Unknown",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 9443,
+        "lines": 176,
+        "exports": [],
+        "functions": [],
+        "ext": ".svg"
+      },
+      "incomingCount": 1,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "bin/cli.js",
+      "name": "cli.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "bin/cli.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 29817,
+        "lines": 689,
+        "exports": [],
+        "functions": [
+          "parseArgs",
+          "printHelp",
+          "runInteractive",
+          "ask",
+          "action",
+          "out",
+          "theme",
+          "runGenerate",
+          "main"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 1,
+      "outgoingCount": 40,
+      "collapsed": false
+    },
+    {
+      "id": "CIRCULAR_DEPENDENCIES.json",
+      "name": "CIRCULAR_DEPENDENCIES.json",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "CIRCULAR_DEPENDENCIES.json",
+      "language": "JSON",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 111,
+        "lines": 3,
+        "exports": [],
+        "functions": [],
+        "ext": ".json"
+      },
+      "incomingCount": 0,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "COMPONENT_USAGE.json",
+      "name": "COMPONENT_USAGE.json",
+      "type": "COMPONENT",
+      "icon": "🧩",
+      "label": "Component",
+      "color": "#3fb950",
+      "filePath": "COMPONENT_USAGE.json",
+      "language": "JSON",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 2,
+        "lines": 1,
+        "exports": [],
+        "functions": [],
+        "ext": ".json"
+      },
+      "incomingCount": 0,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "DEAD_CODE.json",
+      "name": "DEAD_CODE.json",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "DEAD_CODE.json",
+      "language": "JSON",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 737,
+        "lines": 30,
+        "exports": [],
+        "functions": [],
+        "ext": ".json"
+      },
+      "incomingCount": 0,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "DEPENDENCY_HEATMAP.json",
+      "name": "DEPENDENCY_HEATMAP.json",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "DEPENDENCY_HEATMAP.json",
+      "language": "JSON",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 11457,
+        "lines": 608,
+        "exports": [],
+        "functions": [],
+        "ext": ".json"
+      },
+      "incomingCount": 0,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "EXPORT_GRAPH.json",
+      "name": "EXPORT_GRAPH.json",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "EXPORT_GRAPH.json",
+      "language": "JSON",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 3195,
+        "lines": 176,
+        "exports": [],
+        "functions": [],
+        "ext": ".json"
+      },
+      "incomingCount": 0,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "FRAMEWORK_INFO.json",
+      "name": "FRAMEWORK_INFO.json",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "FRAMEWORK_INFO.json",
+      "language": "JSON",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 2040,
+        "lines": 49,
+        "exports": [],
+        "functions": [],
+        "ext": ".json"
+      },
+      "incomingCount": 0,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "IMPORT_GRAPH.json",
+      "name": "IMPORT_GRAPH.json",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "IMPORT_GRAPH.json",
+      "language": "JSON",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 9287,
+        "lines": 412,
+        "exports": [],
+        "functions": [],
+        "ext": ".json"
+      },
+      "incomingCount": 0,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "LANGUAGE_BREAKDOWN.json",
+      "name": "LANGUAGE_BREAKDOWN.json",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "LANGUAGE_BREAKDOWN.json",
+      "language": "JSON",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 257,
+        "lines": 22,
+        "exports": [],
+        "functions": [],
+        "ext": ".json"
+      },
+      "incomingCount": 0,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "LICENSE",
+      "name": "LICENSE",
+      "type": "DOCUMENTATION",
+      "icon": "📝",
+      "label": "Documentation",
+      "color": "#8b949e",
+      "filePath": "LICENSE",
+      "language": "Unknown",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 1089,
+        "lines": 22,
+        "exports": [],
+        "functions": [],
+        "ext": ""
+      },
+      "incomingCount": 0,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "manifest.json",
+      "name": "manifest.json",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "manifest.json",
+      "language": "JSON",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 722,
+        "lines": 29,
+        "exports": [],
+        "functions": [],
+        "ext": ".json"
+      },
+      "incomingCount": 0,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "package.json",
+      "name": "package.json",
+      "type": "CONFIG",
+      "icon": "⚙️",
+      "label": "Configuration",
+      "color": "#8b949e",
+      "filePath": "package.json",
+      "language": "JSON",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 3658,
+        "lines": 105,
+        "exports": [],
+        "functions": [],
+        "ext": ".json"
+      },
+      "incomingCount": 2,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "PROJECT_HEALTH.json",
+      "name": "PROJECT_HEALTH.json",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "PROJECT_HEALTH.json",
+      "language": "JSON",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 149,
+        "lines": 8,
+        "exports": [],
+        "functions": [],
+        "ext": ".json"
+      },
+      "incomingCount": 0,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "PROJECT_STATS.json",
+      "name": "PROJECT_STATS.json",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "PROJECT_STATS.json",
+      "language": "JSON",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 213,
+        "lines": 11,
+        "exports": [],
+        "functions": [],
+        "ext": ".json"
+      },
+      "incomingCount": 0,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "README_ANALYSIS.md",
+      "name": "README_ANALYSIS.md",
+      "type": "DOCUMENTATION",
+      "icon": "📝",
+      "label": "Documentation",
+      "color": "#8b949e",
+      "filePath": "README_ANALYSIS.md",
+      "language": "Markdown",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 1940,
+        "lines": 72,
+        "exports": [],
+        "functions": [],
+        "ext": ".md"
+      },
+      "incomingCount": 0,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "README.md",
+      "name": "README.md",
+      "type": "DOCUMENTATION",
+      "icon": "📝",
+      "label": "Documentation",
+      "color": "#8b949e",
+      "filePath": "README.md",
+      "language": "Markdown",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 15414,
+        "lines": 334,
+        "exports": [],
+        "functions": [],
+        "ext": ".md"
+      },
+      "incomingCount": 0,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "src/core/analyzer.js",
+      "name": "analyzer.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/core/analyzer.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "Exports: x, x, x, x, x",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 12048,
+        "lines": 353,
+        "exports": [
+          "x",
+          "x",
+          "x",
+          "x",
+          "x"
+        ],
+        "functions": [
+          "parseFile",
+          "x",
+          "buildArchitectureGraph",
+          "isConfigFile",
+          "detectCycle"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 3,
+      "outgoingCount": 7,
+      "collapsed": false
+    },
+    {
+      "id": "src/core/architectureFlow.js",
+      "name": "architectureFlow.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/core/architectureFlow.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 19694,
+        "lines": 570,
+        "exports": [],
+        "functions": [
+          "detectFrameworkRole",
+          "resolveFileTarget",
+          "getFileImports",
+          "collectAllFiles",
+          "traverse",
+          "readContentSafely",
+          "analyzeCodebase",
+          "detectEntryPoint",
+          "buildDependencyTree",
+          "formatArchitectureFlowText",
+          "formatArchitectureFlowColored",
+          "generateArchitectureFlow"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 7,
+      "outgoingCount": 4,
+      "collapsed": false
+    },
+    {
+      "id": "src/core/configLoader.js",
+      "name": "configLoader.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/core/configLoader.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 7213,
+        "lines": 245,
+        "exports": [],
+        "functions": [
+          "findConfigFile",
+          "loadEnvConfig",
+          "validateConfig",
+          "loadConfig"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 4,
+      "outgoingCount": 2,
+      "collapsed": false
+    },
+    {
+      "id": "src/core/formatter.js",
+      "name": "formatter.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/core/formatter.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 6284,
+        "lines": 178,
+        "exports": [],
+        "functions": [
+          "formatSize",
+          "getIcon",
+          "renderName",
+          "buildTreeText",
+          "buildColoredTreeText"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 10,
+      "outgoingCount": 3,
+      "collapsed": false
+    },
+    {
+      "id": "src/core/generator.js",
+      "name": "generator.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/core/generator.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 5211,
+        "lines": 165,
+        "exports": [],
+        "functions": [
+          "generateTree",
+          "themeTag",
+          "collectParsed"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 5,
+      "outgoingCount": 11,
+      "collapsed": false
+    },
+    {
+      "id": "src/core/iconEngine.js",
+      "name": "iconEngine.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/core/iconEngine.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 7042,
+        "lines": 248,
+        "exports": [],
+        "functions": [
+          "createIconResolver",
+          "getIcon"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 4,
+      "outgoingCount": 2,
+      "collapsed": false
+    },
+    {
+      "id": "src/core/pluginApi.js",
+      "name": "pluginApi.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/core/pluginApi.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 6751,
+        "lines": 264,
+        "exports": [],
+        "functions": [
+          "registerRenderer",
+          "registerScannerHook",
+          "registerFormatter",
+          "loadPlugin",
+          "loadPluginsFromConfig",
+          "getRenderer",
+          "getFormatter",
+          "runPreScanHooks",
+          "runPostScanHooks",
+          "listPlugins",
+          "listRenderers",
+          "listFormatters",
+          "resetRegistry"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 4,
+      "outgoingCount": 1,
+      "collapsed": false
+    },
+    {
+      "id": "src/core/scanner.js",
+      "name": "scanner.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/core/scanner.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 11674,
+        "lines": 336,
+        "exports": [],
+        "functions": [
+          "isBinaryFile",
+          "parseSize",
+          "compressTree",
+          "formatPermissions",
+          "octal",
+          "scan",
+          "exclude",
+          "maxDepth",
+          "maxSize",
+          "maxFiles",
+          "maxFolders",
+          "buildNode",
+          "countFiles",
+          "collapseTree"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 23,
+      "outgoingCount": 7,
+      "collapsed": false
+    },
+    {
+      "id": "src/core/sorter.js",
+      "name": "sorter.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/core/sorter.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 5405,
+        "lines": 170,
+        "exports": [],
+        "functions": [
+          "naturalCompare",
+          "isDir",
+          "getSortComparator",
+          "aExt",
+          "bExt",
+          "sortTree"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 4,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "src/core/stats.js",
+      "name": "stats.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/core/stats.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 6623,
+        "lines": 194,
+        "exports": [],
+        "functions": [
+          "getDirSize",
+          "computeStats",
+          "traverse",
+          "printDashboard"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 9,
+      "outgoingCount": 4,
+      "collapsed": false
+    },
+    {
+      "id": "src/core/themeEngine.js",
+      "name": "themeEngine.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/core/themeEngine.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 3460,
+        "lines": 104,
+        "exports": [],
+        "functions": [
+          "validateTheme",
+          "loadTheme",
+          "getPresetNames"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 4,
+      "outgoingCount": 2,
+      "collapsed": false
+    },
+    {
+      "id": "src/core/universalGraph.js",
+      "name": "universalGraph.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/core/universalGraph.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 17983,
+        "lines": 314,
+        "exports": [],
+        "functions": [],
+        "ext": ".js"
+      },
+      "incomingCount": 3,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "src/core/universalParser.js",
+      "name": "universalParser.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/core/universalParser.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 39576,
+        "lines": 1012,
+        "exports": [],
+        "functions": [
+          "detectLanguage",
+          "detectFrameworks",
+          "hasFile",
+          "detectNodeType",
+          "getFlutterPackageName",
+          "extractRelationships",
+          "resolveImport",
+          "tryResolveFile",
+          "safeIsFile",
+          "readFileSafely",
+          "collectFiles",
+          "walk",
+          "generateUniversalGraph"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 6,
+      "outgoingCount": 4,
+      "collapsed": false
+    },
+    {
+      "id": "src/detectors/project.js",
+      "name": "project.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/detectors/project.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 12582,
+        "lines": 207,
+        "exports": [],
+        "functions": [
+          "detectProject",
+          "exists"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 5,
+      "outgoingCount": 2,
+      "collapsed": false
+    },
+    {
+      "id": "src/exporters/architectureFlowHtml.js",
+      "name": "architectureFlowHtml.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/exporters/architectureFlowHtml.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 15480,
+        "lines": 332,
+        "exports": [],
+        "functions": [
+          "toArchitectureFlowHtml",
+          "formatSize",
+          "esc",
+          "renderNode",
+          "showDetail",
+          "childPaths",
+          "circularPaths",
+          "simplifyNode",
+          "esc"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 4,
+      "outgoingCount": 1,
+      "collapsed": false
+    },
+    {
+      "id": "src/exporters/csv.js",
+      "name": "csv.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/exporters/csv.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 3072,
+        "lines": 115,
+        "exports": [],
+        "functions": [
+          "flattenTree",
+          "escapeCSV",
+          "toCsv",
+          "toTsv"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 4,
+      "outgoingCount": 1,
+      "collapsed": false
+    },
+    {
+      "id": "src/exporters/graph3dVisualizer.js",
+      "name": "graph3dVisualizer.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/exporters/graph3dVisualizer.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 430,
+        "lines": 15,
+        "exports": [],
+        "functions": [],
+        "ext": ".js"
+      },
+      "incomingCount": 4,
+      "outgoingCount": 1,
+      "collapsed": false
+    },
+    {
+      "id": "src/exporters/graphJson.js",
+      "name": "graphJson.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/exporters/graphJson.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 1166,
+        "lines": 43,
+        "exports": [],
+        "functions": [
+          "toGraphJson",
+          "fromGraphJson"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 5,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "src/exporters/graphVisualizer.js",
+      "name": "graphVisualizer.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/exporters/graphVisualizer.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 122882,
+        "lines": 3071,
+        "exports": [],
+        "functions": [
+          "esc",
+          "toGraphVisualizerHtml",
+          "resizeCanvas",
+          "getVisibleNodes",
+          "getVisibleEdges",
+          "layoutDagre",
+          "layoutForce",
+          "angle",
+          "fx",
+          "fy",
+          "fx",
+          "fy",
+          "layoutTree",
+          "layoutRadial",
+          "angle",
+          "layoutHorizontal",
+          "resolveCollisions",
+          "dx",
+          "dy",
+          "overlap",
+          "pushX",
+          "pushY",
+          "runLayout",
+          "autoSelectLayout",
+          "worldToScreen",
+          "screenToWorld",
+          "isOnScreen",
+          "render",
+          "drawGrid",
+          "offX",
+          "offY",
+          "drawEdge",
+          "midY",
+          "drawNode",
+          "isCompact",
+          "progress",
+          "pulseAlpha",
+          "hasConnections",
+          "roundRect",
+          "roundRectLeft",
+          "nodeAtScreen",
+          "wx",
+          "wy",
+          "triggerNodePulse",
+          "animatePulse",
+          "easeInOutCubic",
+          "smoothCenterOnNode",
+          "step",
+          "triggerNavFlowAnimation",
+          "getBezierPoint",
+          "drawNavFlowParticle",
+          "midY",
+          "setModeUIVisibility",
+          "switchTo2D",
+          "switchTo3D",
+          "resize3dGraph",
+          "zoomToFit3D",
+          "resetCamera3D",
+          "update3dTheme",
+          "search3dHighlight",
+          "lowerTerm",
+          "createTextCardTexture3d",
+          "typeText",
+          "roundRectPath",
+          "init3dGraphEngine",
+          "isDark",
+          "updateTooltip3d",
+          "toggleAutoRotate3D",
+          "set3dCameraPreset",
+          "toggleLabels3D",
+          "toggleParticles3D",
+          "focusCameraOnNode3d",
+          "trigger3dNodePulse",
+          "animPulse",
+          "trigger3dNavFlowParticlesEngine",
+          "anim3dFlow",
+          "selectNode",
+          "deselectNode",
+          "navGoBack",
+          "navGoForward",
+          "toggleConnectionPicker",
+          "showDetailPanel",
+          "incoming",
+          "outgoing",
+          "formatSize",
+          "toggleCollapse",
+          "expandAll",
+          "collapseAll",
+          "updateHiddenNodes",
+          "showContextMenu",
+          "hideContextMenu",
+          "fitView",
+          "cx",
+          "cy",
+          "centerOnNode",
+          "updateMinimap",
+          "offsetX",
+          "offsetY",
+          "vpLeft",
+          "vpTop",
+          "wx",
+          "wy",
+          "buildLegend",
+          "exportPNG",
+          "exportSVG",
+          "escSvg",
+          "exportJSON",
+          "pushHistory",
+          "undo",
+          "redo",
+          "restoreHistory",
+          "toast",
+          "esc",
+          "fitView",
+          "setCardDensity",
+          "init"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 7,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "src/exporters/html.js",
+      "name": "html.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/exporters/html.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 31575,
+        "lines": 739,
+        "exports": [],
+        "functions": [
+          "toHtml",
+          "renderNode",
+          "archData",
+          "deadCount",
+          "circularCount",
+          "buildClientZip",
+          "getCrc",
+          "time",
+          "date",
+          "downloadFile",
+          "downloadReport",
+          "toggleSelectAllReports",
+          "downloadSelectedZipBundle",
+          "toggleTheme",
+          "isDead"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 5,
+      "outgoingCount": 8,
+      "collapsed": false
+    },
+    {
+      "id": "src/exporters/json.js",
+      "name": "json.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/exporters/json.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 1962,
+        "lines": 65,
+        "exports": [],
+        "functions": [
+          "nodeToJson",
+          "toJson"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 7,
+      "outgoingCount": 1,
+      "collapsed": false
+    },
+    {
+      "id": "src/exporters/markdown.js",
+      "name": "markdown.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/exporters/markdown.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 778,
+        "lines": 28,
+        "exports": [],
+        "functions": [
+          "toMarkdown"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 3,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "src/exporters/mermaid.js",
+      "name": "mermaid.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/exporters/mermaid.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 2428,
+        "lines": 85,
+        "exports": [],
+        "functions": [
+          "toMermaid",
+          "cleanId",
+          "genId",
+          "traverse",
+          "escapeMermaid"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 6,
+      "outgoingCount": 1,
+      "collapsed": false
+    },
+    {
+      "id": "src/exporters/mindmap.js",
+      "name": "mindmap.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/exporters/mindmap.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 24417,
+        "lines": 804,
+        "exports": [],
+        "functions": [
+          "formatBytes",
+          "countFiles",
+          "convertToMindMapJson",
+          "toMindmapHtml",
+          "init",
+          "computeTreeLayout",
+          "measureNode",
+          "charCount",
+          "positionNode",
+          "render",
+          "traverse",
+          "updateTransform",
+          "setupEventListeners",
+          "centerView",
+          "showToast",
+          "exportSVG"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 5,
+      "outgoingCount": 3,
+      "collapsed": false
+    },
+    {
+      "id": "src/exporters/plantuml.js",
+      "name": "plantuml.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/exporters/plantuml.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 3766,
+        "lines": 144,
+        "exports": [],
+        "functions": [
+          "escapePuml",
+          "nodeToPlantUml",
+          "nodeToComponentDiagram",
+          "toPlantUml"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 4,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "src/exporters/svg.js",
+      "name": "svg.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/exporters/svg.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 6685,
+        "lines": 179,
+        "exports": [],
+        "functions": [
+          "toSvg",
+          "flatten",
+          "textLen",
+          "formatSizeSvg",
+          "escXml"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 6,
+      "outgoingCount": 1,
+      "collapsed": false
+    },
+    {
+      "id": "src/exporters/xml.js",
+      "name": "xml.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/exporters/xml.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 2922,
+        "lines": 105,
+        "exports": [],
+        "functions": [
+          "escapeXml",
+          "nodeToXml",
+          "toXml"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 4,
+      "outgoingCount": 1,
+      "collapsed": false
+    },
+    {
+      "id": "src/exporters/yaml.js",
+      "name": "yaml.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/exporters/yaml.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 3178,
+        "lines": 101,
+        "exports": [],
+        "functions": [
+          "yamlString",
+          "nodeToYaml",
+          "toYaml"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 4,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "src/features/ai.js",
+      "name": "ai.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/features/ai.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 7133,
+        "lines": 203,
+        "exports": [],
+        "functions": [
+          "generateAiContext",
+          "generateAiPrompt"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 5,
+      "outgoingCount": 2,
+      "collapsed": false
+    },
+    {
+      "id": "src/features/bundle.js",
+      "name": "bundle.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/features/bundle.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 12314,
+        "lines": 348,
+        "exports": [],
+        "functions": [
+          "compileAllReports",
+          "walkNode",
+          "deadCount",
+          "circularCount",
+          "generateBundle",
+          "sizeMb"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 5,
+      "outgoingCount": 16,
+      "collapsed": false
+    },
+    {
+      "id": "src/features/compare.js",
+      "name": "compare.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/features/compare.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 2778,
+        "lines": 93,
+        "exports": [],
+        "functions": [
+          "compare",
+          "loadTree",
+          "collectPaths"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 4,
+      "outgoingCount": 5,
+      "collapsed": false
+    },
+    {
+      "id": "src/features/duplicates.js",
+      "name": "duplicates.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/features/duplicates.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 4088,
+        "lines": 147,
+        "exports": [],
+        "functions": [
+          "collectFiles",
+          "findDuplicatesByName",
+          "findDuplicatesByHash",
+          "formatDuplicateReport"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 4,
+      "outgoingCount": 1,
+      "collapsed": false
+    },
+    {
+      "id": "src/features/exporter.js",
+      "name": "exporter.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/features/exporter.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 3917,
+        "lines": 112,
+        "exports": [],
+        "functions": [
+          "exportReports"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 4,
+      "outgoingCount": 4,
+      "collapsed": false
+    },
+    {
+      "id": "src/features/inject.js",
+      "name": "inject.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/features/inject.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 1528,
+        "lines": 46,
+        "exports": [],
+        "functions": [
+          "injectIntoFile"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 3,
+      "outgoingCount": 1,
+      "collapsed": false
+    },
+    {
+      "id": "src/features/monorepo.js",
+      "name": "monorepo.js",
+      "type": "REPOSITORY",
+      "icon": "🗃️",
+      "label": "Repository",
+      "color": "#da3633",
+      "filePath": "src/features/monorepo.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 5218,
+        "lines": 164,
+        "exports": [],
+        "functions": [
+          "detectMonorepo",
+          "exists",
+          "extractPnpmWorkspaceGlobs",
+          "resolveGlobs",
+          "formatWorkspaceSummary"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 2,
+      "outgoingCount": 2,
+      "collapsed": false
+    },
+    {
+      "id": "src/features/shellHook.js",
+      "name": "shellHook.js",
+      "type": "HOOK",
+      "icon": "🪝",
+      "label": "Hook",
+      "color": "#d2a8ff",
+      "filePath": "src/features/shellHook.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 5436,
+        "lines": 163,
+        "exports": [],
+        "functions": [
+          "generateShellHook",
+          "normalized",
+          "prompt",
+          "getProfilePath",
+          "normalized",
+          "installShellHook"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 4,
+      "outgoingCount": 4,
+      "collapsed": false
+    },
+    {
+      "id": "src/features/summarize.js",
+      "name": "summarize.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/features/summarize.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 13884,
+        "lines": 365,
+        "exports": [],
+        "functions": [
+          "cleanSummaryText",
+          "extractFileSummary",
+          "getDescriptionByFilename",
+          "getDescriptionByExtension"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 4,
+      "outgoingCount": 3,
+      "collapsed": false
+    },
+    {
+      "id": "src/features/tokens.js",
+      "name": "tokens.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/features/tokens.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 2075,
+        "lines": 77,
+        "exports": [],
+        "functions": [
+          "estimateTokens",
+          "calculateCost",
+          "formatTokenSummary"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 5,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "src/features/watcher.js",
+      "name": "watcher.js",
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9",
+      "filePath": "src/features/watcher.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 1585,
+        "lines": 57,
+        "exports": [],
+        "functions": [
+          "watchDirectory",
+          "debounced",
+          "cleanup"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 2,
+      "outgoingCount": 3,
+      "collapsed": false
+    },
+    {
+      "id": "src/index.js",
+      "name": "index.js",
+      "type": "ENTRY",
+      "icon": "🚀",
+      "label": "Entry Point",
+      "color": "#3fb950",
+      "filePath": "src/index.js",
+      "language": "JavaScript",
+      "framework": "Entry Point",
+      "description": "",
+      "badges": [
+        "Entry Point"
+      ],
+      "status": "active",
+      "metadata": {
+        "size": 4248,
+        "lines": 127,
+        "exports": [],
+        "functions": [],
+        "ext": ".js"
+      },
+      "incomingCount": 1,
+      "outgoingCount": 39,
+      "collapsed": false
+    },
+    {
+      "id": "src/utils/clipboard.js",
+      "name": "clipboard.js",
+      "type": "UTILITY",
+      "icon": "🛠️",
+      "label": "Utility",
+      "color": "#8b949e",
+      "filePath": "src/utils/clipboard.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 1153,
+        "lines": 32,
+        "exports": [],
+        "functions": [
+          "copyToClipboard"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 2,
+      "outgoingCount": 1,
+      "collapsed": false
+    },
+    {
+      "id": "src/utils/colors.js",
+      "name": "colors.js",
+      "type": "UTILITY",
+      "icon": "🛠️",
+      "label": "Utility",
+      "color": "#8b949e",
+      "filePath": "src/utils/colors.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 3160,
+        "lines": 90,
+        "exports": [],
+        "functions": [
+          "isColorEnabled",
+          "code",
+          "wrap"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 7,
+      "outgoingCount": 1,
+      "collapsed": false
+    },
+    {
+      "id": "src/utils/globMatcher.js",
+      "name": "globMatcher.js",
+      "type": "UTILITY",
+      "icon": "🛠️",
+      "label": "Utility",
+      "color": "#8b949e",
+      "filePath": "src/utils/globMatcher.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 6101,
+        "lines": 234,
+        "exports": [],
+        "functions": [
+          "escapeRegExp",
+          "globToRegExp",
+          "parseIgnoreLine",
+          "compileIgnoreRules",
+          "isIgnored",
+          "matchesExtension"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 3,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "src/utils/hasher.js",
+      "name": "hasher.js",
+      "type": "UTILITY",
+      "icon": "🛠️",
+      "label": "Utility",
+      "color": "#8b949e",
+      "filePath": "src/utils/hasher.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 2264,
+        "lines": 79,
+        "exports": [],
+        "functions": [
+          "hashFileSync",
+          "hashData",
+          "shortHash"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 5,
+      "outgoingCount": 2,
+      "collapsed": false
+    },
+    {
+      "id": "src/utils/ignore.js",
+      "name": "ignore.js",
+      "type": "UTILITY",
+      "icon": "🛠️",
+      "label": "Utility",
+      "color": "#8b949e",
+      "filePath": "src/utils/ignore.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 6740,
+        "lines": 193,
+        "exports": [],
+        "functions": [
+          "globToRegExpStr",
+          "parseIgnoreFile",
+          "discoverNestedIgnoreFiles",
+          "walkDir",
+          "that",
+          "buildIgnoreMatcher",
+          "isIgnoredNested",
+          "isIgnoredLegacy"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 5,
+      "outgoingCount": 3,
+      "collapsed": false
+    },
+    {
+      "id": "src/utils/sensitive.js",
+      "name": "sensitive.js",
+      "type": "UTILITY",
+      "icon": "🛠️",
+      "label": "Utility",
+      "color": "#8b949e",
+      "filePath": "src/utils/sensitive.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 848,
+        "lines": 37,
+        "exports": [],
+        "functions": [
+          "isSensitive",
+          "maskName"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 2,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "src/utils/zip.js",
+      "name": "zip.js",
+      "type": "UTILITY",
+      "icon": "🛠️",
+      "label": "Utility",
+      "color": "#8b949e",
+      "filePath": "src/utils/zip.js",
+      "language": "JavaScript",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 6048,
+        "lines": 166,
+        "exports": [],
+        "functions": [
+          "crc32",
+          "toDosDateTime",
+          "createZip"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 4,
+      "outgoingCount": 1,
+      "collapsed": false
+    },
+    {
+      "id": "tests/bundle.test.js",
+      "name": "bundle.test.js",
+      "type": "TEST",
+      "icon": "🧪",
+      "label": "Test",
+      "color": "#7ee787",
+      "filePath": "tests/bundle.test.js",
+      "language": "JavaScript",
+      "framework": "Test",
+      "description": "",
+      "badges": [
+        "Test"
+      ],
+      "status": "active",
+      "metadata": {
+        "size": 3466,
+        "lines": 107,
+        "exports": [],
+        "functions": [
+          "test"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 1,
+      "outgoingCount": 4,
+      "collapsed": false
+    },
+    {
+      "id": "tests/compare.test.js",
+      "name": "compare.test.js",
+      "type": "TEST",
+      "icon": "🧪",
+      "label": "Test",
+      "color": "#7ee787",
+      "filePath": "tests/compare.test.js",
+      "language": "JavaScript",
+      "framework": "Test",
+      "description": "",
+      "badges": [
+        "Test"
+      ],
+      "status": "active",
+      "metadata": {
+        "size": 1340,
+        "lines": 37,
+        "exports": [],
+        "functions": [
+          "assert"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 1,
+      "outgoingCount": 4,
+      "collapsed": false
+    },
+    {
+      "id": "tests/exporter.test.js",
+      "name": "exporter.test.js",
+      "type": "TEST",
+      "icon": "🧪",
+      "label": "Test",
+      "color": "#7ee787",
+      "filePath": "tests/exporter.test.js",
+      "language": "JavaScript",
+      "framework": "Test",
+      "description": "",
+      "badges": [
+        "Test"
+      ],
+      "status": "active",
+      "metadata": {
+        "size": 1358,
+        "lines": 51,
+        "exports": [],
+        "functions": [
+          "test"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 1,
+      "outgoingCount": 4,
+      "collapsed": false
+    },
+    {
+      "id": "tests/flow.test.js",
+      "name": "flow.test.js",
+      "type": "TEST",
+      "icon": "🧪",
+      "label": "Test",
+      "color": "#7ee787",
+      "filePath": "tests/flow.test.js",
+      "language": "JavaScript",
+      "framework": "Test",
+      "description": "Exports: Header",
+      "badges": [
+        "Test"
+      ],
+      "status": "active",
+      "metadata": {
+        "size": 3580,
+        "lines": 89,
+        "exports": [
+          "Header"
+        ],
+        "functions": [
+          "Header"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 1,
+      "outgoingCount": 5,
+      "collapsed": false
+    },
+    {
+      "id": "tests/flutter_graph.test.js",
+      "name": "flutter_graph.test.js",
+      "type": "TEST",
+      "icon": "🧪",
+      "label": "Test",
+      "color": "#7ee787",
+      "filePath": "tests/flutter_graph.test.js",
+      "language": "JavaScript",
+      "framework": "Test",
+      "description": "",
+      "badges": [
+        "Test"
+      ],
+      "status": "active",
+      "metadata": {
+        "size": 6846,
+        "lines": 176,
+        "exports": [],
+        "functions": [],
+        "ext": ".js"
+      },
+      "incomingCount": 1,
+      "outgoingCount": 14,
+      "collapsed": false
+    },
+    {
+      "id": "tests/formatter.test.js",
+      "name": "formatter.test.js",
+      "type": "TEST",
+      "icon": "🧪",
+      "label": "Test",
+      "color": "#7ee787",
+      "filePath": "tests/formatter.test.js",
+      "language": "JavaScript",
+      "framework": "Test",
+      "description": "",
+      "badges": [
+        "Test"
+      ],
+      "status": "active",
+      "metadata": {
+        "size": 2581,
+        "lines": 59,
+        "exports": [],
+        "functions": [
+          "assert"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 1,
+      "outgoingCount": 4,
+      "collapsed": false
+    },
+    {
+      "id": "tests/graph.test.js",
+      "name": "graph.test.js",
+      "type": "TEST",
+      "icon": "🧪",
+      "label": "Test",
+      "color": "#7ee787",
+      "filePath": "tests/graph.test.js",
+      "language": "JavaScript",
+      "framework": "Test",
+      "description": "",
+      "badges": [
+        "Test"
+      ],
+      "status": "active",
+      "metadata": {
+        "size": 12439,
+        "lines": 227,
+        "exports": [],
+        "functions": [
+          "assert"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 1,
+      "outgoingCount": 5,
+      "collapsed": false
+    },
+    {
+      "id": "tests/html.test.js",
+      "name": "html.test.js",
+      "type": "TEST",
+      "icon": "🧪",
+      "label": "Test",
+      "color": "#7ee787",
+      "filePath": "tests/html.test.js",
+      "language": "JavaScript",
+      "framework": "Test",
+      "description": "",
+      "badges": [
+        "Test"
+      ],
+      "status": "active",
+      "metadata": {
+        "size": 1585,
+        "lines": 41,
+        "exports": [],
+        "functions": [
+          "assert"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 1,
+      "outgoingCount": 4,
+      "collapsed": false
+    },
+    {
+      "id": "tests/ignore.test.js",
+      "name": "ignore.test.js",
+      "type": "TEST",
+      "icon": "🧪",
+      "label": "Test",
+      "color": "#7ee787",
+      "filePath": "tests/ignore.test.js",
+      "language": "JavaScript",
+      "framework": "Test",
+      "description": "",
+      "badges": [
+        "Test"
+      ],
+      "status": "active",
+      "metadata": {
+        "size": 1154,
+        "lines": 34,
+        "exports": [],
+        "functions": [
+          "assert"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 1,
+      "outgoingCount": 1,
+      "collapsed": false
+    },
+    {
+      "id": "tests/json.test.js",
+      "name": "json.test.js",
+      "type": "TEST",
+      "icon": "🧪",
+      "label": "Test",
+      "color": "#7ee787",
+      "filePath": "tests/json.test.js",
+      "language": "JavaScript",
+      "framework": "Test",
+      "description": "",
+      "badges": [
+        "Test"
+      ],
+      "status": "active",
+      "metadata": {
+        "size": 1541,
+        "lines": 42,
+        "exports": [],
+        "functions": [
+          "assert"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 1,
+      "outgoingCount": 4,
+      "collapsed": false
+    },
+    {
+      "id": "tests/mermaid.test.js",
+      "name": "mermaid.test.js",
+      "type": "TEST",
+      "icon": "🧪",
+      "label": "Test",
+      "color": "#7ee787",
+      "filePath": "tests/mermaid.test.js",
+      "language": "JavaScript",
+      "framework": "Test",
+      "description": "",
+      "badges": [
+        "Test"
+      ],
+      "status": "active",
+      "metadata": {
+        "size": 921,
+        "lines": 28,
+        "exports": [],
+        "functions": [
+          "assert"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 1,
+      "outgoingCount": 3,
+      "collapsed": false
+    },
+    {
+      "id": "tests/mindmap.test.js",
+      "name": "mindmap.test.js",
+      "type": "TEST",
+      "icon": "🧪",
+      "label": "Test",
+      "color": "#7ee787",
+      "filePath": "tests/mindmap.test.js",
+      "language": "JavaScript",
+      "framework": "Test",
+      "description": "",
+      "badges": [
+        "Test"
+      ],
+      "status": "active",
+      "metadata": {
+        "size": 1199,
+        "lines": 30,
+        "exports": [],
+        "functions": [
+          "assert"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 1,
+      "outgoingCount": 3,
+      "collapsed": false
+    },
+    {
+      "id": "tests/scanner.test.js",
+      "name": "scanner.test.js",
+      "type": "TEST",
+      "icon": "🧪",
+      "label": "Test",
+      "color": "#7ee787",
+      "filePath": "tests/scanner.test.js",
+      "language": "JavaScript",
+      "framework": "Test",
+      "description": "",
+      "badges": [
+        "Test"
+      ],
+      "status": "active",
+      "metadata": {
+        "size": 2030,
+        "lines": 52,
+        "exports": [],
+        "functions": [
+          "assert"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 1,
+      "outgoingCount": 2,
+      "collapsed": false
+    },
+    {
+      "id": "tests/shellHook.test.js",
+      "name": "shellHook.test.js",
+      "type": "TEST",
+      "icon": "🧪",
+      "label": "Test",
+      "color": "#7ee787",
+      "filePath": "tests/shellHook.test.js",
+      "language": "JavaScript",
+      "framework": "Test",
+      "description": "",
+      "badges": [
+        "Test"
+      ],
+      "status": "active",
+      "metadata": {
+        "size": 2436,
+        "lines": 57,
+        "exports": [],
+        "functions": [],
+        "ext": ".js"
+      },
+      "incomingCount": 1,
+      "outgoingCount": 5,
+      "collapsed": false
+    },
+    {
+      "id": "tests/summarize.test.js",
+      "name": "summarize.test.js",
+      "type": "TEST",
+      "icon": "🧪",
+      "label": "Test",
+      "color": "#7ee787",
+      "filePath": "tests/summarize.test.js",
+      "language": "JavaScript",
+      "framework": "Test",
+      "description": "",
+      "badges": [
+        "Test"
+      ],
+      "status": "active",
+      "metadata": {
+        "size": 2943,
+        "lines": 62,
+        "exports": [],
+        "functions": [
+          "scan"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 1,
+      "outgoingCount": 6,
+      "collapsed": false
+    },
+    {
+      "id": "tests/svg.test.js",
+      "name": "svg.test.js",
+      "type": "TEST",
+      "icon": "🧪",
+      "label": "Test",
+      "color": "#7ee787",
+      "filePath": "tests/svg.test.js",
+      "language": "JavaScript",
+      "framework": "Test",
+      "description": "",
+      "badges": [
+        "Test"
+      ],
+      "status": "active",
+      "metadata": {
+        "size": 1194,
+        "lines": 35,
+        "exports": [],
+        "functions": [
+          "assert"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 1,
+      "outgoingCount": 4,
+      "collapsed": false
+    },
+    {
+      "id": "tests/tokens.test.js",
+      "name": "tokens.test.js",
+      "type": "TEST",
+      "icon": "🧪",
+      "label": "Test",
+      "color": "#7ee787",
+      "filePath": "tests/tokens.test.js",
+      "language": "JavaScript",
+      "framework": "Test",
+      "description": "",
+      "badges": [
+        "Test"
+      ],
+      "status": "active",
+      "metadata": {
+        "size": 1749,
+        "lines": 47,
+        "exports": [],
+        "functions": [],
+        "ext": ".js"
+      },
+      "incomingCount": 1,
+      "outgoingCount": 2,
+      "collapsed": false
+    },
+    {
+      "id": "tests/v3.test.js",
+      "name": "v3.test.js",
+      "type": "TEST",
+      "icon": "🧪",
+      "label": "Test",
+      "color": "#7ee787",
+      "filePath": "tests/v3.test.js",
+      "language": "JavaScript",
+      "framework": "Test",
+      "description": "",
+      "badges": [
+        "Test"
+      ],
+      "status": "active",
+      "metadata": {
+        "size": 5929,
+        "lines": 212,
+        "exports": [],
+        "functions": [],
+        "ext": ".js"
+      },
+      "incomingCount": 1,
+      "outgoingCount": 16,
+      "collapsed": false
+    },
+    {
+      "id": "tests/zip.test.js",
+      "name": "zip.test.js",
+      "type": "TEST",
+      "icon": "🧪",
+      "label": "Test",
+      "color": "#7ee787",
+      "filePath": "tests/zip.test.js",
+      "language": "JavaScript",
+      "framework": "Test",
+      "description": "",
+      "badges": [
+        "Test"
+      ],
+      "status": "active",
+      "metadata": {
+        "size": 1406,
+        "lines": 56,
+        "exports": [],
+        "functions": [
+          "test"
+        ],
+        "ext": ".js"
+      },
+      "incomingCount": 1,
+      "outgoingCount": 2,
+      "collapsed": false
+    },
+    {
+      "id": "UNUSED_COMPONENTS.json",
+      "name": "UNUSED_COMPONENTS.json",
+      "type": "COMPONENT",
+      "icon": "🧩",
+      "label": "Component",
+      "color": "#3fb950",
+      "filePath": "UNUSED_COMPONENTS.json",
+      "language": "JSON",
+      "framework": "",
+      "description": "",
+      "badges": [],
+      "status": "active",
+      "metadata": {
+        "size": 2,
+        "lines": 1,
+        "exports": [],
+        "functions": [],
+        "ext": ".json"
+      },
+      "incomingCount": 0,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "assets",
+      "name": "assets",
+      "type": "FOLDER",
+      "icon": "📁",
+      "label": "Folder",
+      "color": "#8b949e",
+      "filePath": "assets",
+      "language": "",
+      "framework": "",
+      "description": "Directory: assets",
+      "badges": [
+        "Folder"
+      ],
+      "status": "active",
+      "metadata": {
+        "isFolder": true
+      },
+      "incomingCount": 0,
+      "outgoingCount": 4,
+      "collapsed": false
+    },
+    {
+      "id": "bin",
+      "name": "bin",
+      "type": "FOLDER",
+      "icon": "📁",
+      "label": "Folder",
+      "color": "#8b949e",
+      "filePath": "bin",
+      "language": "",
+      "framework": "",
+      "description": "Directory: bin",
+      "badges": [
+        "Folder"
+      ],
+      "status": "active",
+      "metadata": {
+        "isFolder": true
+      },
+      "incomingCount": 0,
+      "outgoingCount": 1,
+      "collapsed": false
+    },
+    {
+      "id": "src/core",
+      "name": "core",
+      "type": "FOLDER",
+      "icon": "📁",
+      "label": "Folder",
+      "color": "#8b949e",
+      "filePath": "src/core",
+      "language": "",
+      "framework": "",
+      "description": "Directory: src/core",
+      "badges": [
+        "Folder"
+      ],
+      "status": "active",
+      "metadata": {
+        "isFolder": true
+      },
+      "incomingCount": 1,
+      "outgoingCount": 13,
+      "collapsed": false
+    },
+    {
+      "id": "src",
+      "name": "src",
+      "type": "FOLDER",
+      "icon": "📁",
+      "label": "Folder",
+      "color": "#8b949e",
+      "filePath": "src",
+      "language": "",
+      "framework": "",
+      "description": "Directory: src",
+      "badges": [
+        "Folder"
+      ],
+      "status": "active",
+      "metadata": {
+        "isFolder": true
+      },
+      "incomingCount": 0,
+      "outgoingCount": 6,
+      "collapsed": false
+    },
+    {
+      "id": "src/detectors",
+      "name": "detectors",
+      "type": "FOLDER",
+      "icon": "📁",
+      "label": "Folder",
+      "color": "#8b949e",
+      "filePath": "src/detectors",
+      "language": "",
+      "framework": "",
+      "description": "Directory: src/detectors",
+      "badges": [
+        "Folder"
+      ],
+      "status": "active",
+      "metadata": {
+        "isFolder": true
+      },
+      "incomingCount": 1,
+      "outgoingCount": 1,
+      "collapsed": false
+    },
+    {
+      "id": "src/exporters",
+      "name": "exporters",
+      "type": "FOLDER",
+      "icon": "📁",
+      "label": "Folder",
+      "color": "#8b949e",
+      "filePath": "src/exporters",
+      "language": "",
+      "framework": "",
+      "description": "Directory: src/exporters",
+      "badges": [
+        "Folder"
+      ],
+      "status": "active",
+      "metadata": {
+        "isFolder": true
+      },
+      "incomingCount": 1,
+      "outgoingCount": 14,
+      "collapsed": false
+    },
+    {
+      "id": "src/features",
+      "name": "features",
+      "type": "FOLDER",
+      "icon": "📁",
+      "label": "Folder",
+      "color": "#8b949e",
+      "filePath": "src/features",
+      "language": "",
+      "framework": "",
+      "description": "Directory: src/features",
+      "badges": [
+        "Folder"
+      ],
+      "status": "active",
+      "metadata": {
+        "isFolder": true
+      },
+      "incomingCount": 1,
+      "outgoingCount": 11,
+      "collapsed": false
+    },
+    {
+      "id": "src/utils",
+      "name": "utils",
+      "type": "FOLDER",
+      "icon": "📁",
+      "label": "Folder",
+      "color": "#8b949e",
+      "filePath": "src/utils",
+      "language": "",
+      "framework": "",
+      "description": "Directory: src/utils",
+      "badges": [
+        "Folder"
+      ],
+      "status": "active",
+      "metadata": {
+        "isFolder": true
+      },
+      "incomingCount": 1,
+      "outgoingCount": 7,
+      "collapsed": false
+    },
+    {
+      "id": "tests",
+      "name": "tests",
+      "type": "FOLDER",
+      "icon": "📁",
+      "label": "Folder",
+      "color": "#8b949e",
+      "filePath": "tests",
+      "language": "",
+      "framework": "",
+      "description": "Directory: tests",
+      "badges": [
+        "Folder"
+      ],
+      "status": "active",
+      "metadata": {
+        "isFolder": true
+      },
+      "incomingCount": 0,
+      "outgoingCount": 19,
+      "collapsed": false
+    },
+    {
+      "id": "pkg:path",
+      "name": "path",
+      "type": "PACKAGE",
+      "icon": "📦",
+      "label": "Package",
+      "color": "#f0883e",
+      "filePath": "pkg:path",
+      "language": "",
+      "framework": "pkg",
+      "description": "Dependency / Pattern: pkg:path",
+      "badges": [
+        "PKG"
+      ],
+      "status": "active",
+      "metadata": {
+        "isVirtual": true
+      },
+      "incomingCount": 41,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "pkg:fs",
+      "name": "fs",
+      "type": "PACKAGE",
+      "icon": "📦",
+      "label": "Package",
+      "color": "#f0883e",
+      "filePath": "pkg:fs",
+      "language": "",
+      "framework": "pkg",
+      "description": "Dependency / Pattern: pkg:fs",
+      "badges": [
+        "PKG"
+      ],
+      "status": "active",
+      "metadata": {
+        "isVirtual": true
+      },
+      "incomingCount": 27,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "pkg:readline",
+      "name": "readline",
+      "type": "PACKAGE",
+      "icon": "📦",
+      "label": "Package",
+      "color": "#f0883e",
+      "filePath": "pkg:readline",
+      "language": "",
+      "framework": "pkg",
+      "description": "Dependency / Pattern: pkg:readline",
+      "badges": [
+        "PKG"
+      ],
+      "status": "active",
+      "metadata": {
+        "isVirtual": true
+      },
+      "incomingCount": 1,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "env:variables",
+      "name": "variables",
+      "type": "ENVIRONMENT",
+      "icon": "🌍",
+      "label": "Environment",
+      "color": "#7ee787",
+      "filePath": "env:variables",
+      "language": "",
+      "framework": "env",
+      "description": "Dependency / Pattern: env:variables",
+      "badges": [
+        "ENV"
+      ],
+      "status": "active",
+      "metadata": {
+        "isVirtual": true
+      },
+      "incomingCount": 2,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "pkg:y",
+      "name": "y",
+      "type": "PACKAGE",
+      "icon": "📦",
+      "label": "Package",
+      "color": "#f0883e",
+      "filePath": "pkg:y",
+      "language": "",
+      "framework": "pkg",
+      "description": "Dependency / Pattern: pkg:y",
+      "badges": [
+        "PKG"
+      ],
+      "status": "active",
+      "metadata": {
+        "isVirtual": true
+      },
+      "incomingCount": 6,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "pkg:os",
+      "name": "os",
+      "type": "PACKAGE",
+      "icon": "📦",
+      "label": "Package",
+      "color": "#f0883e",
+      "filePath": "pkg:os",
+      "language": "",
+      "framework": "pkg",
+      "description": "Dependency / Pattern: pkg:os",
+      "badges": [
+        "PKG"
+      ],
+      "status": "active",
+      "metadata": {
+        "isVirtual": true
+      },
+      "incomingCount": 4,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "pkg:project-tree-md",
+      "name": "project-tree-md",
+      "type": "PACKAGE",
+      "icon": "📦",
+      "label": "Package",
+      "color": "#f0883e",
+      "filePath": "pkg:project-tree-md",
+      "language": "",
+      "framework": "pkg",
+      "description": "Dependency / Pattern: pkg:project-tree-md",
+      "badges": [
+        "PKG"
+      ],
+      "status": "active",
+      "metadata": {
+        "isVirtual": true
+      },
+      "incomingCount": 1,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "pkg:child_process",
+      "name": "child_process",
+      "type": "PACKAGE",
+      "icon": "📦",
+      "label": "Package",
+      "color": "#f0883e",
+      "filePath": "pkg:child_process",
+      "language": "",
+      "framework": "pkg",
+      "description": "Dependency / Pattern: pkg:child_process",
+      "badges": [
+        "PKG"
+      ],
+      "status": "active",
+      "metadata": {
+        "isVirtual": true
+      },
+      "incomingCount": 1,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "pkg:crypto",
+      "name": "crypto",
+      "type": "PACKAGE",
+      "icon": "📦",
+      "label": "Package",
+      "color": "#f0883e",
+      "filePath": "pkg:crypto",
+      "language": "",
+      "framework": "pkg",
+      "description": "Dependency / Pattern: pkg:crypto",
+      "badges": [
+        "PKG"
+      ],
+      "status": "active",
+      "metadata": {
+        "isVirtual": true
+      },
+      "incomingCount": 1,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "pkg:zlib",
+      "name": "zlib",
+      "type": "PACKAGE",
+      "icon": "📦",
+      "label": "Package",
+      "color": "#f0883e",
+      "filePath": "pkg:zlib",
+      "language": "",
+      "framework": "pkg",
+      "description": "Dependency / Pattern: pkg:zlib",
+      "badges": [
+        "PKG"
+      ],
+      "status": "active",
+      "metadata": {
+        "isVirtual": true
+      },
+      "incomingCount": 1,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "pkg:assert",
+      "name": "assert",
+      "type": "PACKAGE",
+      "icon": "📦",
+      "label": "Package",
+      "color": "#f0883e",
+      "filePath": "pkg:assert",
+      "language": "",
+      "framework": "pkg",
+      "description": "Dependency / Pattern: pkg:assert",
+      "badges": [
+        "PKG"
+      ],
+      "status": "active",
+      "metadata": {
+        "isVirtual": true
+      },
+      "incomingCount": 9,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "pkg:package:flutter",
+      "name": "package:flutter",
+      "type": "PACKAGE",
+      "icon": "📦",
+      "label": "Package",
+      "color": "#f0883e",
+      "filePath": "pkg:package:flutter",
+      "language": "",
+      "framework": "pkg",
+      "description": "Dependency / Pattern: pkg:package:flutter",
+      "badges": [
+        "PKG"
+      ],
+      "status": "active",
+      "metadata": {
+        "isVirtual": true
+      },
+      "incomingCount": 3,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "pkg:package:my_flutter_app",
+      "name": "package:my_flutter_app",
+      "type": "PACKAGE",
+      "icon": "📦",
+      "label": "Package",
+      "color": "#f0883e",
+      "filePath": "pkg:package:my_flutter_app",
+      "language": "",
+      "framework": "pkg",
+      "description": "Dependency / Pattern: pkg:package:my_flutter_app",
+      "badges": [
+        "PKG"
+      ],
+      "status": "active",
+      "metadata": {
+        "isVirtual": true
+      },
+      "incomingCount": 3,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "pkg:package:http",
+      "name": "package:http",
+      "type": "PACKAGE",
+      "icon": "📦",
+      "label": "Package",
+      "color": "#f0883e",
+      "filePath": "pkg:package:http",
+      "language": "",
+      "framework": "pkg",
+      "description": "Dependency / Pattern: pkg:package:http",
+      "badges": [
+        "PKG"
+      ],
+      "status": "active",
+      "metadata": {
+        "isVirtual": true
+      },
+      "incomingCount": 1,
+      "outgoingCount": 0,
+      "collapsed": false
+    },
+    {
+      "id": "pkg:jsonwebtoken",
+      "name": "jsonwebtoken",
+      "type": "PACKAGE",
+      "icon": "📦",
+      "label": "Package",
+      "color": "#f0883e",
+      "filePath": "pkg:jsonwebtoken",
+      "language": "",
+      "framework": "pkg",
+      "description": "Dependency / Pattern: pkg:jsonwebtoken",
+      "badges": [
+        "PKG"
+      ],
+      "status": "active",
+      "metadata": {
+        "isVirtual": true
+      },
+      "incomingCount": 1,
+      "outgoingCount": 0,
+      "collapsed": false
+    }
+  ],
+  "edges": [
+    {
+      "id": "e0",
+      "source": "src",
+      "target": "src/core",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e1",
+      "source": "src",
+      "target": "src/detectors",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e2",
+      "source": "src",
+      "target": "src/exporters",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e3",
+      "source": "src",
+      "target": "src/features",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e4",
+      "source": "src",
+      "target": "src/utils",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e5",
+      "source": "assets",
+      "target": "assets/banner.svg",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e6",
+      "source": "assets",
+      "target": "assets/code_graph_preview.svg",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e7",
+      "source": "assets",
+      "target": "assets/features_preview.svg",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e8",
+      "source": "assets",
+      "target": "assets/react_demo.svg",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e9",
+      "source": "bin",
+      "target": "bin/cli.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e10",
+      "source": "src/core",
+      "target": "src/core/analyzer.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e11",
+      "source": "src/core",
+      "target": "src/core/architectureFlow.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e12",
+      "source": "src/core",
+      "target": "src/core/configLoader.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e13",
+      "source": "src/core",
+      "target": "src/core/formatter.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e14",
+      "source": "src/core",
+      "target": "src/core/generator.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e15",
+      "source": "src/core",
+      "target": "src/core/iconEngine.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e16",
+      "source": "src/core",
+      "target": "src/core/pluginApi.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e17",
+      "source": "src/core",
+      "target": "src/core/scanner.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e18",
+      "source": "src/core",
+      "target": "src/core/sorter.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e19",
+      "source": "src/core",
+      "target": "src/core/stats.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e20",
+      "source": "src/core",
+      "target": "src/core/themeEngine.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e21",
+      "source": "src/core",
+      "target": "src/core/universalGraph.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e22",
+      "source": "src/core",
+      "target": "src/core/universalParser.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e23",
+      "source": "src/detectors",
+      "target": "src/detectors/project.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e24",
+      "source": "src/exporters",
+      "target": "src/exporters/architectureFlowHtml.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e25",
+      "source": "src/exporters",
+      "target": "src/exporters/csv.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e26",
+      "source": "src/exporters",
+      "target": "src/exporters/graph3dVisualizer.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e27",
+      "source": "src/exporters",
+      "target": "src/exporters/graphJson.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e28",
+      "source": "src/exporters",
+      "target": "src/exporters/graphVisualizer.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e29",
+      "source": "src/exporters",
+      "target": "src/exporters/html.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e30",
+      "source": "src/exporters",
+      "target": "src/exporters/json.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e31",
+      "source": "src/exporters",
+      "target": "src/exporters/markdown.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e32",
+      "source": "src/exporters",
+      "target": "src/exporters/mermaid.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e33",
+      "source": "src/exporters",
+      "target": "src/exporters/mindmap.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e34",
+      "source": "src/exporters",
+      "target": "src/exporters/plantuml.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e35",
+      "source": "src/exporters",
+      "target": "src/exporters/svg.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e36",
+      "source": "src/exporters",
+      "target": "src/exporters/xml.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e37",
+      "source": "src/exporters",
+      "target": "src/exporters/yaml.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e38",
+      "source": "src/features",
+      "target": "src/features/ai.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e39",
+      "source": "src/features",
+      "target": "src/features/bundle.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e40",
+      "source": "src/features",
+      "target": "src/features/compare.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e41",
+      "source": "src/features",
+      "target": "src/features/duplicates.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e42",
+      "source": "src/features",
+      "target": "src/features/exporter.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e43",
+      "source": "src/features",
+      "target": "src/features/inject.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e44",
+      "source": "src/features",
+      "target": "src/features/monorepo.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e45",
+      "source": "src/features",
+      "target": "src/features/shellHook.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e46",
+      "source": "src/features",
+      "target": "src/features/summarize.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e47",
+      "source": "src/features",
+      "target": "src/features/tokens.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e48",
+      "source": "src/features",
+      "target": "src/features/watcher.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e49",
+      "source": "src",
+      "target": "src/index.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e50",
+      "source": "src/utils",
+      "target": "src/utils/clipboard.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e51",
+      "source": "src/utils",
+      "target": "src/utils/colors.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e52",
+      "source": "src/utils",
+      "target": "src/utils/globMatcher.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e53",
+      "source": "src/utils",
+      "target": "src/utils/hasher.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e54",
+      "source": "src/utils",
+      "target": "src/utils/ignore.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e55",
+      "source": "src/utils",
+      "target": "src/utils/sensitive.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e56",
+      "source": "src/utils",
+      "target": "src/utils/zip.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e57",
+      "source": "tests",
+      "target": "tests/bundle.test.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e58",
+      "source": "tests",
+      "target": "tests/compare.test.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e59",
+      "source": "tests",
+      "target": "tests/exporter.test.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e60",
+      "source": "tests",
+      "target": "tests/flow.test.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e61",
+      "source": "tests",
+      "target": "tests/flutter_graph.test.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e62",
+      "source": "tests",
+      "target": "tests/formatter.test.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e63",
+      "source": "tests",
+      "target": "tests/graph.test.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e64",
+      "source": "tests",
+      "target": "tests/html.test.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e65",
+      "source": "tests",
+      "target": "tests/ignore.test.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e66",
+      "source": "tests",
+      "target": "tests/json.test.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e67",
+      "source": "tests",
+      "target": "tests/mermaid.test.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e68",
+      "source": "tests",
+      "target": "tests/mindmap.test.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e69",
+      "source": "tests",
+      "target": "tests/scanner.test.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e70",
+      "source": "tests",
+      "target": "tests/shellHook.test.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e71",
+      "source": "tests",
+      "target": "tests/summarize.test.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e72",
+      "source": "tests",
+      "target": "tests/svg.test.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e73",
+      "source": "tests",
+      "target": "tests/tokens.test.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e74",
+      "source": "tests",
+      "target": "tests/v3.test.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e75",
+      "source": "tests",
+      "target": "tests/zip.test.js",
+      "type": "PARENT_CHILD",
+      "label": "Contains",
+      "color": "#58a6ff",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e76",
+      "source": "bin/cli.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e77",
+      "source": "bin/cli.js",
+      "target": "pkg:fs",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "fs"
+      }
+    },
+    {
+      "id": "e78",
+      "source": "bin/cli.js",
+      "target": "src/utils/colors.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e79",
+      "source": "bin/cli.js",
+      "target": "src/utils/clipboard.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e80",
+      "source": "bin/cli.js",
+      "target": "src/core/generator.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e81",
+      "source": "bin/cli.js",
+      "target": "src/core/stats.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e82",
+      "source": "bin/cli.js",
+      "target": "src/core/scanner.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e83",
+      "source": "bin/cli.js",
+      "target": "src/core/formatter.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e84",
+      "source": "bin/cli.js",
+      "target": "src/utils/ignore.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e85",
+      "source": "bin/cli.js",
+      "target": "src/exporters/json.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e86",
+      "source": "bin/cli.js",
+      "target": "src/exporters/html.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e87",
+      "source": "bin/cli.js",
+      "target": "src/exporters/mindmap.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e88",
+      "source": "bin/cli.js",
+      "target": "src/exporters/svg.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e89",
+      "source": "bin/cli.js",
+      "target": "src/exporters/mermaid.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e90",
+      "source": "bin/cli.js",
+      "target": "src/exporters/markdown.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e91",
+      "source": "bin/cli.js",
+      "target": "src/features/ai.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e92",
+      "source": "bin/cli.js",
+      "target": "src/features/inject.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e93",
+      "source": "bin/cli.js",
+      "target": "src/features/watcher.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e94",
+      "source": "bin/cli.js",
+      "target": "src/features/compare.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e95",
+      "source": "bin/cli.js",
+      "target": "src/detectors/project.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e96",
+      "source": "bin/cli.js",
+      "target": "src/features/tokens.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e97",
+      "source": "bin/cli.js",
+      "target": "src/core/architectureFlow.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e98",
+      "source": "bin/cli.js",
+      "target": "src/features/bundle.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e99",
+      "source": "bin/cli.js",
+      "target": "src/features/exporter.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e100",
+      "source": "bin/cli.js",
+      "target": "src/exporters/architectureFlowHtml.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e101",
+      "source": "bin/cli.js",
+      "target": "src/exporters/csv.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e102",
+      "source": "bin/cli.js",
+      "target": "src/exporters/xml.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e103",
+      "source": "bin/cli.js",
+      "target": "src/exporters/yaml.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e104",
+      "source": "bin/cli.js",
+      "target": "src/exporters/plantuml.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e105",
+      "source": "bin/cli.js",
+      "target": "src/core/configLoader.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e106",
+      "source": "bin/cli.js",
+      "target": "src/features/duplicates.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e107",
+      "source": "bin/cli.js",
+      "target": "src/core/pluginApi.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e108",
+      "source": "bin/cli.js",
+      "target": "src/features/shellHook.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e109",
+      "source": "bin/cli.js",
+      "target": "src/core/universalParser.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e110",
+      "source": "bin/cli.js",
+      "target": "src/exporters/graphVisualizer.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e111",
+      "source": "bin/cli.js",
+      "target": "src/exporters/graph3dVisualizer.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e112",
+      "source": "bin/cli.js",
+      "target": "src/exporters/graphJson.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e113",
+      "source": "bin/cli.js",
+      "target": "pkg:readline",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "readline"
+      }
+    },
+    {
+      "id": "e114",
+      "source": "bin/cli.js",
+      "target": "package.json",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e115",
+      "source": "bin/cli.js",
+      "target": "env:variables",
+      "type": "ENV_USAGE",
+      "label": "Environment Variable",
+      "color": "#7ee787",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e116",
+      "source": "src/core/analyzer.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e117",
+      "source": "src/core/analyzer.js",
+      "target": "pkg:y",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "y"
+      }
+    },
+    {
+      "id": "e118",
+      "source": "src/core/analyzer.js",
+      "target": "pkg:y",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "y"
+      }
+    },
+    {
+      "id": "e119",
+      "source": "src/core/analyzer.js",
+      "target": "pkg:y",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "y"
+      }
+    },
+    {
+      "id": "e120",
+      "source": "src/core/analyzer.js",
+      "target": "pkg:y",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "y"
+      }
+    },
+    {
+      "id": "e121",
+      "source": "src/core/analyzer.js",
+      "target": "pkg:y",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "y"
+      }
+    },
+    {
+      "id": "e122",
+      "source": "src/core/analyzer.js",
+      "target": "pkg:y",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "y"
+      }
+    },
+    {
+      "id": "e123",
+      "source": "src/core/architectureFlow.js",
+      "target": "pkg:fs",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "fs"
+      }
+    },
+    {
+      "id": "e124",
+      "source": "src/core/architectureFlow.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e125",
+      "source": "src/core/architectureFlow.js",
+      "target": "src/core/formatter.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e126",
+      "source": "src/core/architectureFlow.js",
+      "target": "src/core/scanner.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e127",
+      "source": "src/core/configLoader.js",
+      "target": "pkg:fs",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "fs"
+      }
+    },
+    {
+      "id": "e128",
+      "source": "src/core/configLoader.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e129",
+      "source": "src/core/formatter.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e130",
+      "source": "src/core/formatter.js",
+      "target": "src/core/themeEngine.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e131",
+      "source": "src/core/formatter.js",
+      "target": "src/core/iconEngine.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e132",
+      "source": "src/core/generator.js",
+      "target": "pkg:fs",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "fs"
+      }
+    },
+    {
+      "id": "e133",
+      "source": "src/core/generator.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e134",
+      "source": "src/core/generator.js",
+      "target": "src/core/scanner.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e135",
+      "source": "src/core/generator.js",
+      "target": "src/core/formatter.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e136",
+      "source": "src/core/generator.js",
+      "target": "src/core/stats.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e137",
+      "source": "src/core/generator.js",
+      "target": "src/utils/ignore.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e138",
+      "source": "src/core/generator.js",
+      "target": "src/exporters/markdown.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e139",
+      "source": "src/core/generator.js",
+      "target": "src/detectors/project.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e140",
+      "source": "src/core/generator.js",
+      "target": "src/features/tokens.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e141",
+      "source": "src/core/generator.js",
+      "target": "src/core/architectureFlow.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e142",
+      "source": "src/core/generator.js",
+      "target": "src/core/analyzer.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e143",
+      "source": "src/core/iconEngine.js",
+      "target": "pkg:fs",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "fs"
+      }
+    },
+    {
+      "id": "e144",
+      "source": "src/core/iconEngine.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e145",
+      "source": "src/core/pluginApi.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e146",
+      "source": "src/core/scanner.js",
+      "target": "pkg:fs",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "fs"
+      }
+    },
+    {
+      "id": "e147",
+      "source": "src/core/scanner.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e148",
+      "source": "src/core/scanner.js",
+      "target": "src/utils/sensitive.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e149",
+      "source": "src/core/scanner.js",
+      "target": "src/features/summarize.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e150",
+      "source": "src/core/scanner.js",
+      "target": "src/core/analyzer.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e151",
+      "source": "src/core/scanner.js",
+      "target": "src/core/sorter.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e152",
+      "source": "src/core/scanner.js",
+      "target": "src/utils/hasher.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e153",
+      "source": "src/core/stats.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e154",
+      "source": "src/core/stats.js",
+      "target": "src/core/formatter.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e155",
+      "source": "src/core/stats.js",
+      "target": "src/core/scanner.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e156",
+      "source": "src/core/stats.js",
+      "target": "src/utils/colors.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e157",
+      "source": "src/core/themeEngine.js",
+      "target": "pkg:fs",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "fs"
+      }
+    },
+    {
+      "id": "e158",
+      "source": "src/core/themeEngine.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e159",
+      "source": "src/core/universalParser.js",
+      "target": "pkg:fs",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "fs"
+      }
+    },
+    {
+      "id": "e160",
+      "source": "src/core/universalParser.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e161",
+      "source": "src/core/universalParser.js",
+      "target": "src/core/universalGraph.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e162",
+      "source": "src/core/universalParser.js",
+      "target": "src/core/scanner.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e163",
+      "source": "src/detectors/project.js",
+      "target": "pkg:fs",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "fs"
+      }
+    },
+    {
+      "id": "e164",
+      "source": "src/detectors/project.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e165",
+      "source": "src/exporters/architectureFlowHtml.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e166",
+      "source": "src/exporters/csv.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e167",
+      "source": "src/exporters/graph3dVisualizer.js",
+      "target": "src/exporters/graphVisualizer.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e168",
+      "source": "src/exporters/html.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e169",
+      "source": "src/exporters/html.js",
+      "target": "src/core/stats.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e170",
+      "source": "src/exporters/html.js",
+      "target": "src/exporters/json.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e171",
+      "source": "src/exporters/html.js",
+      "target": "src/exporters/svg.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e172",
+      "source": "src/exporters/html.js",
+      "target": "src/exporters/mermaid.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e173",
+      "source": "src/exporters/html.js",
+      "target": "src/features/ai.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e174",
+      "source": "src/exporters/html.js",
+      "target": "src/core/formatter.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e175",
+      "source": "src/exporters/html.js",
+      "target": "src/core/scanner.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e176",
+      "source": "src/exporters/json.js",
+      "target": "src/core/scanner.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e177",
+      "source": "src/exporters/mermaid.js",
+      "target": "src/core/scanner.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e178",
+      "source": "src/exporters/mindmap.js",
+      "target": "src/core/stats.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e179",
+      "source": "src/exporters/mindmap.js",
+      "target": "src/core/scanner.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e180",
+      "source": "src/exporters/mindmap.js",
+      "target": "src/core/scanner.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e181",
+      "source": "src/exporters/svg.js",
+      "target": "src/core/scanner.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e182",
+      "source": "src/exporters/xml.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e183",
+      "source": "src/features/ai.js",
+      "target": "src/detectors/project.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e184",
+      "source": "src/features/ai.js",
+      "target": "src/core/formatter.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e185",
+      "source": "src/features/bundle.js",
+      "target": "pkg:fs",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "fs"
+      }
+    },
+    {
+      "id": "e186",
+      "source": "src/features/bundle.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e187",
+      "source": "src/features/bundle.js",
+      "target": "package.json",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e188",
+      "source": "src/features/bundle.js",
+      "target": "src/core/generator.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e189",
+      "source": "src/features/bundle.js",
+      "target": "src/exporters/json.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e190",
+      "source": "src/features/bundle.js",
+      "target": "src/exporters/html.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e191",
+      "source": "src/features/bundle.js",
+      "target": "src/exporters/svg.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e192",
+      "source": "src/features/bundle.js",
+      "target": "src/exporters/mermaid.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e193",
+      "source": "src/features/bundle.js",
+      "target": "src/features/ai.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e194",
+      "source": "src/features/bundle.js",
+      "target": "src/utils/zip.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e195",
+      "source": "src/features/bundle.js",
+      "target": "src/utils/colors.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e196",
+      "source": "src/features/bundle.js",
+      "target": "src/core/universalParser.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e197",
+      "source": "src/features/bundle.js",
+      "target": "src/exporters/graphVisualizer.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e198",
+      "source": "src/features/bundle.js",
+      "target": "src/exporters/graphJson.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e199",
+      "source": "src/features/bundle.js",
+      "target": "src/exporters/graph3dVisualizer.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e200",
+      "source": "src/features/bundle.js",
+      "target": "src/exporters/mindmap.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e201",
+      "source": "src/features/compare.js",
+      "target": "pkg:fs",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "fs"
+      }
+    },
+    {
+      "id": "e202",
+      "source": "src/features/compare.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e203",
+      "source": "src/features/compare.js",
+      "target": "src/core/scanner.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e204",
+      "source": "src/features/compare.js",
+      "target": "src/core/formatter.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e205",
+      "source": "src/features/compare.js",
+      "target": "src/exporters/json.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e206",
+      "source": "src/features/duplicates.js",
+      "target": "src/utils/hasher.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e207",
+      "source": "src/features/exporter.js",
+      "target": "pkg:fs",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "fs"
+      }
+    },
+    {
+      "id": "e208",
+      "source": "src/features/exporter.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e209",
+      "source": "src/features/exporter.js",
+      "target": "src/features/bundle.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e210",
+      "source": "src/features/exporter.js",
+      "target": "src/utils/colors.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e211",
+      "source": "src/features/inject.js",
+      "target": "pkg:fs",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "fs"
+      }
+    },
+    {
+      "id": "e212",
+      "source": "src/features/monorepo.js",
+      "target": "pkg:fs",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "fs"
+      }
+    },
+    {
+      "id": "e213",
+      "source": "src/features/monorepo.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e214",
+      "source": "src/features/shellHook.js",
+      "target": "pkg:fs",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "fs"
+      }
+    },
+    {
+      "id": "e215",
+      "source": "src/features/shellHook.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e216",
+      "source": "src/features/shellHook.js",
+      "target": "pkg:os",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "os"
+      }
+    },
+    {
+      "id": "e217",
+      "source": "src/features/shellHook.js",
+      "target": "src/utils/colors.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e218",
+      "source": "src/features/summarize.js",
+      "target": "pkg:fs",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "fs"
+      }
+    },
+    {
+      "id": "e219",
+      "source": "src/features/summarize.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e220",
+      "source": "src/features/summarize.js",
+      "target": "src/core/architectureFlow.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e221",
+      "source": "src/features/watcher.js",
+      "target": "pkg:fs",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "fs"
+      }
+    },
+    {
+      "id": "e222",
+      "source": "src/features/watcher.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e223",
+      "source": "src/features/watcher.js",
+      "target": "src/utils/colors.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e224",
+      "source": "src/index.js",
+      "target": "pkg:project-tree-md",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "project-tree-md"
+      }
+    },
+    {
+      "id": "e225",
+      "source": "src/index.js",
+      "target": "src/core/generator.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e226",
+      "source": "src/index.js",
+      "target": "src/core/formatter.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e227",
+      "source": "src/index.js",
+      "target": "src/core/stats.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e228",
+      "source": "src/index.js",
+      "target": "src/core/scanner.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e229",
+      "source": "src/index.js",
+      "target": "src/detectors/project.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e230",
+      "source": "src/index.js",
+      "target": "src/utils/ignore.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e231",
+      "source": "src/index.js",
+      "target": "src/exporters/json.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e232",
+      "source": "src/index.js",
+      "target": "src/exporters/html.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e233",
+      "source": "src/index.js",
+      "target": "src/exporters/svg.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e234",
+      "source": "src/index.js",
+      "target": "src/exporters/mermaid.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e235",
+      "source": "src/index.js",
+      "target": "src/features/ai.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e236",
+      "source": "src/index.js",
+      "target": "src/features/inject.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e237",
+      "source": "src/index.js",
+      "target": "src/features/compare.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e238",
+      "source": "src/index.js",
+      "target": "src/features/monorepo.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e239",
+      "source": "src/index.js",
+      "target": "src/features/tokens.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e240",
+      "source": "src/index.js",
+      "target": "src/features/summarize.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e241",
+      "source": "src/index.js",
+      "target": "src/core/architectureFlow.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e242",
+      "source": "src/index.js",
+      "target": "src/utils/zip.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e243",
+      "source": "src/index.js",
+      "target": "src/features/bundle.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e244",
+      "source": "src/index.js",
+      "target": "src/features/exporter.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e245",
+      "source": "src/index.js",
+      "target": "src/exporters/architectureFlowHtml.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e246",
+      "source": "src/index.js",
+      "target": "src/core/universalParser.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e247",
+      "source": "src/index.js",
+      "target": "src/exporters/graphVisualizer.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e248",
+      "source": "src/index.js",
+      "target": "src/exporters/graphJson.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e249",
+      "source": "src/index.js",
+      "target": "src/exporters/graph3dVisualizer.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e250",
+      "source": "src/index.js",
+      "target": "src/exporters/mindmap.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e251",
+      "source": "src/index.js",
+      "target": "src/core/configLoader.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e252",
+      "source": "src/index.js",
+      "target": "src/core/sorter.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e253",
+      "source": "src/index.js",
+      "target": "src/features/duplicates.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e254",
+      "source": "src/index.js",
+      "target": "src/utils/hasher.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e255",
+      "source": "src/index.js",
+      "target": "src/core/themeEngine.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e256",
+      "source": "src/index.js",
+      "target": "src/core/iconEngine.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e257",
+      "source": "src/index.js",
+      "target": "src/exporters/csv.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e258",
+      "source": "src/index.js",
+      "target": "src/exporters/xml.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e259",
+      "source": "src/index.js",
+      "target": "src/exporters/yaml.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e260",
+      "source": "src/index.js",
+      "target": "src/exporters/plantuml.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e261",
+      "source": "src/index.js",
+      "target": "src/core/pluginApi.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e262",
+      "source": "src/index.js",
+      "target": "src/features/shellHook.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e263",
+      "source": "src/utils/clipboard.js",
+      "target": "pkg:child_process",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "child_process"
+      }
+    },
+    {
+      "id": "e264",
+      "source": "src/utils/colors.js",
+      "target": "env:variables",
+      "type": "ENV_USAGE",
+      "label": "Environment Variable",
+      "color": "#7ee787",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e265",
+      "source": "src/utils/hasher.js",
+      "target": "pkg:crypto",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "crypto"
+      }
+    },
+    {
+      "id": "e266",
+      "source": "src/utils/hasher.js",
+      "target": "pkg:fs",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "fs"
+      }
+    },
+    {
+      "id": "e267",
+      "source": "src/utils/ignore.js",
+      "target": "pkg:fs",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "fs"
+      }
+    },
+    {
+      "id": "e268",
+      "source": "src/utils/ignore.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e269",
+      "source": "src/utils/ignore.js",
+      "target": "src/utils/globMatcher.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e270",
+      "source": "src/utils/zip.js",
+      "target": "pkg:zlib",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "zlib"
+      }
+    },
+    {
+      "id": "e271",
+      "source": "tests/bundle.test.js",
+      "target": "pkg:assert",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "assert"
+      }
+    },
+    {
+      "id": "e272",
+      "source": "tests/bundle.test.js",
+      "target": "pkg:fs",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "fs"
+      }
+    },
+    {
+      "id": "e273",
+      "source": "tests/bundle.test.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e274",
+      "source": "tests/bundle.test.js",
+      "target": "src/features/bundle.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e275",
+      "source": "tests/compare.test.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e276",
+      "source": "tests/compare.test.js",
+      "target": "pkg:fs",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "fs"
+      }
+    },
+    {
+      "id": "e277",
+      "source": "tests/compare.test.js",
+      "target": "src/features/compare.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e278",
+      "source": "tests/compare.test.js",
+      "target": "src/core/scanner.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e279",
+      "source": "tests/exporter.test.js",
+      "target": "pkg:assert",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "assert"
+      }
+    },
+    {
+      "id": "e280",
+      "source": "tests/exporter.test.js",
+      "target": "pkg:fs",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "fs"
+      }
+    },
+    {
+      "id": "e281",
+      "source": "tests/exporter.test.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e282",
+      "source": "tests/exporter.test.js",
+      "target": "src/features/exporter.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e283",
+      "source": "tests/flow.test.js",
+      "target": "pkg:assert",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "assert"
+      }
+    },
+    {
+      "id": "e284",
+      "source": "tests/flow.test.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e285",
+      "source": "tests/flow.test.js",
+      "target": "pkg:fs",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "fs"
+      }
+    },
+    {
+      "id": "e286",
+      "source": "tests/flow.test.js",
+      "target": "pkg:os",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "os"
+      }
+    },
+    {
+      "id": "e287",
+      "source": "tests/flow.test.js",
+      "target": "src/core/architectureFlow.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e288",
+      "source": "tests/flutter_graph.test.js",
+      "target": "pkg:fs",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "fs"
+      }
+    },
+    {
+      "id": "e289",
+      "source": "tests/flutter_graph.test.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e290",
+      "source": "tests/flutter_graph.test.js",
+      "target": "pkg:assert",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "assert"
+      }
+    },
+    {
+      "id": "e291",
+      "source": "tests/flutter_graph.test.js",
+      "target": "src/core/universalParser.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e292",
+      "source": "tests/flutter_graph.test.js",
+      "target": "src/core/architectureFlow.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e293",
+      "source": "tests/flutter_graph.test.js",
+      "target": "src/exporters/graphVisualizer.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e294",
+      "source": "tests/flutter_graph.test.js",
+      "target": "src/exporters/architectureFlowHtml.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e295",
+      "source": "tests/flutter_graph.test.js",
+      "target": "pkg:package:flutter",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "package:flutter/material.dart"
+      }
+    },
+    {
+      "id": "e296",
+      "source": "tests/flutter_graph.test.js",
+      "target": "pkg:package:my_flutter_app",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "package:my_flutter_app/screens/home_screen.dart"
+      }
+    },
+    {
+      "id": "e297",
+      "source": "tests/flutter_graph.test.js",
+      "target": "pkg:package:flutter",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "package:flutter/material.dart"
+      }
+    },
+    {
+      "id": "e298",
+      "source": "tests/flutter_graph.test.js",
+      "target": "pkg:package:my_flutter_app",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "package:my_flutter_app/widgets/custom_button.dart"
+      }
+    },
+    {
+      "id": "e299",
+      "source": "tests/flutter_graph.test.js",
+      "target": "pkg:package:my_flutter_app",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "package:my_flutter_app/services/api_service.dart"
+      }
+    },
+    {
+      "id": "e300",
+      "source": "tests/flutter_graph.test.js",
+      "target": "pkg:package:flutter",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "package:flutter/material.dart"
+      }
+    },
+    {
+      "id": "e301",
+      "source": "tests/flutter_graph.test.js",
+      "target": "pkg:package:http",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "package:http/http.dart"
+      }
+    },
+    {
+      "id": "e302",
+      "source": "tests/formatter.test.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e303",
+      "source": "tests/formatter.test.js",
+      "target": "src/core/scanner.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e304",
+      "source": "tests/formatter.test.js",
+      "target": "src/core/formatter.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e305",
+      "source": "tests/formatter.test.js",
+      "target": "src/core/generator.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e306",
+      "source": "tests/graph.test.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e307",
+      "source": "tests/graph.test.js",
+      "target": "src/core/universalGraph.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e308",
+      "source": "tests/graph.test.js",
+      "target": "src/core/universalParser.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e309",
+      "source": "tests/graph.test.js",
+      "target": "src/exporters/graphJson.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e310",
+      "source": "tests/graph.test.js",
+      "target": "src/exporters/graphVisualizer.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e311",
+      "source": "tests/html.test.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e312",
+      "source": "tests/html.test.js",
+      "target": "src/core/scanner.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e313",
+      "source": "tests/html.test.js",
+      "target": "src/exporters/html.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e314",
+      "source": "tests/html.test.js",
+      "target": "src/core/stats.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e315",
+      "source": "tests/ignore.test.js",
+      "target": "src/utils/ignore.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e316",
+      "source": "tests/json.test.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e317",
+      "source": "tests/json.test.js",
+      "target": "src/core/scanner.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e318",
+      "source": "tests/json.test.js",
+      "target": "src/exporters/json.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e319",
+      "source": "tests/json.test.js",
+      "target": "src/core/stats.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e320",
+      "source": "tests/mermaid.test.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e321",
+      "source": "tests/mermaid.test.js",
+      "target": "src/core/scanner.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e322",
+      "source": "tests/mermaid.test.js",
+      "target": "src/exporters/mermaid.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e323",
+      "source": "tests/mindmap.test.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e324",
+      "source": "tests/mindmap.test.js",
+      "target": "src/core/scanner.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e325",
+      "source": "tests/mindmap.test.js",
+      "target": "src/exporters/mindmap.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e326",
+      "source": "tests/scanner.test.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e327",
+      "source": "tests/scanner.test.js",
+      "target": "src/core/scanner.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e328",
+      "source": "tests/shellHook.test.js",
+      "target": "pkg:assert",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "assert"
+      }
+    },
+    {
+      "id": "e329",
+      "source": "tests/shellHook.test.js",
+      "target": "pkg:fs",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "fs"
+      }
+    },
+    {
+      "id": "e330",
+      "source": "tests/shellHook.test.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e331",
+      "source": "tests/shellHook.test.js",
+      "target": "pkg:os",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "os"
+      }
+    },
+    {
+      "id": "e332",
+      "source": "tests/shellHook.test.js",
+      "target": "src/features/shellHook.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e333",
+      "source": "tests/summarize.test.js",
+      "target": "pkg:assert",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "assert"
+      }
+    },
+    {
+      "id": "e334",
+      "source": "tests/summarize.test.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e335",
+      "source": "tests/summarize.test.js",
+      "target": "pkg:fs",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "fs"
+      }
+    },
+    {
+      "id": "e336",
+      "source": "tests/summarize.test.js",
+      "target": "pkg:os",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "os"
+      }
+    },
+    {
+      "id": "e337",
+      "source": "tests/summarize.test.js",
+      "target": "src/features/summarize.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e338",
+      "source": "tests/summarize.test.js",
+      "target": "pkg:jsonwebtoken",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "jsonwebtoken"
+      }
+    },
+    {
+      "id": "e339",
+      "source": "tests/svg.test.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e340",
+      "source": "tests/svg.test.js",
+      "target": "src/core/scanner.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e341",
+      "source": "tests/svg.test.js",
+      "target": "src/exporters/svg.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e342",
+      "source": "tests/svg.test.js",
+      "target": "src/core/stats.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e343",
+      "source": "tests/tokens.test.js",
+      "target": "pkg:assert",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "assert"
+      }
+    },
+    {
+      "id": "e344",
+      "source": "tests/tokens.test.js",
+      "target": "src/features/tokens.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e345",
+      "source": "tests/v3.test.js",
+      "target": "pkg:assert",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "assert"
+      }
+    },
+    {
+      "id": "e346",
+      "source": "tests/v3.test.js",
+      "target": "pkg:path",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "path"
+      }
+    },
+    {
+      "id": "e347",
+      "source": "tests/v3.test.js",
+      "target": "pkg:fs",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "fs"
+      }
+    },
+    {
+      "id": "e348",
+      "source": "tests/v3.test.js",
+      "target": "src/utils/globMatcher.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e349",
+      "source": "tests/v3.test.js",
+      "target": "src/core/configLoader.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e350",
+      "source": "tests/v3.test.js",
+      "target": "src/core/sorter.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e351",
+      "source": "tests/v3.test.js",
+      "target": "src/utils/hasher.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e352",
+      "source": "tests/v3.test.js",
+      "target": "src/features/duplicates.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e353",
+      "source": "tests/v3.test.js",
+      "target": "src/core/themeEngine.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e354",
+      "source": "tests/v3.test.js",
+      "target": "src/core/iconEngine.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e355",
+      "source": "tests/v3.test.js",
+      "target": "src/exporters/csv.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e356",
+      "source": "tests/v3.test.js",
+      "target": "src/exporters/xml.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e357",
+      "source": "tests/v3.test.js",
+      "target": "src/exporters/yaml.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e358",
+      "source": "tests/v3.test.js",
+      "target": "src/exporters/plantuml.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e359",
+      "source": "tests/v3.test.js",
+      "target": "src/core/pluginApi.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e360",
+      "source": "tests/v3.test.js",
+      "target": "src/core/scanner.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    },
+    {
+      "id": "e361",
+      "source": "tests/zip.test.js",
+      "target": "pkg:assert",
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted",
+      "weight": 1,
+      "metadata": {
+        "package": "assert"
+      }
+    },
+    {
+      "id": "e362",
+      "source": "tests/zip.test.js",
+      "target": "src/utils/zip.js",
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid",
+      "weight": 1,
+      "metadata": {}
+    }
+  ],
+  "relationshipTypes": {
+    "PARENT_CHILD": {
+      "type": "PARENT_CHILD",
+      "label": "Parent → Child",
+      "color": "#58a6ff",
+      "style": "solid"
+    },
+    "EXTERNAL_PACKAGE": {
+      "type": "EXTERNAL_PACKAGE",
+      "label": "External Package",
+      "color": "#f0883e",
+      "style": "dotted"
+    },
+    "IMPORTS": {
+      "type": "IMPORTS",
+      "label": "Imports",
+      "color": "#8b949e",
+      "style": "solid"
+    },
+    "ENV_USAGE": {
+      "type": "ENV_USAGE",
+      "label": "Environment Variable",
+      "color": "#7ee787",
+      "style": "dotted"
+    }
+  },
+  "nodeTypes": {
+    "CONFIG": {
+      "type": "CONFIG",
+      "icon": "⚙️",
+      "label": "Configuration",
+      "color": "#8b949e"
+    },
+    "ASSET": {
+      "type": "ASSET",
+      "icon": "🎨",
+      "label": "Asset",
+      "color": "#f778ba"
+    },
+    "FILE": {
+      "type": "FILE",
+      "icon": "📄",
+      "label": "File",
+      "color": "#c9d1d9"
+    },
+    "COMPONENT": {
+      "type": "COMPONENT",
+      "icon": "🧩",
+      "label": "Component",
+      "color": "#3fb950"
+    },
+    "DOCUMENTATION": {
+      "type": "DOCUMENTATION",
+      "icon": "📝",
+      "label": "Documentation",
+      "color": "#8b949e"
+    },
+    "REPOSITORY": {
+      "type": "REPOSITORY",
+      "icon": "🗃️",
+      "label": "Repository",
+      "color": "#da3633"
+    },
+    "HOOK": {
+      "type": "HOOK",
+      "icon": "🪝",
+      "label": "Hook",
+      "color": "#d2a8ff"
+    },
+    "ENTRY": {
+      "type": "ENTRY",
+      "icon": "🚀",
+      "label": "Entry Point",
+      "color": "#3fb950"
+    },
+    "UTILITY": {
+      "type": "UTILITY",
+      "icon": "🛠️",
+      "label": "Utility",
+      "color": "#8b949e"
+    },
+    "TEST": {
+      "type": "TEST",
+      "icon": "🧪",
+      "label": "Test",
+      "color": "#7ee787"
+    },
+    "FOLDER": {
+      "type": "FOLDER",
+      "icon": "📁",
+      "label": "Folder",
+      "color": "#8b949e"
+    },
+    "PACKAGE": {
+      "type": "PACKAGE",
+      "icon": "📦",
+      "label": "Package",
+      "color": "#f0883e"
+    },
+    "ENVIRONMENT": {
+      "type": "ENVIRONMENT",
+      "icon": "🌍",
+      "label": "Environment",
+      "color": "#7ee787"
+    }
+  },
+  "metadata": {
+    "generatedAt": "2026-08-04T17:30:59.251Z",
+    "languages": {
+      "Unknown": 6,
+      "JavaScript": 67,
+      "JSON": 13,
+      "Markdown": 2
+    },
+    "frameworks": [],
+    "totalFiles": 88,
+    "totalLines": 17603
+  },
+  "layout": {
+    "type": "auto",
+    "positions": {}
+  },
+  "viewport": {
+    "x": 0,
+    "y": 0,
+    "zoom": 1
+  },
+  "theme": "dark",
+  "filters": {
+    "nodeTypes": [],
+    "edgeTypes": [],
+    "languages": [],
+    "frameworks": []
+  },
+  "collapseState": {},
+  "selectionState": {
+    "selectedNodes": [],
+    "selectedEdges": []
+  }
+}

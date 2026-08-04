@@ -1,0 +1,29 @@
+{
+  "project": "project-tree-md",
+  "generatedAt": "2026-08-04T17:30:59.250Z",
+  "version": "3.1.0",
+  "framework": "Unknown",
+  "language": "JavaScript",
+  "reports": [
+    "PROJECT_STRUCTURE.md",
+    "PROJECT_STRUCTURE.json",
+    "PROJECT_STRUCTURE.html",
+    "PROJECT_MINDMAP.html",
+    "PROJECT_STRUCTURE.svg",
+    "PROJECT_STRUCTURE.mmd",
+    "AI_CONTEXT.md",
+    "COMPONENT_USAGE.json",
+    "IMPORT_GRAPH.json",
+    "EXPORT_GRAPH.json",
+    "DEAD_CODE.json",
+    "UNUSED_COMPONENTS.json",
+    "CIRCULAR_DEPENDENCIES.json",
+    "PROJECT_STATS.json",
+    "PROJECT_HEALTH.json",
+    "FRAMEWORK_INFO.json",
+    "LANGUAGE_BREAKDOWN.json",
+    "DEPENDENCY_HEATMAP.json",
+    "README_ANALYSIS.md",
+    "manifest.json"
+  ]
+}

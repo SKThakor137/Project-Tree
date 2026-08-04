@@ -1,0 +1,425 @@
+{
+  ".npmignore": [],
+  "assets/banner.svg": [],
+  "assets/code_graph_preview.svg": [],
+  "assets/features_preview.svg": [],
+  "assets/react_demo.svg": [],
+  "bin/cli.js": [
+    "path",
+    "fs",
+    "../src/utils/colors.js",
+    "../src/utils/clipboard.js",
+    "../src/core/generator.js",
+    "../src/core/stats.js",
+    "../src/core/scanner.js",
+    "../src/core/formatter.js",
+    "../src/utils/ignore.js",
+    "../src/exporters/json.js",
+    "../src/exporters/html.js",
+    "../src/exporters/mindmap.js",
+    "../src/exporters/svg.js",
+    "../src/exporters/mermaid.js",
+    "../src/exporters/markdown.js",
+    "../src/features/ai.js",
+    "../src/features/inject.js",
+    "../src/features/watcher.js",
+    "../src/features/compare.js",
+    "../src/detectors/project.js",
+    "../src/features/tokens.js",
+    "../src/core/architectureFlow.js",
+    "../src/features/bundle.js",
+    "../src/features/exporter.js",
+    "../src/exporters/architectureFlowHtml.js",
+    "../src/exporters/csv.js",
+    "../src/exporters/xml.js",
+    "../src/exporters/yaml.js",
+    "../src/exporters/plantuml.js",
+    "../src/core/configLoader.js",
+    "../src/features/duplicates.js",
+    "../src/core/pluginApi.js",
+    "../src/features/shellHook.js",
+    "../src/core/universalParser.js",
+    "../src/exporters/graphVisualizer.js",
+    "../src/exporters/graph3dVisualizer.js",
+    "../src/exporters/graphJson.js",
+    "readline",
+    "../package.json"
+  ],
+  "CIRCULAR_DEPENDENCIES.json": [],
+  "COMPONENT_USAGE.json": [],
+  "DEAD_CODE.json": [],
+  "DEPENDENCY_HEATMAP.json": [],
+  "EXPORT_GRAPH.json": [],
+  "FRAMEWORK_INFO.json": [],
+  "IMPORT_GRAPH.json": [],
+  "LANGUAGE_BREAKDOWN.json": [],
+  "LICENSE": [],
+  "manifest.json": [],
+  "package.json": [],
+  "PROJECT_HEALTH.json": [],
+  "PROJECT_STATS.json": [],
+  "README_ANALYSIS.md": [],
+  "README.md": [],
+  "src/core/analyzer.js": [
+    "y",
+    "path"
+  ],
+  "src/core/architectureFlow.js": [
+    "fs",
+    "path",
+    "./formatter.js",
+    "./scanner.js"
+  ],
+  "src/core/configLoader.js": [
+    "fs",
+    "path"
+  ],
+  "src/core/formatter.js": [
+    "path",
+    "./themeEngine.js",
+    "./iconEngine.js"
+  ],
+  "src/core/generator.js": [
+    "fs",
+    "path",
+    "./scanner.js",
+    "./formatter.js",
+    "./stats.js",
+    "../utils/ignore.js",
+    "../exporters/markdown.js",
+    "../detectors/project.js",
+    "../features/tokens.js",
+    "./architectureFlow.js",
+    "./analyzer.js"
+  ],
+  "src/core/iconEngine.js": [
+    "fs",
+    "path"
+  ],
+  "src/core/pluginApi.js": [
+    "path"
+  ],
+  "src/core/scanner.js": [
+    "fs",
+    "path",
+    "../utils/sensitive.js",
+    "../features/summarize.js",
+    "./analyzer.js",
+    "./sorter.js",
+    "../utils/hasher.js"
+  ],
+  "src/core/sorter.js": [],
+  "src/core/stats.js": [
+    "path",
+    "./formatter.js",
+    "../utils/colors.js",
+    "./scanner"
+  ],
+  "src/core/themeEngine.js": [
+    "fs",
+    "path"
+  ],
+  "src/core/universalGraph.js": [],
+  "src/core/universalParser.js": [
+    "fs",
+    "path",
+    "./universalGraph.js",
+    "./scanner.js"
+  ],
+  "src/detectors/project.js": [
+    "fs",
+    "path"
+  ],
+  "src/exporters/architectureFlowHtml.js": [
+    "path"
+  ],
+  "src/exporters/csv.js": [
+    "path"
+  ],
+  "src/exporters/graph3dVisualizer.js": [
+    "./graphVisualizer"
+  ],
+  "src/exporters/graphJson.js": [],
+  "src/exporters/graphVisualizer.js": [],
+  "src/exporters/html.js": [
+    "path",
+    "../core/stats.js",
+    "./json.js",
+    "./svg.js",
+    "./mermaid.js",
+    "../features/ai.js",
+    "../core/formatter.js",
+    "../core/scanner"
+  ],
+  "src/exporters/json.js": [
+    "../core/scanner"
+  ],
+  "src/exporters/markdown.js": [],
+  "src/exporters/mermaid.js": [
+    "../core/scanner"
+  ],
+  "src/exporters/mindmap.js": [
+    "../core/stats.js",
+    "../core/scanner"
+  ],
+  "src/exporters/plantuml.js": [],
+  "src/exporters/svg.js": [
+    "../core/scanner"
+  ],
+  "src/exporters/xml.js": [
+    "path"
+  ],
+  "src/exporters/yaml.js": [],
+  "src/features/ai.js": [
+    "../detectors/project.js",
+    "../core/formatter.js"
+  ],
+  "src/features/bundle.js": [
+    "fs",
+    "path",
+    "../../package.json",
+    "../core/generator.js",
+    "../exporters/json.js",
+    "../exporters/html.js",
+    "../exporters/svg.js",
+    "../exporters/mermaid.js",
+    "./ai.js",
+    "../utils/zip.js",
+    "../utils/colors.js",
+    "../core/universalParser.js",
+    "../exporters/graphVisualizer.js",
+    "../exporters/graphJson.js",
+    "../exporters/graph3dVisualizer.js",
+    "../exporters/mindmap.js"
+  ],
+  "src/features/compare.js": [
+    "fs",
+    "path",
+    "../core/scanner.js",
+    "../core/formatter.js",
+    "../exporters/json.js"
+  ],
+  "src/features/duplicates.js": [
+    "../utils/hasher.js"
+  ],
+  "src/features/exporter.js": [
+    "fs",
+    "path",
+    "./bundle.js",
+    "../utils/colors.js"
+  ],
+  "src/features/inject.js": [
+    "fs"
+  ],
+  "src/features/monorepo.js": [
+    "fs",
+    "path"
+  ],
+  "src/features/shellHook.js": [
+    "fs",
+    "path",
+    "os",
+    "../utils/colors.js"
+  ],
+  "src/features/summarize.js": [
+    "fs",
+    "path",
+    "../core/architectureFlow.js"
+  ],
+  "src/features/tokens.js": [],
+  "src/features/watcher.js": [
+    "fs",
+    "path",
+    "../utils/colors.js"
+  ],
+  "src/index.js": [
+    "project-tree-md",
+    "./core/generator.js",
+    "./core/formatter.js",
+    "./core/stats.js",
+    "./core/scanner.js",
+    "./detectors/project.js",
+    "./utils/ignore.js",
+    "./exporters/json.js",
+    "./exporters/html.js",
+    "./exporters/svg.js",
+    "./exporters/mermaid.js",
+    "./features/ai.js",
+    "./features/inject.js",
+    "./features/compare.js",
+    "./features/monorepo.js",
+    "./features/tokens.js",
+    "./features/summarize.js",
+    "./core/architectureFlow.js",
+    "./utils/zip.js",
+    "./features/bundle.js",
+    "./features/exporter.js",
+    "./exporters/architectureFlowHtml.js",
+    "./core/universalParser.js",
+    "./exporters/graphVisualizer.js",
+    "./exporters/graphJson.js",
+    "./exporters/graph3dVisualizer.js",
+    "./exporters/mindmap.js",
+    "./core/configLoader.js",
+    "./core/sorter.js",
+    "./features/duplicates.js",
+    "./utils/hasher.js",
+    "./core/themeEngine.js",
+    "./core/iconEngine.js",
+    "./exporters/csv.js",
+    "./exporters/xml.js",
+    "./exporters/yaml.js",
+    "./exporters/plantuml.js",
+    "./core/pluginApi.js",
+    "./features/shellHook.js"
+  ],
+  "src/utils/clipboard.js": [
+    "child_process"
+  ],
+  "src/utils/colors.js": [],
+  "src/utils/globMatcher.js": [],
+  "src/utils/hasher.js": [
+    "crypto",
+    "fs"
+  ],
+  "src/utils/ignore.js": [
+    "fs",
+    "path",
+    "./globMatcher.js"
+  ],
+  "src/utils/sensitive.js": [],
+  "src/utils/zip.js": [
+    "zlib"
+  ],
+  "tests/bundle.test.js": [
+    "assert",
+    "fs",
+    "path",
+    "../src/features/bundle.js"
+  ],
+  "tests/compare.test.js": [
+    "path",
+    "fs",
+    "../src/features/compare.js",
+    "../src/core/scanner.js"
+  ],
+  "tests/exporter.test.js": [
+    "assert",
+    "fs",
+    "path",
+    "../src/features/exporter.js"
+  ],
+  "tests/flow.test.js": [
+    "./helper.js",
+    "assert",
+    "path",
+    "fs",
+    "os",
+    "../src/core/architectureFlow.js",
+    "./helper"
+  ],
+  "tests/flutter_graph.test.js": [
+    "package:flutter/material.dart",
+    "package:my_flutter_app/screens/home_screen.dart",
+    "package:my_flutter_app/widgets/custom_button.dart",
+    "package:my_flutter_app/services/api_service.dart",
+    "package:http/http.dart",
+    "fs",
+    "path",
+    "assert",
+    "../src/core/universalParser.js",
+    "../src/core/architectureFlow.js",
+    "../src/exporters/graphVisualizer.js",
+    "../src/exporters/architectureFlowHtml.js"
+  ],
+  "tests/formatter.test.js": [
+    "path",
+    "../src/core/scanner.js",
+    "../src/core/formatter.js",
+    "../src/core/generator.js"
+  ],
+  "tests/graph.test.js": [
+    "path",
+    "../src/core/universalGraph.js",
+    "../src/core/universalParser.js",
+    "../src/exporters/graphJson.js",
+    "../src/exporters/graphVisualizer.js"
+  ],
+  "tests/html.test.js": [
+    "path",
+    "../src/core/scanner.js",
+    "../src/exporters/html.js",
+    "../src/core/stats.js"
+  ],
+  "tests/ignore.test.js": [
+    "../src/utils/ignore.js"
+  ],
+  "tests/json.test.js": [
+    "path",
+    "../src/core/scanner.js",
+    "../src/exporters/json.js",
+    "../src/core/stats.js"
+  ],
+  "tests/mermaid.test.js": [
+    "path",
+    "../src/core/scanner.js",
+    "../src/exporters/mermaid.js"
+  ],
+  "tests/mindmap.test.js": [
+    "path",
+    "../src/core/scanner.js",
+    "../src/exporters/mindmap.js"
+  ],
+  "tests/scanner.test.js": [
+    "path",
+    "../src/core/scanner.js"
+  ],
+  "tests/shellHook.test.js": [
+    "assert",
+    "fs",
+    "path",
+    "os",
+    "../src/features/shellHook.js"
+  ],
+  "tests/summarize.test.js": [
+    "assert",
+    "path",
+    "fs",
+    "os",
+    "../src/features/summarize.js",
+    "jsonwebtoken"
+  ],
+  "tests/svg.test.js": [
+    "path",
+    "../src/core/scanner.js",
+    "../src/exporters/svg.js",
+    "../src/core/stats.js"
+  ],
+  "tests/tokens.test.js": [
+    "assert",
+    "../src/features/tokens.js"
+  ],
+  "tests/v3.test.js": [
+    "assert",
+    "path",
+    "fs",
+    "../src/utils/globMatcher.js",
+    "../src/core/configLoader.js",
+    "../src/core/sorter.js",
+    "../src/utils/hasher.js",
+    "../src/features/duplicates.js",
+    "../src/core/themeEngine.js",
+    "../src/core/iconEngine.js",
+    "../src/exporters/csv.js",
+    "../src/exporters/xml.js",
+    "../src/exporters/yaml.js",
+    "../src/exporters/plantuml.js",
+    "../src/core/pluginApi.js",
+    "../src/core/scanner.js"
+  ],
+  "tests/zip.test.js": [
+    "assert",
+    "../src/utils/zip.js"
+  ],
+  "UNUSED_COMPONENTS.json": []
+}
