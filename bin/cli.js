@@ -35,6 +35,10 @@ const { loadConfig } = require('../src/core/configLoader.js');
 const { findDuplicatesByName, findDuplicatesByHash, formatDuplicateReport } = require('../src/features/duplicates.js');
 const { loadPluginsFromConfig } = require('../src/core/pluginApi.js');
 const { generateShellHook, installShellHook } = require('../src/features/shellHook.js');
+const { generateUniversalGraph } = require('../src/core/universalParser.js');
+const { toGraphVisualizerHtml } = require('../src/exporters/graphVisualizer.js');
+const { toGraph3dVisualizerHtml } = require('../src/exporters/graph3dVisualizer.js');
+const { toGraphJson } = require('../src/exporters/graphJson.js');
 
 // ─── Arg Parser ───────────────────────────────────────────────────────────────
 

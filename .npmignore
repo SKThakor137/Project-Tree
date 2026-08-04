@@ -1,7 +1,53 @@
+# Logs
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
 .DS_Store
-PROJECT_STRUCTURE.md
+Thumbs.db
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Git
+.git/
+.github/
+.gitignore
+
+# Tests (not needed at runtime)
+tests/
+TESTING_GUIDE.md
+
+# Generated output files (not needed in package)
+PROJECT_STRUCTURE.*
+PROJECT_MINDMAP.html
+ARCHITECTURE_FLOW.html
+CODE_GRAPH.html
+CODE_GRAPH_3D.html
+CODE_GRAPH.json
+AI_CONTEXT.md
+AI_PROMPT.md
 TEST_OUTPUT.md
+
+# Assets (banner images, previews — not needed at runtime)
+assets/
+
+# Zip / reports
+*.zip
+reports/
+
+# Environment
 .env
 .env.*
-.github/
+
+# Lock files
+package-lock.json
+
+# Agents / configs
+.agents/
+.antigravityignore

@@ -47,14 +47,25 @@
     .t-node { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-weight: 700; fill: #ffffff; font-size: 11px; }
     .t-tag { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-weight: 800; fill: #ffffff; font-size: 9px; }
     .t-mono { font-family: 'Fira Code', 'Consolas', monospace; font-size: 11px; fill: #cbd5e1; }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.12; }
+      50% { opacity: 0.28; }
+    }
+    @keyframes flowDash {
+      0% { stroke-dashoffset: 20; }
+      100% { stroke-dashoffset: 0; }
+    }
+    .pulse-bg { animation: pulseGlow 3.5s ease-in-out infinite; }
+    .flow-dash { stroke-dasharray: 6 4; animation: flowDash 1.2s linear infinite; }
   </style>
 
   <!-- Background -->
   <rect width="960" height="460" rx="16" fill="url(#g-bg)" stroke="#1e293b" stroke-width="2" />
 
   <!-- Radial Background Glows -->
-  <circle cx="240" cy="230" r="180" fill="#6366f1" opacity="0.12" filter="url(#glow-heavy)" />
-  <circle cx="700" cy="230" r="180" fill="#06b6d4" opacity="0.12" filter="url(#glow-heavy)" />
+  <circle cx="240" cy="230" r="180" fill="#6366f1" opacity="0.12" filter="url(#glow-heavy)" class="pulse-bg" />
+  <circle cx="700" cy="230" r="180" fill="#06b6d4" opacity="0.12" filter="url(#glow-heavy)" class="pulse-bg" />
 
   <!-- Window Header -->
   <rect x="24" y="20" width="912" height="44" rx="10" fill="rgba(30, 41, 59, 0.6)" stroke="rgba(255, 255, 255, 0.08)" stroke-width="1" />
@@ -76,57 +87,57 @@
     <text x="16" y="24" class="t-title" font-size="13">🎨 2D Directed Architecture Flow (Sugiyama DAG)</text>
 
     <!-- 2D Connections -->
-    <path d="M 220 85 L 110 160" stroke="#818cf8" stroke-width="2.5" opacity="0.8" stroke-dasharray="4 2" />
-    <path d="M 220 85 L 220 160" stroke="#38bdf8" stroke-width="2.5" opacity="0.8" />
-    <path d="M 220 85 L 330 160" stroke="#34d399" stroke-width="2.5" opacity="0.8" />
+    <path d="M 220 91 L 80 150" stroke="#818cf8" stroke-width="2.5" opacity="0.8" class="flow-dash" />
+    <path d="M 220 91 L 220 150" stroke="#38bdf8" stroke-width="2.5" opacity="0.8" class="flow-dash" />
+    <path d="M 220 91 L 360 150" stroke="#34d399" stroke-width="2.5" opacity="0.8" class="flow-dash" />
 
-    <path d="M 110 195 L 110 270" stroke="#a78bfa" stroke-width="2" />
-    <path d="M 220 195 L 220 270" stroke="#38bdf8" stroke-width="2" />
-    <path d="M 330 195 L 220 270" stroke="#f43f5e" stroke-width="2" />
-    <path d="M 220 305 L 220 325" stroke="#fbbf24" stroke-width="2.5" stroke-dasharray="2 2" />
+    <path d="M 80 184 L 80 240" stroke="#a78bfa" stroke-width="2" />
+    <path d="M 220 184 L 220 240" stroke="#38bdf8" stroke-width="2" />
+    <path d="M 360 184 L 220 240" stroke="#f43f5e" stroke-width="2" />
+    <path d="M 220 274 L 220 310" stroke="#fbbf24" stroke-width="2.5" stroke-dasharray="2 2" />
 
     <!-- 2D Nodes -->
     <!-- Root App.jsx -->
-    <g transform="translate(160, 60)">
-      <rect width="120" height="36" rx="10" fill="url(#g-purple-cyan)" filter="url(#glow-subtle)" />
-      <text x="60" y="22" class="t-node" text-anchor="middle">⚡ App.jsx</text>
-      <rect x="95" y="-5" width="30" height="14" rx="7" fill="#1e1b4b" stroke="#818cf8" />
-      <text x="110" y="5" class="t-tag" text-anchor="middle">ENTRY</text>
+    <g transform="translate(165, 55)">
+      <rect width="110" height="36" rx="10" fill="url(#g-purple-cyan)" filter="url(#glow-subtle)" />
+      <text x="55" y="22" class="t-node" text-anchor="middle">⚡ App.jsx</text>
+      <rect x="80" y="-4" width="34" height="14" rx="7" fill="#1e1b4b" stroke="#818cf8" />
+      <text x="97" y="6" class="t-tag" text-anchor="middle">ENTRY</text>
     </g>
 
     <!-- Level 1 Nodes -->
-    <g transform="translate(50, 160)">
-      <rect width="120" height="34" rx="8" fill="#1e1b4b" stroke="#818cf8" stroke-width="1.5" />
-      <text x="60" y="21" class="t-node" text-anchor="middle">🧩 Header.jsx</text>
+    <g transform="translate(25, 150)">
+      <rect width="110" height="34" rx="8" fill="#1e1b4b" stroke="#818cf8" stroke-width="1.5" />
+      <text x="55" y="21" class="t-node" text-anchor="middle">🧩 Header.jsx</text>
     </g>
 
-    <g transform="translate(160, 160)">
-      <rect width="120" height="34" rx="8" fill="#083344" stroke="#38bdf8" stroke-width="1.5" />
-      <text x="60" y="21" class="t-node" text-anchor="middle">📂 Sidebar.jsx</text>
+    <g transform="translate(165, 150)">
+      <rect width="110" height="34" rx="8" fill="#083344" stroke="#38bdf8" stroke-width="1.5" />
+      <text x="55" y="21" class="t-node" text-anchor="middle">📂 Sidebar.jsx</text>
     </g>
 
-    <g transform="translate(270, 160)">
-      <rect width="120" height="34" rx="8" fill="#022c22" stroke="#34d399" stroke-width="1.5" />
-      <text x="60" y="21" class="t-node" text-anchor="middle">🛡️ AuthContext</text>
+    <g transform="translate(305, 150)">
+      <rect width="110" height="34" rx="8" fill="#022c22" stroke="#34d399" stroke-width="1.5" />
+      <text x="55" y="21" class="t-node" text-anchor="middle">🛡️ AuthContext</text>
     </g>
 
     <!-- Level 2 Nodes -->
-    <g transform="translate(50, 270)">
-      <rect width="120" height="34" rx="8" fill="#2e1065" stroke="#a78bfa" stroke-width="1.5" />
-      <text x="60" y="21" class="t-node" text-anchor="middle">👤 UserMenu</text>
+    <g transform="translate(25, 240)">
+      <rect width="110" height="34" rx="8" fill="#2e1065" stroke="#a78bfa" stroke-width="1.5" />
+      <text x="55" y="21" class="t-node" text-anchor="middle">👤 UserMenu</text>
     </g>
 
-    <g transform="translate(160, 270)">
-      <rect width="120" height="34" rx="8" fill="#4c0519" stroke="#f43f5e" stroke-width="1.5" filter="url(#glow-subtle)" />
-      <text x="60" y="21" class="t-node" text-anchor="middle">🪝 useAuth()</text>
-      <rect x="90" y="-5" width="36" height="14" rx="7" fill="#881337" />
-      <text x="108" y="5" class="t-tag" text-anchor="middle">HOOK</text>
+    <g transform="translate(165, 240)">
+      <rect width="110" height="34" rx="8" fill="#4c0519" stroke="#f43f5e" stroke-width="1.5" filter="url(#glow-subtle)" />
+      <text x="55" y="21" class="t-node" text-anchor="middle">🪝 useAuth()</text>
+      <rect x="80" y="-4" width="34" height="14" rx="7" fill="#881337" />
+      <text x="97" y="6" class="t-tag" text-anchor="middle">HOOK</text>
     </g>
 
     <!-- Level 3 Node -->
-    <g transform="translate(160, 310)">
-      <rect width="120" height="32" rx="8" fill="#451a03" stroke="#fbbf24" stroke-width="1.5" />
-      <text x="60" y="20" class="t-node" text-anchor="middle">🌐 apiService.js</text>
+    <g transform="translate(165, 310)">
+      <rect width="110" height="32" rx="8" fill="#451a03" stroke="#fbbf24" stroke-width="1.5" />
+      <text x="55" y="20" class="t-node" text-anchor="middle">🌐 apiService.js</text>
     </g>
   </g>
 

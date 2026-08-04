@@ -504,6 +504,13 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--fon
   <div class="tb-group" id="controls3dOnly" style="display:none;">
     <button class="tb-btn" id="btnZoomFit3D" title="Zoom to Fit All Nodes"><span class="icon">⊡</span><span class="tb-label">Fit</span></button>
     <button class="tb-btn" id="btnResetCamera" title="Reset Camera Position"><span class="icon">🎯</span><span class="tb-label">Reset</span></button>
+    <button class="tb-btn" id="btnAutoRotate3D" title="Toggle Auto Rotation"><span class="icon">🔄</span><span class="tb-label">Rotate</span></button>
+    <span class="toolbar-sep"></span>
+    <select class="tb-select" id="preset3dSelect" title="3D Camera View Angle">
+      <option value="iso">Isometric</option>
+      <option value="top">Top View</option>
+      <option value="front">Front View</option>
+    </select>
     <span class="toolbar-sep"></span>
     <button class="tb-btn active" id="btnToggleLabels" title="Toggle Labels"><span class="icon">🏷️</span><span class="tb-label">Labels</span></button>
     <button class="tb-btn active" id="btnToggleParticles" title="Toggle Particles"><span class="icon">✨</span><span class="tb-label">Particles</span></button>
@@ -750,14 +757,22 @@ function layoutDagre(isHorizontal) {
     }
   });
 
-  const gapX = isHorizontal ? 300 : STATE.nodeWidth + 80;
-  const gapY = isHorizontal ? STATE.nodeHeight + 50 : 120;
+  const baseGapX = isHorizontal ? 320 : STATE.nodeWidth + 80;
+  const baseGapY = isHorizontal ? STATE.nodeHeight + 50 : 130;
   const startX = 100, startY = 100;
 
   layers.forEach((layer, li) => {
+    const nInLayer = layer.length;
+    const gapX = isHorizontal ? baseGapX : Math.max(baseGapX, Math.min(350, (STATE.nodeWidth + 40)));
+    const gapY = isHorizontal ? Math.max(baseGapY, Math.min(180, (STATE.nodeHeight + 35))) : baseGapY;
+
     layer.forEach((id, ni) => {
-      const x = isHorizontal ? startX + li * gapX : startX + ni * gapX - (layer.length * gapX) / 2;
-      const y = isHorizontal ? startY + ni * gapY - (layer.length * gapY) / 2 : startY + li * gapY;
+      const x = isHorizontal
+        ? startX + li * gapX
+        : startX + ni * (STATE.nodeWidth + 45) - ((nInLayer - 1) * (STATE.nodeWidth + 45)) / 2;
+      const y = isHorizontal
+        ? startY + ni * (STATE.nodeHeight + 35) - ((nInLayer - 1) * (STATE.nodeHeight + 35)) / 2
+        : startY + li * gapY;
       STATE.positions.set(id, { x, y });
     });
   });
@@ -913,6 +928,52 @@ function layoutHorizontal() {
   layoutDagre(true);
 }
 
+// ─── POST-PROCESSING ANTI-COLLISION PASS ─────────────────────────────────────
+// Guarantees zero node overlap across all 2D layout engines
+function resolveCollisions() {
+  const visible = getVisibleNodes();
+  if (visible.length < 2) return;
+
+  const minGapX = STATE.nodeWidth + 25;
+  const minGapY = STATE.nodeHeight + 18;
+  const iterations = 35;
+
+  for (let iter = 0; iter < iterations; iter++) {
+    let moved = false;
+    for (let i = 0; i < visible.length; i++) {
+      const p1 = STATE.positions.get(visible[i].id);
+      if (!p1) continue;
+
+      for (let j = i + 1; j < visible.length; j++) {
+        const p2 = STATE.positions.get(visible[j].id);
+        if (!p2) continue;
+
+        const dx = (p2.x + STATE.nodeWidth / 2) - (p1.x + STATE.nodeWidth / 2);
+        const dy = (p2.y + STATE.nodeHeight / 2) - (p1.y + STATE.nodeHeight / 2);
+        const absX = Math.abs(dx);
+        const absY = Math.abs(dy);
+
+        if (absX < minGapX && absY < minGapY) {
+          moved = true;
+          const overlapX = minGapX - absX;
+          const overlapY = minGapY - absY;
+
+          if (overlapX < overlapY) {
+            const shift = overlapX / 2 + 1;
+            if (dx >= 0) { p1.x += shift; p2.x -= shift; }
+            else { p1.x -= shift; p2.x += shift; }
+          } else {
+            const shift = overlapY / 2 + 1;
+            if (dy >= 0) { p1.y += shift; p2.y -= shift; }
+            else { p1.y -= shift; p2.y += shift; }
+          }
+        }
+      }
+    }
+    if (!moved) break;
+  }
+}
+
 function runLayout(type) {
   switch (type) {
     case 'dagre': layoutDagre(false); break;
@@ -922,6 +983,7 @@ function runLayout(type) {
     case 'horizontal': layoutHorizontal(); break;
     default: layoutDagre(false);
   }
+  resolveCollisions();
   render();
   updateMinimap();
 }
@@ -1841,6 +1903,35 @@ function updateTooltip3d(n) {
   tip.style.display = 'block';
 }
 
+let is3dAutoRotating = false;
+
+function toggleAutoRotate3D() {
+  if (!graph3dInstance) return;
+  is3dAutoRotating = !is3dAutoRotating;
+  const btn = document.getElementById('btnAutoRotate3D');
+  if (btn) btn.classList.toggle('active', is3dAutoRotating);
+  try {
+    const controls = graph3dInstance.controls();
+    if (controls) {
+      controls.autoRotate = is3dAutoRotating;
+      controls.autoRotateSpeed = 1.8;
+    }
+  } catch(e) {}
+  toast(is3dAutoRotating ? 'Auto-rotation ON' : 'Auto-rotation OFF');
+}
+
+function set3dCameraPreset(preset) {
+  if (!graph3dInstance) return;
+  const dist = 500;
+  if (preset === 'top') {
+    graph3dInstance.cameraPosition({ x: 0, y: dist, z: 0 }, { x: 0, y: 0, z: 0 }, 1200);
+  } else if (preset === 'front') {
+    graph3dInstance.cameraPosition({ x: 0, y: 0, z: dist }, { x: 0, y: 0, z: 0 }, 1200);
+  } else if (preset === 'iso') {
+    graph3dInstance.cameraPosition({ x: dist * 0.7, y: dist * 0.7, z: dist * 0.7 }, { x: 0, y: 0, z: 0 }, 1200);
+  }
+}
+
 function toggleLabels3D() {
   show3dLabels = !show3dLabels;
   const btn = document.getElementById('btnToggleLabels');
@@ -2751,10 +2842,14 @@ function init() {
   // 3D-only buttons
   const btnFit3D = document.getElementById('btnZoomFit3D');
   const btnReset3D = document.getElementById('btnResetCamera');
+  const btnAutoRotate3D = document.getElementById('btnAutoRotate3D');
+  const preset3dSelect = document.getElementById('preset3dSelect');
   const btnLabels3D = document.getElementById('btnToggleLabels');
   const btnParticles3D = document.getElementById('btnToggleParticles');
   if (btnFit3D) btnFit3D.addEventListener('click', zoomToFit3D);
   if (btnReset3D) btnReset3D.addEventListener('click', resetCamera3D);
+  if (btnAutoRotate3D) btnAutoRotate3D.addEventListener('click', toggleAutoRotate3D);
+  if (preset3dSelect) preset3dSelect.addEventListener('change', (e) => set3dCameraPreset(e.target.value));
   if (btnLabels3D) btnLabels3D.addEventListener('click', toggleLabels3D);
   if (btnParticles3D) btnParticles3D.addEventListener('click', toggleParticles3D);
 

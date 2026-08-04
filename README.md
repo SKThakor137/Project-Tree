@@ -285,29 +285,18 @@ const result = generateTree({
 
 console.log(result.coloredTreeText);
 
-// 2. Export as YAML & PlantUML
-const yamlString = toYaml(result.tree, result.stats);
-const pumlString = toPlantUml(result.tree, result.stats);
-
-// 3. Find Duplicates
-const duplicates = findDuplicatesByName(result.tree);
-console.log(`Found ${duplicates.length} duplicate file groups`);
-```st graph2dHtml = toGraphVisualizerHtml(graphModel, 'My Project');
-const graph3dHtml = toGraph3dVisualizerHtml(graphModel, 'My Project');
+// 2. Export as 2D & 3D Interactive Graph HTML
+const graphModel = generateUniversalGraph(process.cwd(), result.tree);
+const graph2dHtml = toGraphVisualizerHtml(graphModel, 'My Project');
 const graphJson = toGraphJson(graphModel);
 
 console.log(`Graph Nodes: ${graphModel.nodes.length}, Edges: ${graphModel.edges.length}`);
 
-// 2. Generate full tree
-const result = generateTree({
-  rootDir: process.cwd(),
-  flow: true,
-  summarize: true,
-});
+// 3. Find Duplicates
+const duplicates = findDuplicatesByName(result.tree);
+console.log(`Found ${duplicates.length} duplicate file groups`);
 
-console.log(result.coloredTreeText);
-
-// 3. Generate customized ZIP bundle programmatically
+// 4. Generate customized ZIP bundle programmatically
 const bundle = generateBundle({
   rootDir: process.cwd(),
   outputDir: 'dist/reports',
