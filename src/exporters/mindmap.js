@@ -409,8 +409,11 @@ function toMindmapHtml(tree, stats = null) {
       z-index: 100;
     }
 
-    #toast.show {
-      transform: translateX(-50%) translateY(0);
+    @media (max-width: 768px) {
+      #sidebar { width: 100vw; max-width: 100vw; }
+      #sidebar.collapsed { transform: translateX(-100vw); }
+      .floating-controls { top: 12px; right: 12px; gap: 4px; padding: 4px; }
+      .btn { padding: 6px 10px; font-size: 0.8rem; }
     }
   </style>
 </head>

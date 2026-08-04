@@ -106,10 +106,17 @@ function toArchitectureFlowHtml(flowResult, projectName = 'Project') {
 
     /* Responsive */
     @media (max-width: 768px) {
+      .navbar { padding: 0 0.75rem; height: 50px; }
+      .brand { font-size: 0.9rem; }
+      .btn { padding: 0.3rem 0.5rem; font-size: 0.78rem; }
       .layout { flex-direction: column; }
-      .detail-panel { width: 100%; border-left: none; border-top: 1px solid var(--border); max-height: 45vh; }
+      .detail-panel { width: 100%; border-left: none; border-top: 1px solid var(--border); max-height: 45vh; padding: 1rem; }
       .flow-panel { padding: 1rem; }
-      .detail-panel { padding: 1rem; }
+    }
+
+    @media (max-width: 480px) {
+      .file-size { display: none; }
+      .role-badge { padding: 1px 5px; font-size: 0.68rem; }
     }
 
     @media print {

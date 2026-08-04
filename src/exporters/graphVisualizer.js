@@ -138,37 +138,52 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--fon
   box-shadow: 0 1px 3px rgba(0,0,0,0.12);
 }
 .toolbar-brand {
-  display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.95rem;
-  color: var(--accent); white-space: nowrap; margin-right: 8px;
+  display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 0.95rem;
+  color: var(--accent); white-space: nowrap; margin-right: 8px; height: 32px;
 }
 .toolbar-brand span { font-size: 1.2rem; }
-.toolbar-sep { width: 1px; height: 22px; background: var(--border); margin: 0 6px; flex-shrink: 0; display: inline-block; vertical-align: middle; }
-.tb-group { display: inline-flex; align-items: center; gap: 6px; }
+.toolbar-sep { width: 1px; height: 20px; background: var(--border); margin: 0 6px; flex-shrink: 0; align-self: center; }
+.tb-group { display: inline-flex; align-items: center; gap: 6px; height: 32px; }
 .tb-btn {
-  display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 0 12px; height: 32px;
   background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius-sm);
   color: var(--text-secondary); font-size: 0.8rem; font-family: var(--font-sans);
-  cursor: pointer; transition: var(--transition); white-space: nowrap; line-height: 1.2;
+  cursor: pointer; transition: var(--transition); white-space: nowrap; line-height: 1; box-sizing: border-box;
 }
 .tb-btn:hover { background: var(--bg-hover); color: var(--text); border-color: var(--accent); }
 .tb-btn.active { background: var(--accent-bg); color: var(--accent); border-color: var(--accent); font-weight: 600; }
-.tb-btn .icon { font-size: 1rem; line-height: 1; }
+.tb-btn .icon { font-size: 0.95rem; line-height: 1; display: inline-flex; align-items: center; }
+
+.mode-toggle-group {
+  display: inline-flex; align-items: center; padding: 2px; background: var(--bg-panel-2);
+  border: 1px solid var(--border); border-radius: var(--radius-sm); height: 32px; box-sizing: border-box;
+}
+.mode-toggle-btn {
+  display: inline-flex; align-items: center; justify-content: center; padding: 0 10px; height: 26px;
+  background: transparent; border: none; border-radius: 4px; color: var(--text-secondary);
+  font-size: 0.78rem; font-weight: 500; font-family: var(--font-sans); cursor: pointer; transition: var(--transition);
+}
+.mode-toggle-btn:hover { color: var(--text); }
+.mode-toggle-btn.active { background: var(--accent); color: #ffffff; font-weight: 600; box-shadow: 0 1px 4px rgba(0,0,0,0.2); }
+
 .tb-select {
-  padding: 5px 10px; height: 30px; background: var(--bg-panel); border: 1px solid var(--border);
+  padding: 0 10px; height: 32px; background: var(--bg-panel); border: 1px solid var(--border);
   border-radius: var(--radius-sm); color: var(--text); font-size: 0.8rem;
   font-family: var(--font-sans); cursor: pointer; outline: none; transition: var(--transition);
+  display: inline-flex; align-items: center; box-sizing: border-box;
 }
 .tb-select:focus { border-color: var(--accent); }
 #searchBox {
-  padding: 6px 12px 6px 32px; width: 220px; height: 30px; background: var(--bg-panel);
+  padding: 0 12px 0 32px; width: 220px; height: 32px; background: var(--bg-panel);
   border: 1px solid var(--border); border-radius: var(--radius); color: var(--text);
   font-size: 0.82rem; font-family: var(--font-sans); outline: none; transition: var(--transition);
+  box-sizing: border-box;
 }
 #searchBox:focus { border-color: var(--accent); width: 280px; box-shadow: 0 0 0 3px var(--accent-bg); }
-.search-wrap { position: relative; display: flex; align-items: center; }
+.search-wrap { position: relative; display: inline-flex; align-items: center; height: 32px; }
 .search-wrap::before { content: '🔍'; position: absolute; left: 10px; font-size: 0.8rem; pointer-events: none; }
 .search-results-count { position: absolute; right: 8px; font-size: 0.7rem; color: var(--text-muted); pointer-events: none; }
-.toolbar-right { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+.toolbar-right { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; height: 32px; }
 
 /* ═══════════════════════════════════════════════════════════════════════════
    CANVAS AREA
@@ -444,14 +459,36 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--fon
    RESPONSIVE
    ═══════════════════════════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
-  #detailPanel { width: 100%; top: auto; bottom: 0; height: 50vh; border-left: none; border-top: 1px solid var(--glass-border); transform: translateY(100%); }
-  #detailPanel.open { transform: translateY(0); }
-  #toolbar { gap: 4px; padding: 0 8px; }
-  #searchBox { width: 140px; }
-  #searchBox:focus { width: 180px; }
+  #toolbar {
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    gap: 6px;
+    padding: 0 10px;
+  }
+  #toolbar::-webkit-scrollbar { display: none; }
+  #searchBox { width: 120px; }
+  #searchBox:focus { width: 160px; }
   .tb-label { display: none; }
-  #minimap { width: 140px; height: 100px; }
-  #legend { max-width: 200px; }
+  #detailPanel {
+    width: 100vw;
+    top: auto;
+    bottom: 0;
+    height: 55vh;
+    border-left: none;
+    border-top: 1px solid var(--glass-border);
+    transform: translateY(100%);
+  }
+  #detailPanel.open { transform: translateY(0); }
+  #minimap { width: 120px; height: 85px; bottom: 12px; left: 12px; }
+  #legend { max-width: 180px; bottom: 12px; left: 12px; }
+}
+
+@media (max-width: 480px) {
+  #searchBox { width: 100px; }
+  #searchBox:focus { width: 130px; }
+  .toolbar-brand span { display: none; }
 }
 
 @media print {
@@ -783,8 +820,9 @@ function layoutForce() {
   const visible = getVisibleNodes();
   if (visible.length === 0) return;
 
-  // Initialize positions in a circle
-  const cx = W / 2, cy = H / 2, radius = Math.min(W, H) * 0.3;
+  // Initialize positions centered at origin
+  const cx = 0, cy = 0;
+  const radius = Math.max(250, visible.length * 15);
   visible.forEach((n, i) => {
     const angle = (2 * Math.PI * i) / visible.length;
     if (!STATE.positions.has(n.id) || !STATE.pinned.has(n.id)) {
@@ -867,7 +905,7 @@ function layoutRadial() {
   const visible = getVisibleNodes();
   if (visible.length === 0) return;
 
-  const cx = W / 2, cy = H / 2;
+  const cx = 0, cy = 0;
 
   // Find roots (no incoming IMPORTS edges)
   const hasIncoming = new Set();
@@ -908,16 +946,16 @@ function layoutRadial() {
     layers[l].push(id);
   });
 
-  const maxLayer = Math.max(...Object.keys(layers).map(Number), 0);
-  const ringGap = Math.min(W, H) * 0.15;
-
   Object.entries(layers).forEach(([layerIdx, ids]) => {
-    const r = layerIdx == 0 ? 0 : Number(layerIdx) * ringGap + 100;
+    const count = ids.length;
+    const minCircumference = count * (STATE.nodeWidth + 60);
+    const minRadius = minCircumference / (2 * Math.PI);
+    const r = layerIdx == 0 ? 0 : Math.max(Number(layerIdx) * 220, minRadius + 80);
     ids.forEach((id, i) => {
-      const angle = (2 * Math.PI * i) / ids.length - Math.PI / 2;
+      const angle = (2 * Math.PI * i) / count - Math.PI / 2;
       STATE.positions.set(id, {
-        x: cx + r * Math.cos(angle),
-        y: cy + r * Math.sin(angle)
+        x: cx + r * Math.cos(angle) - STATE.nodeWidth / 2,
+        y: cy + r * Math.sin(angle) - STATE.nodeHeight / 2
       });
     });
   });
@@ -934,9 +972,11 @@ function resolveCollisions() {
   const visible = getVisibleNodes();
   if (visible.length < 2) return;
 
-  const minGapX = STATE.nodeWidth + 25;
-  const minGapY = STATE.nodeHeight + 18;
-  const iterations = 35;
+  const nw = STATE.nodeWidth;
+  const nh = STATE.nodeHeight;
+  const minGapX = nw + 35;
+  const minGapY = nh + 25;
+  const iterations = 45;
 
   for (let iter = 0; iter < iterations; iter++) {
     let moved = false;
@@ -948,25 +988,29 @@ function resolveCollisions() {
         const p2 = STATE.positions.get(visible[j].id);
         if (!p2) continue;
 
-        const dx = (p2.x + STATE.nodeWidth / 2) - (p1.x + STATE.nodeWidth / 2);
-        const dy = (p2.y + STATE.nodeHeight / 2) - (p1.y + STATE.nodeHeight / 2);
-        const absX = Math.abs(dx);
-        const absY = Math.abs(dy);
+        let dx = (p2.x + nw / 2) - (p1.x + nw / 2);
+        let dy = (p2.y + nh / 2) - (p1.y + nh / 2);
 
-        if (absX < minGapX && absY < minGapY) {
+        // Nudge if exactly on top of each other
+        if (Math.abs(dx) < 0.5 && Math.abs(dy) < 0.5) {
+          dx = (Math.random() - 0.5) * 20;
+          dy = (Math.random() - 0.5) * 20;
+        }
+
+        const normX = dx / minGapX;
+        const normY = dy / minGapY;
+        const dist = Math.sqrt(normX * normX + normY * normY);
+
+        if (dist < 1.0) {
           moved = true;
-          const overlapX = minGapX - absX;
-          const overlapY = minGapY - absY;
+          const overlap = (1.0 - dist) * 0.5;
+          const pushX = (normX / (dist || 0.001)) * overlap * minGapX;
+          const pushY = (normY / (dist || 0.001)) * overlap * minGapY;
 
-          if (overlapX < overlapY) {
-            const shift = overlapX / 2 + 1;
-            if (dx >= 0) { p1.x += shift; p2.x -= shift; }
-            else { p1.x -= shift; p2.x += shift; }
-          } else {
-            const shift = overlapY / 2 + 1;
-            if (dy >= 0) { p1.y += shift; p2.y -= shift; }
-            else { p1.y -= shift; p2.y += shift; }
-          }
+          p1.x -= pushX;
+          p1.y -= pushY;
+          p2.x += pushX;
+          p2.y += pushY;
         }
       }
     }
@@ -1738,27 +1782,76 @@ let show3dParticles = true;
 let highlight3dNodes = new Set();
 let highlight3dLinks = new Set();
 
-function createTextTexture3d(text, color) {
+function createTextCardTexture3d(n) {
   const T = window.THREE;
   if (!T) return null;
   const cvs = document.createElement('canvas');
   const c = cvs.getContext('2d');
-  const fontSize = 48;
+
+  const iconText = n.icon || '📄';
+  const nameText = n.name || '';
+  const typeText = (n.label || n.type || '').toUpperCase();
+
+  const fontSize = 24;
+  const subFontSize = 15;
+
   c.font = '600 ' + fontSize + 'px Inter, sans-serif';
-  const tw = c.measureText(text).width;
-  cvs.width = Math.min(tw + 24, 1024);
-  cvs.height = fontSize + 16;
+  const nameW = c.measureText(iconText + ' ' + nameText).width;
+  c.font = '700 ' + subFontSize + 'px Inter, sans-serif';
+  const typeW = c.measureText(typeText).width;
+
+  const w = Math.max(nameW + 40, typeW + 40, 160);
+  const h = 60;
+
+  cvs.width = w * 2;
+  cvs.height = h * 2;
+  c.scale(2, 2);
+
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+
+  // 3D Card Background
+  c.fillStyle = isDark ? 'rgba(15, 23, 42, 0.94)' : 'rgba(255, 255, 255, 0.96)';
+  c.beginPath();
+  roundRectPath(c, 2, 2, w - 4, h - 4, 10);
+  c.fill();
+
+  // 3D Card Border
+  c.strokeStyle = n.color || '#58a6ff';
+  c.lineWidth = 2.5;
+  c.stroke();
+
+  // Left Accent Indicator
+  c.fillStyle = n.color || '#58a6ff';
+  c.fillRect(2, 6, 6, h - 12);
+
+  // File Icon + Name Text
   c.font = '600 ' + fontSize + 'px Inter, sans-serif';
-  c.textAlign = 'center';
+  c.fillStyle = isDark ? '#f0f6fc' : '#1f2328';
+  c.textAlign = 'left';
   c.textBaseline = 'middle';
-  c.shadowColor = 'rgba(0,0,0,0.6)';
-  c.shadowBlur = 6;
-  c.shadowOffsetY = 2;
-  c.fillStyle = color || '#e6edf3';
-  c.fillText(text, cvs.width / 2, cvs.height / 2, cvs.width - 12);
+  c.fillText(iconText + ' ' + nameText, 16, 24, w - 24);
+
+  // Type Tag Text
+  c.font = '700 ' + subFontSize + 'px Inter, sans-serif';
+  c.fillStyle = n.color || '#8b949e';
+  c.fillText(typeText, 16, 45, w - 24);
+
   const texture = new T.CanvasTexture(cvs);
   texture.minFilter = T.LinearFilter;
-  return texture;
+  return { texture, w, h };
+}
+
+function roundRectPath(ctx, x, y, w, h, r) {
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);
+  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
 }
 
 function init3dGraphEngine() {
@@ -1785,7 +1878,7 @@ function init3dGraphEngine() {
     label: e.label || e.type, color: e.color || '#8b949e', style: e.style
   }));
 
-  graph3dInstance = ForceGraph3D()(container3d)
+  graph3dInstance = ForceGraph3D({ controlType: 'orbit', rendererConfig: { preserveDrawingBuffer: true } })(container3d)
     .graphData({ nodes: g3dNodes, links: g3dLinks })
     .backgroundColor(isDark() ? '#0a0e14' : '#ffffff')
     .showNavInfo(false)
@@ -1798,18 +1891,17 @@ function init3dGraphEngine() {
     .nodeOpacity(0.92)
     .nodeResolution(16)
     .nodeLabel(() => '')
-    .nodeThreeObjectExtend(true)
+    .nodeThreeObjectExtend(false)
     .nodeThreeObject(n => {
-      if (!show3dLabels) return undefined;
       const T = window.THREE;
       if (!T) return undefined;
-      const texture = createTextTexture3d(n.name, n.color);
-      if (!texture) return undefined;
-      const sprite = new T.Sprite(new T.SpriteMaterial({ map: texture, transparent: true, depthWrite: false }));
-      const scale = Math.max(6, 3 + n.val * 0.5);
-      sprite.scale.set(scale * 4, scale, 1);
-      sprite.position.set(0, Math.max(4, 2 + n.val * 0.3), 0);
-      sprite.renderOrder = 999;
+      const cardInfo = createTextCardTexture3d(n);
+      if (!cardInfo) return undefined;
+      const spriteMat = new T.SpriteMaterial({ map: cardInfo.texture, transparent: true, depthWrite: false });
+      const sprite = new T.Sprite(spriteMat);
+      const aspect = cardInfo.w / cardInfo.h;
+      const scaleH = Math.max(14, 10 + n.val * 0.7);
+      sprite.scale.set(scaleH * aspect, scaleH, 1);
       return sprite;
     })
     .linkColor(l => {
@@ -2656,10 +2748,28 @@ document.getElementById('btnExportJSON').addEventListener('click', exportJSON);
 
 function exportPNG() {
   const link = document.createElement('a');
-  link.download = (GRAPH.projectName || 'graph') + '_code_graph.png';
-  link.href = canvas.toDataURL('image/png');
+  link.download = (GRAPH.projectName || 'graph') + (currentViewMode === '3D' ? '_3d_code_graph.png' : '_2d_code_graph.png');
+
+  if (currentViewMode === '3D' && graph3dInstance) {
+    try {
+      const renderer = graph3dInstance.renderer();
+      const scene = graph3dInstance.scene();
+      const camera = graph3dInstance.camera();
+      if (renderer && scene && camera) {
+        renderer.render(scene, camera);
+        link.href = renderer.domElement.toDataURL('image/png');
+      } else {
+        link.href = canvas.toDataURL('image/png');
+      }
+    } catch (e) {
+      link.href = canvas.toDataURL('image/png');
+    }
+  } else {
+    link.href = canvas.toDataURL('image/png');
+  }
+
   link.click();
-  toast('PNG exported!');
+  toast((currentViewMode === '3D' ? '3D' : '2D') + ' PNG exported!');
 }
 
 function exportJSON() {

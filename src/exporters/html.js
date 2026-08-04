@@ -209,6 +209,25 @@ function toHtml(tree, stats = null) {
     .shortcuts-bar { font-size: 0.78rem; color: var(--text-muted); display: flex; gap: 1rem; padding: 0.5rem 1.25rem; background: var(--bg-panel); border-top: 1px solid var(--border); }
     kbd { background: var(--bg-hover); border: 1px solid var(--border); padding: 1px 5px; border-radius: 3px; font-family: monospace; }
 
+    @media (max-width: 768px) {
+      .navbar { padding: 0 0.75rem; height: 50px; }
+      .brand { font-size: 0.95rem; }
+      .nav-actions { gap: 0.35rem; }
+      .btn { padding: 0.3rem 0.6rem; font-size: 0.78rem; }
+      .app-body { flex-direction: column; }
+      .sidebar { width: 100%; height: 45vh; border-right: none; border-bottom: 1px solid var(--border); }
+      .main { width: 100%; height: 55vh; }
+      .panel-container { padding: 1rem; }
+      .stats-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 0.75rem; }
+      .export-grid { grid-template-columns: 1fr; gap: 0.75rem; }
+      .shortcuts-bar { display: none; }
+    }
+
+    @media (max-width: 480px) {
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .btn-label { display: none; }
+    }
+
     @media print {
       .sidebar, .navbar, .shortcuts-bar, .tabs { display: none !important; }
       body, .main, .panel-container { height: auto; overflow: visible; background: #fff; color: #000; }
