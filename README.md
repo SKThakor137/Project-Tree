@@ -18,7 +18,7 @@
 
 <p align="center">
   <a href="#-quick-start">Quick Start</a> •
-  <a href="#-interactive-project-dashboard--explorer---html">Interactive HTML Dashboard</a> •
+  <a href="#-interactive-project-dashboard--explorer---report">Interactive HTML Dashboard</a> •
   <a href="#-interactive-horizontal-mind-map----mindmap">Interactive Mind Map</a> •
   <a href="#-universal-code-relationship-visualizer----visualize">Interactive Code Graph</a> •
   <a href="#-why-project-tree-md">Why Us?</a> •
@@ -34,14 +34,14 @@ Run directly in any project folder — no global installation needed:
 
 | Feature | Command | Output File |
 | :--- | :--- | :--- |
-| 📊 **Interactive Project Dashboard & Explorer** | `npx ptree --html` | `PROJECT_STRUCTURE.html` *(auto-opens in browser)* |
+| 📊 **Interactive Project Dashboard & Explorer** | `npx ptree --report` | `PROJECT_STRUCTURE.html` *(auto-opens in browser)* |
 | 🧠 **Interactive Mind Map** | `npx ptree --mindmap` | `PROJECT_MINDMAP.html` *(auto-opens in browser)* |
 | 🌐 **2D & 3D Code Graph** | `npx ptree --visualize` | `CODE_GRAPH.html` *(auto-opens in browser)* |
 | 📄 **Markdown Tree** *(Default)* | `npx ptree` | `PROJECT_STRUCTURE.md` *(clean terminal output)* |
 
 ---
 
-## 📊 Interactive Project Dashboard & Explorer (`--html`)
+## 📊 Interactive Project Dashboard & Explorer (`--report`)
 
 Transform your entire project structure into a self-contained, interactive web dashboard (`PROJECT_STRUCTURE.html`). It automatically launches in your default browser and gives you instant codebase search, folder expansion, project metrics, architecture analysis, and client-side report exports.
 

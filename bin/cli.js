@@ -170,7 +170,14 @@ function parseArgs(argv) {
         args.visualize3d = true; break;
       case 'graph-json': case '--graph-json': args.graphJson = true; break;
       case 'json': case '--json': args.json = true; break;
-      case 'html': case '--html': args.html = true; break;
+      case 'html': case '--html':
+      case 'report': case '--report':
+      case 'explorer': case '--explorer':
+      case 'web': case '--web':
+      case 'ui': case '--ui':
+      case 'web-dashboard': case '--web-dashboard':
+      case 'structure-report': case '--structure-report':
+        args.html = true; break;
       case 'mindmap': case '--mindmap':
       case 'roadmap': case '--roadmap':
       case 'codemap': case '--codemap':
@@ -263,8 +270,8 @@ ${colors.bold('File Metadata & Hashing:')}
   --duplicates            Detect & report duplicate files (by name or hash)
 
 ${colors.bold('Export Formats:')}
+  --report, --explorer    Export as Interactive Web Dashboard HTML (PROJECT_STRUCTURE.html)
   --json                  Export as JSON
-  --html                  Export as collapsible HTML with Download Center
   --roadmap, --codemap    Export as interactive Code Architecture Roadmap HTML
   --svg                   Export as SVG diagram
   --mermaid               Export as Mermaid graph
