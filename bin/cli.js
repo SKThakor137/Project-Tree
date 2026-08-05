@@ -39,6 +39,7 @@ const { generateUniversalGraph } = require('../src/core/universalParser.js');
 const { toGraphVisualizerHtml } = require('../src/exporters/graphVisualizer.js');
 const { toGraph3dVisualizerHtml } = require('../src/exporters/graph3dVisualizer.js');
 const { toGraphJson } = require('../src/exporters/graphJson.js');
+const { openInBrowser } = require('../src/utils/opener.js');
 
 // ─── Arg Parser ───────────────────────────────────────────────────────────────
 
@@ -94,34 +95,44 @@ function parseArgs(argv) {
     bfs: false,
     config: null,
     respectIgnore: true,
+
+    // Terminal & Browser Behavior Flags (null = fallback to config / defaults)
+    silent: null,
+    openHtml: null,
   };
 
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
     switch (arg) {
       // Existing flags
-      case '--out': case '-o':         args.outputFile = argv[++i]; break;
-      case '--depth': case '-L':       args.maxDepth = parseInt(argv[++i], 10); break;
-      case '--exclude': case '-I':     args.excludeStr = argv[++i]; break;
-      case '--no-copy':                args.copy = false; break;
-      case '--help': case '-h':        args.help = true; break;
-      case '--version': case '-v':     args.version = true; break;
+      case '--out': case '-o': args.outputFile = argv[++i]; break;
+      case '--depth': case '-L': args.maxDepth = parseInt(argv[++i], 10); break;
+      case '--exclude': case '-I': args.excludeStr = argv[++i]; break;
+      case '--no-copy': args.copy = false; break;
+      case '--help': case '-h': args.help = true; break;
+      case '--version': case '-v': args.version = true; break;
 
       // New v3.0 flags
-      case '--sort':                   args.sort = argv[++i]; break;
-      case '--sort-order':             args.sortOrder = argv[++i]; break;
-      case '--hash':                   args.hash = argv[++i] || 'sha256'; break;
-      case '--permissions':            args.permissions = true; break;
-      case '--owner':                  args.owner = true; break;
-      case '--modified':               args.modified = true; break;
-      case '--created':                args.created = true; break;
-      case '--duplicates':             args.duplicates = true; break;
-      case '--icons':                  args.icons = argv[++i]; break;
-      case '--max-files':              args.maxFiles = parseInt(argv[++i], 10); break;
-      case '--max-folders':            args.maxFolders = parseInt(argv[++i], 10); break;
-      case '--bfs':                    args.bfs = true; break;
-      case '--config':                 args.config = argv[++i]; break;
-      case '--respect-ignore':         args.respectIgnore = true; break;
+      case '--sort': args.sort = argv[++i]; break;
+      case '--sort-order': args.sortOrder = argv[++i]; break;
+      case '--hash': args.hash = argv[++i] || 'sha256'; break;
+      case '--permissions': args.permissions = true; break;
+      case '--owner': args.owner = true; break;
+      case '--modified': args.modified = true; break;
+      case '--created': args.created = true; break;
+      case '--duplicates': args.duplicates = true; break;
+      case '--icons': args.icons = argv[++i]; break;
+      case '--max-files': args.maxFiles = parseInt(argv[++i], 10); break;
+      case '--max-folders': args.maxFolders = parseInt(argv[++i], 10); break;
+      case '--bfs': args.bfs = true; break;
+      case '--config': args.config = argv[++i]; break;
+      case '--respect-ignore': args.respectIgnore = true; break;
+
+      // Terminal & Browser Behavior Flags
+      case '--silent': args.silent = true; break;
+      case '--no-silent': case '--verbose': args.silent = false; break;
+      case '--open-html': args.openHtml = true; break;
+      case '--no-open': args.openHtml = false; break;
 
       // Bundle & Export System Flags & Subcommands
       case 'bundle': case '--bundle': case '--zip': case '--download':
@@ -145,44 +156,44 @@ function parseArgs(argv) {
         args.noWrite = true; break;
 
       // Format & Analysis Flags & Subcommands
-      case 'ai': case '--ai':                         args.ai = true; break;
-      case 'prompt': case '--prompt':                 args.prompt = true; break;
-      case 'tokens': case '--tokens':                 args.tokens = true; break;
-      case 'summarize': case '--summarize':          args.summarize = true; break;
-      case 'flow': case '--flow':                     args.flow = true; break;
-      case 'architecture': case '--architecture':     args.architecture = true; break;
+      case 'ai': case '--ai': args.ai = true; break;
+      case 'prompt': case '--prompt': args.prompt = true; break;
+      case 'tokens': case '--tokens': args.tokens = true; break;
+      case 'summarize': case '--summarize': args.summarize = true; break;
+      case 'flow': case '--flow': args.flow = true; break;
+      case 'architecture': case '--architecture': args.architecture = true; break;
       case 'visualize': case 'graph': case 'code-graph':
       case '--visualize': case '--graph': case '--code-graph':
-                                                      args.visualize = true; break;
+        args.visualize = true; break;
       case 'visualize-3d': case '3d-graph': case 'graph-3d':
       case '--visualize-3d': case '--3d-graph': case '--graph-3d':
-                                                      args.visualize3d = true; break;
-      case 'graph-json': case '--graph-json':         args.graphJson = true; break;
-      case 'json': case '--json':                     args.json = true; break;
-      case 'html': case '--html':                     args.html = true; break;
-      case 'mindmap': case '--mindmap':               
+        args.visualize3d = true; break;
+      case 'graph-json': case '--graph-json': args.graphJson = true; break;
+      case 'json': case '--json': args.json = true; break;
+      case 'html': case '--html': args.html = true; break;
+      case 'mindmap': case '--mindmap':
       case 'roadmap': case '--roadmap':
       case 'codemap': case '--codemap':
-      case 'tree-flow': case '--tree-flow':           args.mindmap = true; break;
-      case 'svg': case '--svg':                       args.svg = true; break;
-      case 'mermaid': case '--mermaid':               args.mermaid = true; break;
-      case 'csv': case '--csv':                       args.csv = true; break;
-      case 'tsv': case '--tsv':                       args.tsv = true; break;
-      case 'xml': case '--xml':                       args.xml = true; break;
-      case 'yaml': case '--yaml':                     args.yaml = true; break;
-      case 'plantuml': case '--plantuml':             args.plantuml = true; break;
-      case '--watch':                                 args.watch = true; break;
-      case '--inject':                                args.inject = argv[++i]; break;
-      case '--theme':                                 args.theme = argv[++i]; break;
-      case '--details':                               args.details = true; break;
-      case '--compress':                              args.compress = true; break;
-      case '--collapse':                              args.collapseThreshold = parseInt(argv[++i], 10); break;
-      case '--max-size':                              args.maxSize = argv[++i]; break;
-      case '--include-binary':                        args.includeBinary = true; break;
-      case '--show-sensitive':                        args.showSensitive = true; break;
-      case '--no-ignore':                             args.noIgnore = true; break;
-      case 'dashboard': case '--dashboard':           args.dashboard = true; break;
-      case '-i': case '--interactive':                args.interactive = true; break;
+      case 'tree-flow': case '--tree-flow': args.mindmap = true; break;
+      case 'svg': case '--svg': args.svg = true; break;
+      case 'mermaid': case '--mermaid': args.mermaid = true; break;
+      case 'csv': case '--csv': args.csv = true; break;
+      case 'tsv': case '--tsv': args.tsv = true; break;
+      case 'xml': case '--xml': args.xml = true; break;
+      case 'yaml': case '--yaml': args.yaml = true; break;
+      case 'plantuml': case '--plantuml': args.plantuml = true; break;
+      case '--watch': args.watch = true; break;
+      case '--inject': args.inject = argv[++i]; break;
+      case '--theme': args.theme = argv[++i]; break;
+      case '--details': args.details = true; break;
+      case '--compress': args.compress = true; break;
+      case '--collapse': args.collapseThreshold = parseInt(argv[++i], 10); break;
+      case '--max-size': args.maxSize = argv[++i]; break;
+      case '--include-binary': args.includeBinary = true; break;
+      case '--show-sensitive': args.showSensitive = true; break;
+      case '--no-ignore': args.noIgnore = true; break;
+      case 'dashboard': case '--dashboard': args.dashboard = true; break;
+      case '-i': case '--interactive': args.interactive = true; break;
 
       // Terminal Shell Hook Integration
       case 'init-shell': case '--init-shell':
@@ -274,6 +285,12 @@ ${colors.bold('AI Features:')}
   --prompt                Generate AI-ready prompt
   --tokens                Output AI context token count & cost estimation
 
+${colors.bold('Terminal & Browser Behavior:')}
+  --silent                Suppress tree output in terminal           ${colors.gray('(default: on)')}
+  --verbose, --no-silent  Print full tree to terminal (old behavior)
+  --open-html             Auto-open HTML reports in default browser  ${colors.gray('(default: on)')}
+  --no-open               Disable auto-opening HTML reports
+
 ${colors.bold('Terminal Shell Integration:')}
   --init-shell [shell]    Output shell tab hook snippet ${colors.gray('(powershell|bash|zsh|cmd)')}
   --install-hook [shell]  Install shell hook into user profile (runs tree ONCE on 1st command)
@@ -330,6 +347,10 @@ function runGenerate(cliArgs) {
     const { config: mergedConfig, source: configSource } = loadConfig(rootDir, cliArgs);
     const args = { ...mergedConfig, ...cliArgs };
 
+    // Resolve silent & openHtml: CLI > config > defaults (true)
+    const isSilent = args.silent !== null && args.silent !== undefined ? args.silent : true;
+    const shouldOpenHtml = args.openHtml !== null && args.openHtml !== undefined ? args.openHtml : true;
+
     if (configSource && process.env.VERBOSE) {
       console.log(colors.dim(`Loaded config from ${configSource}`));
     }
@@ -374,8 +395,12 @@ function runGenerate(cliArgs) {
       maxFolders: args.maxFolders,
     });
 
-    // Print colorized tree
-    console.log('\n' + result.coloredTreeText + '\n');
+    const generatedHtmlFiles = [];
+
+    // Print colorized tree ONLY when not silent (--verbose / --no-silent)
+    if (!isSilent) {
+      console.log('\n' + result.coloredTreeText + '\n');
+    }
 
     // Duplicate Detection Report
     if (args.duplicates) {
@@ -383,7 +408,9 @@ function runGenerate(cliArgs) {
       const dups = mode === 'hash'
         ? findDuplicatesByHash(result.tree, args.hash)
         : findDuplicatesByName(result.tree);
-      console.log(formatDuplicateReport(dups, mode) + '\n');
+      if (!isSilent) {
+        console.log(formatDuplicateReport(dups, mode) + '\n');
+      }
     }
 
     const outDir = args.outputDir
@@ -393,13 +420,16 @@ function runGenerate(cliArgs) {
     // Architecture Flow Output
     if (args.flow) {
       const flowRes = result.flowResult || generateArchitectureFlow(rootDir, result.tree);
-      console.log(flowRes.coloredFlowText + '\n');
+      if (!isSilent) {
+        console.log(flowRes.coloredFlowText + '\n');
+      }
 
       // Generate Architecture Flow HTML
       const flowHtml = toArchitectureFlowHtml(flowRes, result.tree.name);
       const flowHtmlPath = path.join(outDir, 'ARCHITECTURE_FLOW.html');
       fs.writeFileSync(flowHtmlPath, flowHtml, 'utf8');
       console.log(colors.success(`Architecture Flow HTML exported to ${path.relative(process.cwd(), flowHtmlPath)}`));
+      generatedHtmlFiles.push(flowHtmlPath);
     }
 
     // Universal Code Relationship Graph
@@ -414,6 +444,7 @@ function runGenerate(cliArgs) {
           const graphHtmlPath = path.join(outDir, 'CODE_GRAPH.html');
           fs.writeFileSync(graphHtmlPath, graphHtml, 'utf8');
           console.log(colors.success(`Code Relationship Graph exported to ${path.relative(process.cwd(), graphHtmlPath)} (${nodeCount} nodes, ${edgeCount} edges)`));
+          generatedHtmlFiles.push(graphHtmlPath);
         }
 
         if (args.visualize3d) {
@@ -421,6 +452,7 @@ function runGenerate(cliArgs) {
           const graph3dPath = path.join(outDir, 'CODE_GRAPH_3D.html');
           fs.writeFileSync(graph3dPath, graph3dHtml, 'utf8');
           console.log(colors.success(`3D Code Relationship Graph exported to ${path.relative(process.cwd(), graph3dPath)} (${nodeCount} nodes, ${edgeCount} edges)`));
+          generatedHtmlFiles.push(graph3dPath);
         }
 
         if (args.graphJson) {
@@ -434,7 +466,10 @@ function runGenerate(cliArgs) {
       }
     }
 
-    console.log(`📊 ${colors.bold('Stats:')} ${result.statsText}`);
+    // Print stats only when not silent
+    if (!isSilent) {
+      console.log(`📊 ${colors.bold('Stats:')} ${result.statsText}`);
+    }
 
     // Dashboard
     if (args.dashboard) {
@@ -470,7 +505,8 @@ function runGenerate(cliArgs) {
       const htmlName = baseOutName.replace(/\.md$/, '.html');
       const htmlPath = path.join(outDir, htmlName);
       fs.writeFileSync(htmlPath, htmlStr, 'utf8');
-      console.log(colors.success(`HTML exported to ${path.relative(process.cwd(), htmlPath)}`));
+      console.log(colors.success(`Interactive HTML Tree exported to ${path.relative(process.cwd(), htmlPath)}`));
+      generatedHtmlFiles.push(htmlPath);
     }
 
     if (args.mindmap) {
@@ -478,6 +514,7 @@ function runGenerate(cliArgs) {
       const mindmapPath = path.join(outDir, 'PROJECT_MINDMAP.html');
       fs.writeFileSync(mindmapPath, mindmapStr, 'utf8');
       console.log(colors.success(`Mind Map HTML exported to ${path.relative(process.cwd(), mindmapPath)}`));
+      generatedHtmlFiles.push(mindmapPath);
     }
 
     if (args.svg) {
@@ -590,6 +627,16 @@ function runGenerate(cliArgs) {
     if (args.copy && process.stdout.isTTY) {
       const copied = copyToClipboard(result.markdown);
       if (copied) console.log(`📋 ${colors.green('Project structure copied to clipboard!')}`);
+    }
+
+    // Auto-open generated HTML reports in default browser
+    if (shouldOpenHtml && generatedHtmlFiles.length > 0) {
+      // Open the primary (first) HTML file
+      const primaryHtml = generatedHtmlFiles[0];
+      const opened = openInBrowser(primaryHtml);
+      if (opened) {
+        console.log(`🌐 ${colors.cyan('Opened in browser:')} ${colors.bold(path.relative(process.cwd(), primaryHtml))}`);
+      }
     }
 
     // Watch mode

@@ -48,6 +48,10 @@ const DEFAULTS = {
   outputFile: null,
   outputDir: null,
   noWrite: false,
+
+  // v3.2 — Terminal & Browser behavior
+  silent: true,
+  openHtml: true,
 };
 
 /** Valid config keys for schema validation. */
@@ -138,6 +142,8 @@ function loadEnvConfig() {
     PTREE_CREATED:     'created',
     PTREE_DUPLICATES:  'duplicates',
     PTREE_NO_WRITE:    'noWrite',
+    PTREE_SILENT:      'silent',
+    PTREE_OPEN_HTML:   'openHtml',
   };
 
   for (const [envKey, configKey] of Object.entries(envMap)) {

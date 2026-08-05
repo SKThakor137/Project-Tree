@@ -48,6 +48,7 @@ const { toXml } = require('./exporters/xml.js');
 const { toYaml } = require('./exporters/yaml.js');
 const { toPlantUml } = require('./exporters/plantuml.js');
 const { registerRenderer, registerScannerHook, registerFormatter, loadPlugin } = require('./core/pluginApi.js');
+const { openInBrowser } = require('./utils/opener.js');
 
 module.exports = {
   // Core (backward-compatible)
@@ -122,5 +123,8 @@ module.exports = {
 
   // Shell Hook & Terminal Integration
   ...require('./features/shellHook.js'),
+
+  // Browser Opener (v3.2)
+  openInBrowser,
 };
 

@@ -18,10 +18,11 @@
 
 <p align="center">
   <a href="#-quick-start">Quick Start</a> •
+  <a href="#-interactive-project-dashboard--explorer---html">Interactive HTML Dashboard</a> •
   <a href="#-interactive-horizontal-mind-map----mindmap">Interactive Mind Map</a> •
   <a href="#-universal-code-relationship-visualizer----visualize">Interactive Code Graph</a> •
   <a href="#-why-project-tree-md">Why Us?</a> •
-  <a href="#-bundle-export-workflow---bundle">ZIP Bundles</a> •
+  <a href="#-configuration-file-project-treeconfigjson">Configuration</a> •
   <a href="#-programmatic-api">API Usage</a>
 </p>
 
@@ -33,9 +34,23 @@ Run directly in any project folder — no global installation needed:
 
 | Feature | Command | Output File |
 | :--- | :--- | :--- |
-| 📄 **Simple Markdown Tree** *(Default)* | `npx ptree` | `PROJECT_STRUCTURE.md` *(auto-copies to clipboard)* |
-| 🧠 **Interactive Mind Map** | `npx ptree --mindmap` | `PROJECT_MINDMAP.html` |
-| 🌐 **2D & 3D Code Graph** | `npx ptree --visualize` | `CODE_GRAPH.html` |
+| 📊 **Interactive Project Dashboard & Explorer** | `npx ptree --html` | `PROJECT_STRUCTURE.html` *(auto-opens in browser)* |
+| 🧠 **Interactive Mind Map** | `npx ptree --mindmap` | `PROJECT_MINDMAP.html` *(auto-opens in browser)* |
+| 🌐 **2D & 3D Code Graph** | `npx ptree --visualize` | `CODE_GRAPH.html` *(auto-opens in browser)* |
+| 📄 **Markdown Tree** *(Default)* | `npx ptree` | `PROJECT_STRUCTURE.md` *(clean terminal output)* |
+
+---
+
+## 📊 Interactive Project Dashboard & Explorer (`--html`)
+
+Transform your entire project structure into a self-contained, interactive web dashboard (`PROJECT_STRUCTURE.html`). It automatically launches in your default browser and gives you instant codebase search, folder expansion, project metrics, architecture analysis, and client-side report exports.
+
+### ⚡ Key Capabilities:
+* 📁 **Interactive Collapsible Tree**: Click to expand/collapse folders with live file counts and type icons.
+* 🔍 **Real-Time Instant Search**: Filter files and folders dynamically as you type with keyboard shortcuts.
+* 📊 **Project Analytics & Stats**: View file count distribution, lines of code, language breakdown, and directory sizes.
+* 🏗️ **Architecture & Dependency Insights**: Inspect module imports, exports, and dead code analysis.
+* 📦 **Built-in Client-Side Export Center**: Export to Markdown, JSON, SVG, Mermaid, and AI Prompts directly from your browser.
 
 ---
 
@@ -181,6 +196,33 @@ npx ptree --bundle --output-dir reports/
 
 ---
 
+## ⚙️ Configuration File (`project-tree.config.json`)
+
+Configure `project-tree-md` behavior globally or per-project. Settings are loaded automatically in priority order:
+1. CLI arguments *(highest priority)*
+2. `project-tree.config.json`
+3. `project-tree.config.js`
+4. `.projecttreerc`
+5. `package.json` under `"projectTree"`
+
+```json
+{
+  "silent": true,
+  "openHtml": true,
+  "theme": "emoji",
+  "sort": "folders-first",
+  "outputFile": "PROJECT_STRUCTURE.md"
+}
+```
+
+### Key Configuration Options:
+* **`silent`** *(boolean, default: true)*: Keeps the terminal output clean by suppressing full tree printing in stdout.
+* **`openHtml`** *(boolean, default: true)*: Automatically launches generated HTML reports in your system's default browser.
+* **`theme`** *(string)*: Tree visual theme (`unicode`, `ascii`, `box`, `emoji`, `rounded`, `double`, `minimal`).
+* **`sort`** *(string)*: Sorting strategy (`alpha`, `folders-first`, `files-first`, `extension`, `size`, `modified`, `created`, `natural`).
+
+---
+
 ## 🎯 Complete CLI Options (v3.0)
 
 ```text
@@ -244,6 +286,12 @@ AI Features:
   --ai                    Generate AI context document
   --prompt                Generate AI-ready prompt
   --tokens                Output AI context token count & cost estimation
+
+Terminal & Browser Behavior:
+  --silent                Suppress tree output in terminal (default: on)
+  --verbose, --no-silent  Print full tree to terminal (old behavior)
+  --open-html             Auto-open HTML reports in default browser (default: on)
+  --no-open               Disable auto-opening HTML reports
 
 Other Options:
   -i, --interactive       Interactive guided setup

@@ -17,7 +17,7 @@
   ],
   "scripts": {
     "test": "node bin/cli.js --no-write",
-    "test:all": "node tests/scanner.test.js && node tests/formatter.test.js && node tests/ignore.test.js && node tests/json.test.js && node tests/mermaid.test.js && node tests/html.test.js && node tests/mindmap.test.js && node tests/svg.test.js && node tests/compare.test.js && node tests/tokens.test.js && node tests/summarize.test.js && node tests/flow.test.js && node tests/zip.test.js && node tests/bundle.test.js && node tests/exporter.test.js && node tests/graph.test.js && node tests/flutter_graph.test.js && node tests/v3.test.js && node tests/shellHook.test.js",
+    "test:all": "node tests/scanner.test.js && node tests/formatter.test.js && node tests/ignore.test.js && node tests/json.test.js && node tests/mermaid.test.js && node tests/html.test.js && node tests/mindmap.test.js && node tests/svg.test.js && node tests/compare.test.js && node tests/tokens.test.js && node tests/summarize.test.js && node tests/flow.test.js && node tests/zip.test.js && node tests/bundle.test.js && node tests/exporter.test.js && node tests/graph.test.js && node tests/flutter_graph.test.js && node tests/v3.test.js && node tests/shellHook.test.js && node tests/opener.test.js",
     "test:v3": "node tests/v3.test.js",
     "test:shell": "node tests/shellHook.test.js",
     "test:mindmap": "node tests/mindmap.test.js",
