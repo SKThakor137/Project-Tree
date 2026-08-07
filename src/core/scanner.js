@@ -10,6 +10,7 @@ const { extractFileSummary } = require('../features/summarize.js');
 const { parseFile } = require('./analyzer.js');
 const { sortTree } = require('./sorter.js');
 const { hashFileSync } = require('../utils/hasher.js');
+const { getGitStatus, filterTreeByChanged } = require('../utils/git.js');
 
 /** Default exclusion pattern (kept for backward compatibility). */
 const DEFAULT_EXCLUDE = /node_modules|\.next|\.git|dist|build|coverage|\.turbo|venv|\.venv|__pycache__|\.dart_tool|\.cache|\.pytest_cache|\.idea|\.vscode/;
@@ -121,9 +122,13 @@ function scan(rootDir, options = {}) {
   const maxFiles          = (options.maxFiles !== null && options.maxFiles !== undefined && !isNaN(options.maxFiles)) ? Number(options.maxFiles) : Infinity;
   const maxFolders        = (options.maxFolders !== null && options.maxFolders !== undefined && !isNaN(options.maxFolders)) ? Number(options.maxFolders) : Infinity;
   const signal            = options.signal || null;
+  const gitStatus         = options.gitStatus || options.changedOnly || false;
+  const changedOnly       = options.changedOnly || false;
 
   const absoluteRoot = path.resolve(rootDir);
   if (!fs.existsSync(absoluteRoot)) return null;
+
+  const gitStatusMap = gitStatus ? getGitStatus(absoluteRoot) : {};
 
   const visitedInodes = new Set();
   let fileCountAcc = 0;
@@ -213,6 +218,10 @@ function scan(rootDir, options = {}) {
         ...extraMeta,
       };
 
+      if (gitStatusMap[relPath]) {
+        fileNode.gitStatus = gitStatusMap[relPath];
+      }
+
       if (hash && !binary && stat.size < 5 * 1024 * 1024) {
         fileNode.hash = hashFileSync(itemPath, hash);
       }
@@ -284,6 +293,11 @@ function scan(rootDir, options = {}) {
 
   let root = buildNode(absoluteRoot, 0);
   if (!root) return null;
+
+  if (changedOnly) {
+    root = filterTreeByChanged(root, gitStatusMap, absoluteRoot);
+    if (!root) return null;
+  }
 
   // Apply sorting if requested
   if (sort) {

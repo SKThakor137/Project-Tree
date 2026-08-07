@@ -50,6 +50,10 @@ const { toPlantUml } = require('./exporters/plantuml.js');
 const { registerRenderer, registerScannerHook, registerFormatter, loadPlugin } = require('./core/pluginApi.js');
 const { openInBrowser } = require('./utils/opener.js');
 
+const { getGitStatus } = require('./utils/git.js');
+const { generateAiRules } = require('./features/aiRules.js');
+const { startLiveServer } = require('./features/server.js');
+
 module.exports = {
   // Core (backward-compatible)
   generateTree,
@@ -86,6 +90,7 @@ module.exports = {
   // Features
   generateAiContext,
   generateAiPrompt,
+  generateAiRules,
   injectIntoFile,
   compare,
   detectMonorepo,
@@ -120,6 +125,10 @@ module.exports = {
   compileAllReports,
   generateBundle,
   exportReports,
+
+  // Git & Live Server (v3.2)
+  getGitStatus,
+  startLiveServer,
 
   // Shell Hook & Terminal Integration
   ...require('./features/shellHook.js'),

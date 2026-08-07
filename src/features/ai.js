@@ -199,4 +199,6 @@ function generateAiPrompt(rootDir, treeText, stats) {
   return parts.join('\n');
 }
 
-module.exports = { generateAiContext, generateAiPrompt };
+const { generateAiRules } = require('./aiRules.js');
+
+module.exports = { generateAiContext, generateAiPrompt, generateAiRules };

@@ -184,6 +184,21 @@ npx ptree --theme rounded
 npx ptree --theme ./my-theme.json --icons ./my-icons.json
 ```
 
+### 6. Git Status, AI Rules & Live Hot-Reload Server (New in v3.2)
+```bash
+# Display Git status tags ([M], [A], [?]) alongside files
+npx ptree --git-status
+
+# Show ONLY modified & untracked files for PR code reviews
+npx ptree --changed-only
+
+# Generate AI Agent coding guidelines & context file (AGENTS.md)
+npx ptree ai-rules
+
+# Start Zero-Dependency Live Server with instant hot reload on file changes
+npx ptree serve
+```
+
 ---
 
 ## 📦 Bundle Export System (`--bundle`)

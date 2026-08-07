@@ -545,6 +545,20 @@ html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--fon
     <span class="toolbar-sep"></span>
   </div>
 
+  <select class="tb-select" id="nodeTypeFilter" title="Filter by Node Type">
+    <option value="ALL">All Types</option>
+    <option value="ENTRY">Entry Points</option>
+    <option value="COMPONENT">Components</option>
+    <option value="SERVICE">Services</option>
+    <option value="ROUTE">Routes</option>
+    <option value="CONTROLLER">Controllers</option>
+    <option value="MODEL">Models</option>
+    <option value="UTILITY">Utilities</option>
+    <option value="TEST">Tests</option>
+    <option value="CONFIG">Configs</option>
+  </select>
+  <span class="toolbar-sep"></span>
+
   <div class="search-wrap">
     <input type="text" id="searchBox" placeholder="Search nodes... (Ctrl+F)" autocomplete="off">
     <span class="search-results-count" id="searchCount"></span>
@@ -2530,6 +2544,22 @@ searchBox.addEventListener('input', () => {
     search3dHighlight(STATE.searchTerm);
   }
 });
+
+const nodeTypeFilterSelect = document.getElementById('nodeTypeFilter');
+if (nodeTypeFilterSelect) {
+  nodeTypeFilterSelect.addEventListener('change', () => {
+    const val = nodeTypeFilterSelect.value;
+    if (val === 'ALL') {
+      STATE.searchResults = [];
+      STATE.searchResultIds = new Set();
+    } else {
+      STATE.searchResults = nodes.filter(n => (n.type || '').toUpperCase() === val);
+      STATE.searchResultIds = new Set(STATE.searchResults.map(r => r.id));
+    }
+    if (currentViewMode === '2D') render();
+    else search3dHighlight(val === 'ALL' ? '' : val.toLowerCase());
+  });
+}
 
 // ─── FIT VIEW ────────────────────────────────────────────────────────────────
 

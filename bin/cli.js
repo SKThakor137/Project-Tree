@@ -200,7 +200,10 @@ function parseArgs(argv) {
       case '--show-sensitive': args.showSensitive = true; break;
       case '--no-ignore': args.noIgnore = true; break;
       case 'dashboard': case '--dashboard': args.dashboard = true; break;
-      case '-i': case '--interactive': args.interactive = true; break;
+      case '--git-status': args.gitStatus = true; break;
+      case '--changed-only': args.changedOnly = true; break;
+      case 'ai-rules': case '--ai-rules': args.aiRules = true; break;
+      case 'serve': case '--serve': args.serve = true; break;
 
       // Terminal Shell Hook Integration
       case 'init-shell': case '--init-shell':
@@ -400,6 +403,8 @@ function runGenerate(cliArgs) {
       icons: args.icons,
       maxFiles: args.maxFiles,
       maxFolders: args.maxFolders,
+      gitStatus: args.gitStatus,
+      changedOnly: args.changedOnly,
     });
 
     const generatedHtmlFiles = [];
@@ -727,6 +732,30 @@ function main() {
       console.error(colors.error(e.message));
       process.exit(1);
     }
+    return;
+  }
+
+  // AI Rules Generator
+  if (args.aiRules) {
+    const { generateAiRules } = require('../src/features/aiRules.js');
+    const rulesText = generateAiRules(process.cwd());
+    if (args.noWrite) {
+      console.log(rulesText);
+    } else {
+      const outPath = path.join(process.cwd(), 'AGENTS.md');
+      fs.writeFileSync(outPath, rulesText, 'utf8');
+      console.log(colors.success(`AI Agent rules exported to ${path.relative(process.cwd(), outPath)}`));
+    }
+    return;
+  }
+
+  // Live Server mode
+  if (args.serve) {
+    const { startLiveServer } = require('../src/features/server.js');
+    startLiveServer(process.cwd(), {
+      openHtml: args.openHtml !== false,
+      mode: args.visualize ? 'visualize' : 'report',
+    });
     return;
   }
 

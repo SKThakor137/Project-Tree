@@ -3,6 +3,7 @@
   "version": "3.1.2",
   "description": "Enterprise-grade AI-ready project analysis, architecture & visualizer suite. Generates interactive Code Relationship Graphs (HTML/Canvas/3D), Markdown, JSON, HTML, SVG, Mermaid, CSV, TSV, XML, YAML, PlantUML, ZIP bundles, AI context, duplicate reports, custom themes, custom icons, and plugin system. Zero dependencies. Node.js 20+.",
   "main": "src/index.js",
+  "types": "types/index.d.ts",
   "type": "commonjs",
   "bin": {
     "project-tree-md": "bin/cli.js",
@@ -12,12 +13,13 @@
   "files": [
     "bin",
     "src",
+    "types",
     "README.md",
     "LICENSE"
   ],
   "scripts": {
     "test": "node bin/cli.js --no-write",
-    "test:all": "node tests/scanner.test.js && node tests/formatter.test.js && node tests/ignore.test.js && node tests/json.test.js && node tests/mermaid.test.js && node tests/html.test.js && node tests/mindmap.test.js && node tests/svg.test.js && node tests/compare.test.js && node tests/tokens.test.js && node tests/summarize.test.js && node tests/flow.test.js && node tests/zip.test.js && node tests/bundle.test.js && node tests/exporter.test.js && node tests/graph.test.js && node tests/flutter_graph.test.js && node tests/v3.test.js && node tests/shellHook.test.js && node tests/opener.test.js",
+    "test:all": "node tests/scanner.test.js && node tests/formatter.test.js && node tests/ignore.test.js && node tests/json.test.js && node tests/mermaid.test.js && node tests/html.test.js && node tests/mindmap.test.js && node tests/svg.test.js && node tests/compare.test.js && node tests/tokens.test.js && node tests/summarize.test.js && node tests/flow.test.js && node tests/zip.test.js && node tests/bundle.test.js && node tests/exporter.test.js && node tests/graph.test.js && node tests/flutter_graph.test.js && node tests/v3.test.js && node tests/shellHook.test.js && node tests/opener.test.js && node tests/types.test.js && node tests/git.test.js && node tests/aiRules.test.js && node tests/server.test.js",
     "test:v3": "node tests/v3.test.js",
     "test:shell": "node tests/shellHook.test.js",
     "test:mindmap": "node tests/mindmap.test.js",

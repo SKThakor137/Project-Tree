@@ -46,6 +46,7 @@ function renderName(node, opts = {}) {
   if (node.isSymlink && node.symlinkTarget) name += ` → ${node.symlinkTarget}`;
   if (node.collapsed) name += ` (${node.collapsedCount} files)`;
   if (node.isEmpty && node.children !== undefined) name += ' [empty]';
+  if (node.gitStatus) name += ` [${node.gitStatus}]`;
 
   const metaParts = [];
 
