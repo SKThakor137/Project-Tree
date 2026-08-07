@@ -2,7 +2,7 @@
   <a href="https://github.com/SKThakor137/Project-Tree">
     <img src="assets/banner.svg" alt="project-tree-md Banner" width="100%" />
   </a>
-  <h1 align="center">🌳 project-tree-md v3.1</h1>
+  <h1 align="center">🌳 project-tree-md</h1>
   <p align="center">
     <strong>Enterprise AI-Ready Project Intelligence & 2D/3D Code Visualizer Suite</strong><br>
     <em>Instantly map codebases for Cursor, Claude, ChatGPT & Developers. Generates Interactive Mind Maps, 2D/3D Code Graphs, Markdown, JSON, HTML, SVG, Mermaid, CSV, TSV, XML, YAML, PlantUML & ZIP Bundles in 1-Second. Zero Dependencies. Node.js 20+.</em>

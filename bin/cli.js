@@ -232,8 +232,9 @@ function parseArgs(argv) {
 // ─── Help ─────────────────────────────────────────────────────────────────────
 
 function printHelp() {
+  const pkg = require('../package.json');
   console.log(`
-${colors.boldCyan('project-tree-md')} — Enterprise AI-Ready Project Analysis Suite (v3.0)
+${colors.boldCyan('project-tree-md')} — Enterprise AI-Ready Project Analysis Suite (v${pkg.version})
 
 ${colors.bold('Usage:')}
   npx project-tree-md [options]
