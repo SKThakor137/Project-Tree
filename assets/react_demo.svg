@@ -70,7 +70,7 @@
   <circle cx="88" cy="42" r="6" fill="#10b981" />
   <text x="116" y="47" class="title-text" font-size="14">⚛️ React Project Intelligence Demo — npx project-tree-md --mindmap</text>
   <rect x="800" y="32" width="120" height="22" rx="11" fill="url(#primary-grad)" />
-  <text x="860" y="47" class="badge-text" text-anchor="middle">v3.1.0 Ready</text>
+  <text x="860" y="47" class="badge-text" text-anchor="middle">Ready</text>
 
   <!-- Left Card: Simple Markdown Tree Output -->
   <g transform="translate(24, 80)">

@@ -93,7 +93,7 @@
     
     <!-- Version Tag -->
     <rect x="800" y="10" width="96" height="22" rx="11" fill="url(#grad-indigo-purple)" class="pulse-badge" />
-    <text x="848" y="25" font-family="Inter, sans-serif" font-weight="800" font-size="11" fill="#ffffff" text-anchor="middle">v3.1.1 LIVE</text>
+    <text x="848" y="25" font-family="Inter, sans-serif" font-weight="800" font-size="11" fill="#ffffff" text-anchor="middle">LIVE</text>
   </g>
 
   <!-- 4 Feature Cards Grid -->
