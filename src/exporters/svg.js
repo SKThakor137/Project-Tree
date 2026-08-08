@@ -3,27 +3,43 @@
  */
 'use strict';
 
+const { createIconResolver } = require('../core/iconEngine.js');
+
 /** @typedef {import('../core/scanner').ScanNode} ScanNode */
 
 /**
- * Generate a clean SVG tree diagram with proper indentation and connector lines.
+ * Generate a clean SVG vector tree diagram with line connectors & node dots.
  * @param {ScanNode} tree
  * @param {Object}   [stats]
+ * @param {Object}   [options]
  * @returns {string} svg
  */
-function toSvg(tree, stats = null) {
+function toSvg(tree, stats = null, options = {}) {
   const LINE_HEIGHT = 22;
   const INDENT_PX = 20;
   const LEFT_PAD = 20;
   const TOP_PAD = 55;
   const FONT = "'Consolas', 'Courier New', monospace";
   const FONT_SIZE = 13;
-  const CHAR_WIDTH = 7.8; // approximate monospace character width
+  const CHAR_WIDTH = 7.8;
 
   const svgLines = [];
   const connectorLines = [];
   let y = 0;
   let maxTextWidth = 0;
+
+  const iconResolver = createIconResolver(options ? options.icons : null);
+
+  function sortChildrenFoldersFirst(children) {
+    if (!children || !Array.isArray(children)) return [];
+    return [...children].sort((a, b) => {
+      const aIsDir = a.children !== undefined;
+      const bIsDir = b.children !== undefined;
+      if (aIsDir && !bIsDir) return -1;
+      if (!aIsDir && bIsDir) return 1;
+      return a.name.localeCompare(b.name, undefined, { sensitivity: 'base', numeric: true });
+    });
+  }
 
   function flatten(node, depth, isLast, parentConnectors) {
     const isDir = node.children !== undefined;
@@ -36,25 +52,18 @@ function toSvg(tree, stats = null) {
           : node.name;
 
     const color = depth === 0 ? '#58a6ff' : isDir ? '#79c0ff' : '#c9d1d9';
-    const icon = isDir ? '📁' : '📄';
+    const icon = iconResolver.getIcon(node);
     const fontWeight = depth === 0 ? 'bold' : 'normal';
 
     const x = LEFT_PAD + depth * INDENT_PX;
     const currentY = TOP_PAD + y * LINE_HEIGHT;
 
-    // Draw connector lines for non-root nodes
+    // Draw horizontal connector line
     if (depth > 0) {
       const parentX = x - INDENT_PX + 8;
-
-      // Horizontal connector line
       connectorLines.push(
         `<line x1="${parentX}" y1="${currentY - 4}" x2="${x + 4}" y2="${currentY - 4}" stroke="#30363d" stroke-width="1"/>`
       );
-
-      // Vertical connector from parent
-      if (!isLast) {
-        // Will be extended by siblings below
-      }
     }
 
     // Draw vertical pipe lines for ancestor connections
@@ -84,7 +93,7 @@ function toSvg(tree, stats = null) {
     }
 
     const textX = depth === 0 ? x : x + 14;
-    const labelText = `${icon} ${escXml(displayName)}`;
+    const labelText = `${icon}${escXml(displayName)}`;
 
     // Size info for files
     let sizeLabel = '';
@@ -102,9 +111,10 @@ function toSvg(tree, stats = null) {
     y++;
 
     if (node.children && node.children.length && !node.collapsed) {
+      const sortedChildren = sortChildrenFoldersFirst(node.children);
       const newConnectors = [...parentConnectors];
-      node.children.forEach((child, i) => {
-        const childIsLast = i === node.children.length - 1;
+      sortedChildren.forEach((child, i) => {
+        const childIsLast = i === sortedChildren.length - 1;
         newConnectors[depth + 1] = !childIsLast;
         flatten(child, depth + 1, childIsLast, newConnectors);
       });
@@ -115,7 +125,7 @@ function toSvg(tree, stats = null) {
 
   // Stats line at top
   const statsLine = stats ? stats.statsText || '' : '';
-  const width = Math.max(700, maxTextWidth + 40);
+  const width = Math.max(700, Math.ceil(maxTextWidth + 40));
   const contentHeight = TOP_PAD + y * LINE_HEIGHT + 15;
 
   // Architecture section
@@ -152,7 +162,11 @@ function toSvg(tree, stats = null) {
 
   return [
     `<?xml version="1.0" encoding="UTF-8"?>`,
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="${width}" height="${height}">`,
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${width} ${height}" width="100%" height="${height}" style="background-color: #0d1117; max-width: ${width}px; display: block;">`,
+    `  <style>`,
+    `    :root { color-scheme: dark; }`,
+    `    svg { background-color: #0d1117 !important; }`,
+    `  </style>`,
     `  <rect width="100%" height="100%" fill="#0d1117" rx="10"/>`,
     `  <text x="${LEFT_PAD}" y="22" fill="#58a6ff" font-family="${FONT}" font-size="15" font-weight="bold">📂 ${escXml(tree.name)}</text>`,
     statsLine ? `  <text x="${LEFT_PAD}" y="38" fill="#8b949e" font-family="${FONT}" font-size="10">${escXml(statsLine)}</text>` : '',

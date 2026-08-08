@@ -81,7 +81,7 @@ function generateTree(options = {}) {
     compress,
     collapseThreshold,
     summarize,
-    architecture: options.architecture,
+    architecture: options.architecture !== undefined ? options.architecture : true,
     modified,
     created,
     permissions,
@@ -101,7 +101,8 @@ function generateTree(options = {}) {
   const coloredTreeText = buildColoredTreeText(tree, fmtOpts);
   const stats = computeStats(tree);
 
-  if (options.architecture) {
+  const shouldRunArch = options.architecture !== undefined ? options.architecture : true;
+  if (shouldRunArch) {
     // Collect parsed files for architecture graph
     const parsedFiles = [];
     function collectParsed(node) {

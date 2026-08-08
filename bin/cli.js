@@ -5,7 +5,6 @@
 const path = require('path');
 const fs = require('fs');
 const colors = require('../src/utils/colors.js');
-const { copyToClipboard } = require('../src/utils/clipboard.js');
 const { generateTree } = require('../src/core/generator.js');
 const { computeStats, printDashboard } = require('../src/core/stats.js');
 const { scan, DEFAULT_EXCLUDE, parseSize } = require('../src/core/scanner.js');
@@ -192,7 +191,7 @@ function parseArgs(argv) {
       case '--watch': args.watch = true; break;
       case '--inject': args.inject = argv[++i]; break;
       case '--theme': args.theme = argv[++i]; break;
-      case '--details': args.details = true; break;
+      case '--details': case '-d': case 'details': case '-s': case '--stats': args.details = true; break;
       case '--compress': args.compress = true; break;
       case '--collapse': args.collapseThreshold = parseInt(argv[++i], 10); break;
       case '--max-size': args.maxSize = argv[++i]; break;
@@ -218,7 +217,11 @@ function parseArgs(argv) {
         args.compare = [argv[++i], argv[++i]];
         break;
 
-      default: break;
+      default:
+        if (arg && !arg.startsWith('-') && /\.(md|txt|json|html|svg|csv|tsv|xml|yaml|yml|puml)$/i.test(arg)) {
+          args.outputFile = arg;
+        }
+        break;
     }
   }
 
@@ -372,7 +375,8 @@ function runGenerate(cliArgs) {
     }
 
     // Preserve 100% existing functionality: PROJECT_STRUCTURE.md is always written by default unless --no-write is passed
-    const shouldWriteMarkdown = !args.noWrite;
+    const isSpecificExport = args.json || args.html || args.mindmap || args.svg || args.mermaid || args.csv || args.tsv || args.xml || args.yaml || args.plantuml;
+    const shouldWriteMarkdown = !args.noWrite && (!isSpecificExport || (args.outputFile && args.outputFile.endsWith('.md')));
 
     // If architecture is required by bundle or export, enable architecture mode automatically
     const isArchNeeded = args.architecture || args.bundle || args.exportAll || args.exportList;
@@ -507,7 +511,9 @@ function runGenerate(cliArgs) {
     // Format Exports
     if (args.json) {
       const jsonStr = toJson(result.tree, result.stats);
-      const jsonName = baseOutName.replace(/\.md$/, '.json');
+      const jsonName = (args.outputFile && args.outputFile.toLowerCase().endsWith('.json'))
+        ? path.basename(args.outputFile)
+        : baseOutName.replace(/\.md$/, '.json');
       const jsonPath = path.join(outDir, jsonName);
       fs.writeFileSync(jsonPath, jsonStr, 'utf8');
       console.log(colors.success(`JSON exported to ${path.relative(process.cwd(), jsonPath)}`));
@@ -515,7 +521,9 @@ function runGenerate(cliArgs) {
 
     if (args.html) {
       const htmlStr = toHtml(result.tree, result.stats);
-      const htmlName = baseOutName.replace(/\.md$/, '.html');
+      const htmlName = (args.outputFile && args.outputFile.toLowerCase().endsWith('.html'))
+        ? path.basename(args.outputFile)
+        : baseOutName.replace(/\.md$/, '.html');
       const htmlPath = path.join(outDir, htmlName);
       fs.writeFileSync(htmlPath, htmlStr, 'utf8');
       console.log(colors.success(`Interactive HTML Tree exported to ${path.relative(process.cwd(), htmlPath)}`));
@@ -636,12 +644,6 @@ function runGenerate(cliArgs) {
       console.log(colors.success(`Project structure written to ${colors.green(path.relative(process.cwd(), result.outputPath))}`));
     }
 
-    // Clipboard
-    if (args.copy && process.stdout.isTTY) {
-      const copied = copyToClipboard(result.markdown);
-      if (copied) console.log(`📋 ${colors.green('Project structure copied to clipboard!')}`);
-    }
-
     // Auto-open generated HTML reports in default browser
     if (shouldOpenHtml && generatedHtmlFiles.length > 0) {
       // Open the primary (first) HTML file
@@ -667,7 +669,6 @@ function runGenerate(cliArgs) {
           });
           const ts = new Date().toLocaleTimeString();
           console.log(`🔄 ${colors.cyan(`Tree updated at ${ts}`)} (${r.statsText})`);
-          if (args.copy && process.stdout.isTTY) copyToClipboard(r.markdown);
         } catch (e) {
           console.error(colors.error(e.message));
         }

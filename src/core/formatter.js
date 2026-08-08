@@ -40,7 +40,8 @@ function renderName(node, opts = {}) {
   const { theme = 'unicode', details = false, includeSummary = true, icons = null } = opts;
   if (node.isSensitive) return `${node.name} (hidden)`;
 
-  const iconStr = theme === 'emoji' ? getIcon(node, { icons }) : '';
+  const useIcons = icons !== null ? icons : theme === 'emoji';
+  const iconStr = useIcons ? getIcon(node, { icons }) : '';
   let name = `${iconStr}${node.name}`;
 
   if (node.isSymlink && node.symlinkTarget) name += ` → ${node.symlinkTarget}`;

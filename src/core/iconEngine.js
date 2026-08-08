@@ -230,15 +230,16 @@ function createIconResolver(customIcons = null) {
    * @returns {string}
    */
   function getIcon(node) {
-    if (node.children !== undefined) return dirIcon + ' ';
+    if (node.children !== undefined) return String(dirIcon).trim() + ' ';
 
-    // Check exact filename first
-    if (filenameMap[node.name]) return filenameMap[node.name] + ' ';
-
-    // Then extension
-    const ext = node.ext || '';
-    const icon = merged[ext] || DEFAULT_ICON;
-    return icon + ' ';
+    let raw = DEFAULT_ICON;
+    if (filenameMap[node.name]) {
+      raw = filenameMap[node.name];
+    } else {
+      const ext = node.ext || '';
+      raw = merged[ext] || DEFAULT_ICON;
+    }
+    return String(raw).trim() + ' ';
   }
 
   return { getIcon, dirIcon };

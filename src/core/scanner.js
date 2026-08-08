@@ -299,10 +299,9 @@ function scan(rootDir, options = {}) {
     if (!root) return null;
   }
 
-  // Apply sorting if requested
-  if (sort) {
-    sortTree(root, sort, sortOrder);
-  }
+  // Apply sorting (defaults to folders-first for consistent VS Code-style tree hierarchy)
+  const sortMode = sort || 'folders-first';
+  sortTree(root, sortMode, sortOrder);
 
   // Post-processing: compress first (merge single-child dirs), then collapse
   if (compress) root = compressTree(root);
