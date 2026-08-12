@@ -26,10 +26,10 @@ const { generateArchitectureFlow } = require('../src/core/architectureFlow.js');
 const { generateBundle } = require('../src/features/bundle.js');
 const { exportReports } = require('../src/features/exporter.js');
 const { toArchitectureFlowHtml } = require('../src/exporters/architectureFlowHtml.js');
-const { toCsv, toTsv } = require('../src/exporters/csv.js');
-const { toXml } = require('../src/exporters/xml.js');
-const { toYaml } = require('../src/exporters/yaml.js');
-const { toPlantUml } = require('../src/exporters/plantuml.js');
+// const { toCsv, toTsv } = require('../src/exporters/csv.js');
+// const { toXml } = require('../src/exporters/xml.js');
+// const { toYaml } = require('../src/exporters/yaml.js');
+// const { toPlantUml } = require('../src/exporters/plantuml.js');
 const { loadConfig } = require('../src/core/configLoader.js');
 const { findDuplicatesByName, findDuplicatesByHash, formatDuplicateReport } = require('../src/features/duplicates.js');
 const { loadPluginsFromConfig } = require('../src/core/pluginApi.js');
@@ -162,6 +162,7 @@ function parseArgs(argv) {
       case 'flow': case '--flow': args.flow = true; break;
       case 'architecture': case '--architecture': args.architecture = true; break;
       case 'visualize': case 'graph': case 'code-graph':
+      case 'visualize': case 'graph': case 'code-graph':
       case '--visualize': case '--graph': case '--code-graph':
         args.visualize = true; break;
       case 'visualize-3d': case '3d-graph': case 'graph-3d':
@@ -218,7 +219,7 @@ function parseArgs(argv) {
         break;
 
       default:
-        if (arg && !arg.startsWith('-') && /\.(md|txt|json|html|svg|csv|tsv|xml|yaml|yml|puml)$/i.test(arg)) {
+        if (arg && !arg.startsWith('-') && /\.(md|txt|json|html|svg|csv|tsv|xml|yaml|yml|puml|mmd|mermaid)$/i.test(arg)) {
           args.outputFile = arg;
         }
         break;
@@ -532,10 +533,25 @@ function runGenerate(cliArgs) {
 
     if (args.mindmap) {
       const mindmapStr = toMindmapHtml(result.tree, result.stats);
-      const mindmapPath = path.join(outDir, 'PROJECT_MINDMAP.html');
+      const mindmapName = (args.outputFile && args.outputFile.toLowerCase().endsWith('.html'))
+        ? path.basename(args.outputFile)
+        : 'PROJECT_MINDMAP.html';
+      const mindmapPath = path.join(outDir, mindmapName);
       fs.writeFileSync(mindmapPath, mindmapStr, 'utf8');
       console.log(colors.success(`Mind Map HTML exported to ${path.relative(process.cwd(), mindmapPath)}`));
       generatedHtmlFiles.push(mindmapPath);
+    }
+
+    if (args.visualize) {
+      const graphModel = generateUniversalGraph(rootDir, result.tree, result.stats);
+      const visualizerStr = toGraphVisualizerHtml(graphModel, result.tree.name);
+      const graphName = (args.outputFile && args.outputFile.toLowerCase().endsWith('.html'))
+        ? path.basename(args.outputFile)
+        : 'CODE_GRAPH.html';
+      const graphPath = path.join(outDir, graphName);
+      fs.writeFileSync(graphPath, visualizerStr, 'utf8');
+      console.log(colors.success(`2D Interactive Code Graph HTML exported to ${path.relative(process.cwd(), graphPath)}`));
+      generatedHtmlFiles.push(graphPath);
     }
 
     if (args.svg) {
@@ -547,14 +563,19 @@ function runGenerate(cliArgs) {
     }
 
     if (args.mermaid) {
-      const mermaidStr = toMermaid(result.tree);
-      const mermaidName = baseOutName.replace(/\.md$/, '_mermaid.md');
+      const mermaidStr = toMermaid(result.tree, result.stats);
+      const mermaidName = (args.outputFile && /\.(mmd|mermaid|md)$/i.test(args.outputFile))
+        ? path.basename(args.outputFile)
+        : 'PROJECT_STRUCTURE.mmd';
       const mermaidPath = path.join(outDir, mermaidName);
-      const content = '# Project Structure (Mermaid)\n\n```mermaid\n' + mermaidStr + '\n```\n';
+      const content = mermaidName.endsWith('.md')
+        ? '# Project Structure (Mermaid)\n\n```mermaid\n' + mermaidStr + '\n```\n'
+        : mermaidStr;
       fs.writeFileSync(mermaidPath, content, 'utf8');
       console.log(colors.success(`Mermaid exported to ${path.relative(process.cwd(), mermaidPath)}`));
     }
 
+    /* Unused Exporters commented out per requirements: CSV, TSV, XML, YAML, PlantUML
     if (args.csv) {
       const csvStr = toCsv(result.tree, result.stats, rootDir);
       const csvName = baseOutName.replace(/\.md$/, '.csv');
@@ -594,6 +615,7 @@ function runGenerate(cliArgs) {
       fs.writeFileSync(pumlPath, pumlStr, 'utf8');
       console.log(colors.success(`PlantUML exported to ${path.relative(process.cwd(), pumlPath)}`));
     }
+    */
 
     // AI Context
     if (args.ai) {

@@ -1,25 +1,8 @@
 'use strict';
 
-/**
- * CSV/TSV flat-table exporter for project trees.
- *
- * Exports each file/directory as a row with columns:
- *   path, name, type, extension, size, depth, lines
- *
- * Zero dependencies.
- */
-
+/* CSV and TSV exporters have been commented out per project requirements.
 const path = require('path');
 
-/**
- * Flatten a tree into an array of row objects.
- *
- * @param {Object} node — ScanNode
- * @param {string} rootDir — root path for relative paths
- * @param {number} [depth=0]
- * @param {Object[]} [rows=[]]
- * @returns {Object[]}
- */
 function flattenTree(node, rootDir, depth = 0, rows = []) {
   if (!node) return rows;
 
@@ -51,12 +34,6 @@ function flattenTree(node, rootDir, depth = 0, rows = []) {
   return rows;
 }
 
-/**
- * Escape a CSV field — quote if it contains commas, quotes, or newlines.
- *
- * @param {*} value
- * @returns {string}
- */
 function escapeCSV(value) {
   const str = String(value === undefined || value === null ? '' : value);
   if (str.includes(',') || str.includes('"') || str.includes('\n') || str.includes('\r')) {
@@ -65,17 +42,8 @@ function escapeCSV(value) {
   return str;
 }
 
-/** Column headers. */
 const HEADERS = ['path', 'name', 'type', 'extension', 'size', 'depth', 'lines', 'binary', 'sensitive', 'symlink'];
 
-/**
- * Export tree as CSV string.
- *
- * @param {Object} tree — ScanNode root
- * @param {Object} [stats] — optional stats object
- * @param {string} [rootDir] — root directory for relative paths
- * @returns {string}
- */
 function toCsv(tree, stats = {}, rootDir = '') {
   const rows = flattenTree(tree, rootDir || (tree.path || '.'));
   const lines = [HEADERS.join(',')];
@@ -88,14 +56,6 @@ function toCsv(tree, stats = {}, rootDir = '') {
   return lines.join('\n') + '\n';
 }
 
-/**
- * Export tree as TSV (tab-separated) string.
- *
- * @param {Object} tree — ScanNode root
- * @param {Object} [stats]
- * @param {string} [rootDir]
- * @returns {string}
- */
 function toTsv(tree, stats = {}, rootDir = '') {
   const rows = flattenTree(tree, rootDir || (tree.path || '.'));
   const lines = [HEADERS.join('\t')];
@@ -110,5 +70,11 @@ function toTsv(tree, stats = {}, rootDir = '') {
 
   return lines.join('\n') + '\n';
 }
+*/
+
+function toCsv() { return ''; }
+function toTsv() { return ''; }
+function flattenTree() { return []; }
+const HEADERS = [];
 
 module.exports = { toCsv, toTsv, flattenTree, HEADERS };

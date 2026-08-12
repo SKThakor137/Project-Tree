@@ -1,34 +1,18 @@
 # Project Structure
 
-_Auto-generated on 2026-08-07T17:58:21.625Z_
-_Total: 10 directories, 99 files_
+_Auto-generated on 2026-08-12T17:02:47.397Z_
+_Total: 11 directories, 102 files_
 
 ```
-📁 Project-Tree
-├── 📄 .npmignore
-├── 📝 AGENTS.md
+📁 project-tree-md
 ├── 📁 assets
-│   ├── 🖼️  banner.svg
-│   ├── 🖼️  code_graph_preview.svg
-│   ├── 🖼️  features_preview.svg
-│   └── 🖼️  react_demo.svg
+│   ├── 🖼️ banner.svg
+│   ├── 🖼️ code_graph_preview.svg
+│   ├── 🖼️ features_preview.svg
+│   └── 🖼️ react_demo.svg
 ├── 📁 bin
 │   └── 📄 cli.js
-├── 📋 CIRCULAR_DEPENDENCIES.json
-├── 📋 COMPONENT_USAGE.json
-├── 📋 DEAD_CODE.json
-├── 📋 DEPENDENCY_HEATMAP.json
-├── 📋 EXPORT_GRAPH.json
-├── 📋 FRAMEWORK_INFO.json
-├── 📋 IMPORT_GRAPH.json
-├── 📋 LANGUAGE_BREAKDOWN.json
-├── 📜 LICENSE
-├── 📋 manifest.json
-├── 📦 package.json
-├── 📋 PROJECT_HEALTH.json
-├── 📋 PROJECT_STATS.json
-├── 📝 README_ANALYSIS.md
-├── 📖 README.md
+├── 📁 scratch [empty]
 ├── 📁 src
 │   ├── 📁 core
 │   │   ├── 📄 analyzer.js
@@ -75,17 +59,17 @@ _Total: 10 directories, 99 files_
 │   │   ├── 📄 summarize.js
 │   │   ├── 📄 tokens.js
 │   │   └── 📄 watcher.js
-│   ├── 📄 index.js
-│   └── 📁 utils
-│       ├── 📄 clipboard.js
-│       ├── 📄 colors.js
-│       ├── 📄 git.js
-│       ├── 📄 globMatcher.js
-│       ├── 📄 hasher.js
-│       ├── 📄 ignore.js
-│       ├── 📄 opener.js
-│       ├── 📄 sensitive.js
-│       └── 📄 zip.js
+│   ├── 📁 utils
+│   │   ├── 📄 clipboard.js
+│   │   ├── 📄 colors.js
+│   │   ├── 📄 git.js
+│   │   ├── 📄 globMatcher.js
+│   │   ├── 📄 hasher.js
+│   │   ├── 📄 ignore.js
+│   │   ├── 📄 opener.js
+│   │   ├── 📄 sensitive.js
+│   │   └── 📄 zip.js
+│   └── 📄 index.js
 ├── 📁 tests
 │   ├── 📄 aiRules.test.js
 │   ├── 📄 bundle.test.js
@@ -113,5 +97,25 @@ _Total: 10 directories, 99 files_
 │   └── 📄 zip.test.js
 ├── 📁 types
 │   └── 📘 index.d.ts
+├── 📄 .npmignore
+├── 📝 AGENTS.md
+├── 📋 CIRCULAR_DEPENDENCIES.json
+├── 📝 COMMANDS_CHECKLIST.md
+├── 📋 COMPONENT_USAGE.json
+├── 📋 DEAD_CODE.json
+├── 📋 DEPENDENCY_HEATMAP.json
+├── 📋 EXPORT_GRAPH.json
+├── 📋 FRAMEWORK_INFO.json
+├── 📋 IMPORT_GRAPH.json
+├── 📋 LANGUAGE_BREAKDOWN.json
+├── 📜 LICENSE
+├── 📋 manifest.json
+├── 📄 MY_DIAGRAM.mmd
+├── 🌐 MY_MINDMAP.html
+├── 📦 package.json
+├── 📋 PROJECT_HEALTH.json
+├── 📋 PROJECT_STATS.json
+├── 📝 README_ANALYSIS.md
+├── 📖 README.md
 └── 📋 UNUSED_COMPONENTS.json
 ```

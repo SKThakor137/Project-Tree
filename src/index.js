@@ -42,11 +42,10 @@ const { sortTree, getSortComparator } = require('./core/sorter.js');
 const { findDuplicatesByName, findDuplicatesByHash, formatDuplicateReport } = require('./features/duplicates.js');
 const { hashFileSync, hashData } = require('./utils/hasher.js');
 const { loadTheme, getPresetNames } = require('./core/themeEngine.js');
-const { createIconResolver } = require('./core/iconEngine.js');
-const { toCsv, toTsv } = require('./exporters/csv.js');
-const { toXml } = require('./exporters/xml.js');
-const { toYaml } = require('./exporters/yaml.js');
-const { toPlantUml } = require('./exporters/plantuml.js');
+// const { toCsv, toTsv } = require('./exporters/csv.js');
+// const { toXml } = require('./exporters/xml.js');
+// const { toYaml } = require('./exporters/yaml.js');
+// const { toPlantUml } = require('./exporters/plantuml.js');
 const { registerRenderer, registerScannerHook, registerFormatter, loadPlugin } = require('./core/pluginApi.js');
 const { openInBrowser } = require('./utils/opener.js');
 
@@ -74,11 +73,11 @@ module.exports = {
   toSvg,
   toMermaid,
   toArchitectureFlowHtml,
-  toCsv,
-  toTsv,
-  toXml,
-  toYaml,
-  toPlantUml,
+  // toCsv,
+  // toTsv,
+  // toXml,
+  // toYaml,
+  // toPlantUml,
 
   // Universal Code Relationship Graph (2D & 3D)
   generateUniversalGraph,
