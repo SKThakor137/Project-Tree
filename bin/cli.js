@@ -162,12 +162,10 @@ function parseArgs(argv) {
       case 'flow': case '--flow': args.flow = true; break;
       case 'architecture': case '--architecture': args.architecture = true; break;
       case 'visualize': case 'graph': case 'code-graph':
-      case 'visualize': case 'graph': case 'code-graph':
-      case '--visualize': case '--graph': case '--code-graph':
-        args.visualize = true; break;
       case 'visualize-3d': case '3d-graph': case 'graph-3d':
+      case '--visualize': case '--graph': case '--code-graph':
       case '--visualize-3d': case '--3d-graph': case '--graph-3d':
-        args.visualize3d = true; break;
+        args.visualize = true; break;
       case 'graph-json': case '--graph-json': args.graphJson = true; break;
       case 'json': case '--json': args.json = true; break;
       case 'html': case '--html':
@@ -376,7 +374,7 @@ function runGenerate(cliArgs) {
     }
 
     // Preserve 100% existing functionality: PROJECT_STRUCTURE.md is always written by default unless --no-write is passed
-    const isSpecificExport = args.json || args.html || args.mindmap || args.svg || args.mermaid || args.csv || args.tsv || args.xml || args.yaml || args.plantuml;
+    const isSpecificExport = args.json || args.html || args.mindmap || args.svg || args.mermaid || args.csv || args.tsv || args.xml || args.yaml || args.plantuml || args.ai || args.prompt || args.tokens || args.aiRules || args.flow || args.architecture || args.visualize || args.visualize3d || args.graphJson;
     const shouldWriteMarkdown = !args.noWrite && (!isSpecificExport || (args.outputFile && args.outputFile.endsWith('.md')));
 
     // If architecture is required by bundle or export, enable architecture mode automatically
@@ -431,9 +429,11 @@ function runGenerate(cliArgs) {
       }
     }
 
-    const outDir = args.outputDir
-      ? (path.isAbsolute(args.outputDir) ? args.outputDir : path.join(rootDir, args.outputDir))
-      : rootDir;
+    // --output-dir feature disabled per requirement (always output to rootDir or relative process.cwd())
+    // const outDir = args.outputDir
+    //   ? (path.isAbsolute(args.outputDir) ? args.outputDir : path.join(rootDir, args.outputDir))
+    //   : rootDir;
+    const outDir = rootDir;
 
     // Architecture Flow Output
     if (args.flow) {
@@ -542,6 +542,18 @@ function runGenerate(cliArgs) {
       generatedHtmlFiles.push(mindmapPath);
     }
 
+    if (args.flow || args.architecture) {
+      const flowResult = generateArchitectureFlow(rootDir, result.tree, result.stats);
+      const flowHtmlStr = toArchitectureFlowHtml(flowResult, result.tree.name);
+      const flowName = (args.outputFile && args.outputFile.toLowerCase().endsWith('.html'))
+        ? path.basename(args.outputFile)
+        : 'ARCHITECTURE_FLOW.html';
+      const flowPath = path.join(outDir, flowName);
+      fs.writeFileSync(flowPath, flowHtmlStr, 'utf8');
+      console.log(colors.success(`Execution & Architecture Flow HTML exported to ${path.relative(process.cwd(), flowPath)}`));
+      generatedHtmlFiles.push(flowPath);
+    }
+
     if (args.visualize) {
       const graphModel = generateUniversalGraph(rootDir, result.tree, result.stats);
       const visualizerStr = toGraphVisualizerHtml(graphModel, result.tree.name);
@@ -550,8 +562,19 @@ function runGenerate(cliArgs) {
         : 'CODE_GRAPH.html';
       const graphPath = path.join(outDir, graphName);
       fs.writeFileSync(graphPath, visualizerStr, 'utf8');
-      console.log(colors.success(`2D Interactive Code Graph HTML exported to ${path.relative(process.cwd(), graphPath)}`));
+      console.log(colors.success(`2D & 3D Interactive Code Graph HTML exported to ${path.relative(process.cwd(), graphPath)}`));
       generatedHtmlFiles.push(graphPath);
+    }
+
+    if (args.graphJson) {
+      const graphModel = generateUniversalGraph(rootDir, result.tree, result.stats);
+      const graphJsonStr = toGraphJson(graphModel);
+      const graphJsonName = (args.outputFile && args.outputFile.toLowerCase().endsWith('.json'))
+        ? path.basename(args.outputFile)
+        : 'CODE_GRAPH.json';
+      const graphJsonPath = path.join(outDir, graphJsonName);
+      fs.writeFileSync(graphJsonPath, graphJsonStr, 'utf8');
+      console.log(colors.success(`Universal Graph Model JSON exported to ${path.relative(process.cwd(), graphJsonPath)}`));
     }
 
     if (args.svg) {

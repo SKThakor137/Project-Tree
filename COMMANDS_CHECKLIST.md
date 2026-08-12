@@ -18,25 +18,25 @@ Is list mein `project-tree-md` ke saare commands, subcommands, flags aur exporte
 ---
 
 ## 2. 🕸️ Graph Visualization & Architecture Engines
-- [ ] **2.1 2D Interactive Code Graph** (`--visualize` / `graph` / `code-graph`)
-- [ ] **2.2 3D WebGL Code Graph** (`--visualize-3d` / `3d-graph` / `graph-3d`)
-- [ ] **2.3 Universal Graph Model JSON Export** (`--graph-json` / `graph-json`)
-- [ ] **2.4 Execution & Architecture Flow Engine** (`--flow` / `flow` / `--architecture`)
+- [x] **2.1 2D & 3D Unified Code Relationship Graph** (`--visualize` / `graph` / `code-graph` / `3d-graph`)
+- [x] ~**2.2 3D WebGL Code Graph**~ *(Merged into 2.1 Unified Graph Engine)*
+- [x] **2.3 Universal Graph Model JSON Export** (`--graph-json` / `graph-json`)
+- [x] **2.4 Execution & Architecture Flow Engine** (`--flow` / `flow` / `--architecture`)
 
 ---
 
 ## 3. 🤖 AI Integration & Rule Generators
-- [ ] **3.1 AI Context Generator** (`--ai` / `ai`)
-- [ ] **3.2 AI Prompt Generator** (`--prompt` / `prompt`)
-- [ ] **3.3 AI Token & Cost Estimator** (`--tokens` / `tokens`)
-- [ ] **3.4 AI Rules / Agent Guidelines Generator** (`--ai-rules` / `ai-rules`)
+- [x] **3.1 AI Context Generator** (`--ai` / `ai`)
+- [x] **3.2 AI Prompt Generator** (`--prompt` / `prompt`)
+- [x] **3.3 AI Token & Cost Estimator** (`--tokens` / `tokens`)
+- [x] **3.4 AI Rules / Agent Guidelines Generator** (`--ai-rules` / `ai-rules`)
 
 ---
 
 ## 4. 📦 Bundling & Multi-Export System
-- [ ] **4.1 Report ZIP Bundle Generator** (`--bundle` / `bundle` / `--zip`)
-- [ ] **4.2 Selective & Full Report Exporter** (`--export`, `--export-all`, `export`)
-- [ ] **4.3 Custom Output Directory & Stdout Modes** (`--output-dir`, `--no-write` / `--stdout`)
+- [x] **4.1 Report ZIP Bundle Generator** (`--bundle` / `bundle` / `--zip`)
+- [x] **4.2 Selective & Full Report Exporter** (`--export`, `--export-all`, `export`)
+- [x] ~**4.3 Custom Output Directory & Stdout Modes** (`--output-dir`, `--no-write` / `--stdout`)~ *(Disabled / Commented Out)*
 
 ---
 

@@ -1,8 +1,0 @@
-{
-  "score": 0,
-  "grade": "D",
-  "deadCodeCount": 35,
-  "circularDependenciesCount": 1,
-  "avgCyclomaticComplexity": 34.69,
-  "status": "Critical"
-}

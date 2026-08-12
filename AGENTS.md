@@ -15,19 +15,19 @@
 
 ## 📁 Project Structure Snapshot
 ```
-.npmignore
-AI_CONTEXT.md
 assets/
 bin/
+scratch/
+src/
+tests/
+types/
+.npmignore
+AGENTS.md
+AI_CONTEXT.md
+AI_PROMPT.md
+ARCHITECTURE_FLOW.html
 CIRCULAR_DEPENDENCIES.json
 CODE_GRAPH_3D.html
 CODE_GRAPH.html
-CODE_GRAPH.json
-COMPONENT_USAGE.json
-DEAD_CODE.json
-DEPENDENCY_HEATMAP.json
-EXPORT_GRAPH.json
-FRAMEWORK_INFO.json
-IMPORT_GRAPH.json
-LANGUAGE_BREAKDOWN.json
+COMMANDS_CHECKLIST.md
 ```
