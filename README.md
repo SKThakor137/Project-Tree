@@ -1,11 +1,11 @@
 <p align="center">
   <a href="https://github.com/SKThakor137/Project-Tree">
-    <img src="assets/banner.svg" alt="project-tree-md Banner" width="100%" />
+    <img src="assets/hero_banner.jpg" alt="project-tree-md Hero Banner" width="100%" />
   </a>
   <h1 align="center">🌳 project-tree-md</h1>
   <p align="center">
     <strong>Enterprise AI-Ready Project Intelligence & 2D/3D Code Visualizer Suite</strong><br>
-    <em>Instantly map codebases for Cursor, Claude, ChatGPT & Developers. Generates Interactive Mind Maps, 2D/3D Code Graphs, Markdown, JSON, HTML, SVG, Mermaid, CSV, TSV, XML, YAML, PlantUML & ZIP Bundles in 1-Second. Zero Dependencies. Node.js 20+.</em>
+    <em>Instantly map codebases for Cursor, Claude, ChatGPT & Developers. Generates Interactive Mind Maps, 2D/3D Code Graphs, Markdown, JSON, HTML, SVG, Mermaid, CSV, ZIP Bundles in 1-Second. Zero Dependencies. Node.js 20+.</em>
   </p>
   <p align="center">
     <a href="https://www.npmjs.com/package/project-tree-md"><img src="https://img.shields.io/npm/v/project-tree-md.svg?style=for-the-badge&color=58a6ff" alt="npm version" /></a>
@@ -17,380 +17,139 @@
 </p>
 
 <p align="center">
+  <a href="#-key-features--capabilities">Top Features</a> •
   <a href="#-quick-start">Quick Start</a> •
-  <a href="#-interactive-project-dashboard--explorer---report">Interactive HTML Dashboard</a> •
-  <a href="#-interactive-horizontal-mind-map----mindmap">Interactive Mind Map</a> •
-  <a href="#-universal-code-relationship-visualizer----visualize">Interactive Code Graph</a> •
-  <a href="#-why-project-tree-md">Why Us?</a> •
-  <a href="#-configuration-file-project-treeconfigjson">Configuration</a> •
-  <a href="#-programmatic-api">API Usage</a>
+  <a href="#-ai-integration--prompt-context-generator">AI Prompt Suite</a> •
+  <a href="#-2d--3d-code-architecture-graph---visualize">2D/3D Code Graph</a> •
+  <a href="#-interactive-mind-map---mindmap">Mind Map</a> •
+  <a href="#-dedicated-task-outputs--export-system">Dedicated Outputs</a> •
+  <a href="#-configuration-file-project-treeconfigjson">Configuration</a>
 </p>
+
+---
+
+## 🔥 Key Features & Capabilities
+
+* 🤖 **AI Prompt & Context Generator**: Create token-optimized architecture context for ChatGPT, Claude, Cursor & Copilot (`ptree ai`, `ptree prompt`, `ptree ai-rules`).
+* 🌐 **Interactive 2D & 3D Code Graph**: Explore codebase imports, exports, and module relationships with 3D WebGL spatial sphere and flat 2D canvas (`ptree --visualize`).
+* 🧠 **Interactive Horizontal Mind Map**: Auto-layout node hierarchy with curved Bezier connectors, pan/zoom, and live JSON data editor (`ptree --mindmap`).
+* 📁 **Dedicated Output File Names**: Every command writes to its own task-specific file to prevent overwriting (`GIT_STATUS_TREE.md`, `CHANGED_FILES_TREE.md`, `SORTED_TREE.md`, `FILE_HASHES.md`, etc.).
+* 🌿 **Git Integration & Changed Files Filter**: Highlight modified, added, and untracked files (`[Modified]`, `[Added]`, `[Untracked]`) or filter tree to changed files only (`ptree --git-status`, `ptree --changed-only`).
+* 🔍 **Content Hashing & Duplicate File Analyzer**: Compute cryptographic checksums (`md5`, `sha256`) and detect duplicate files (`ptree --hash`, `ptree --duplicates`).
+* 📦 **ZIP Bundle Generator & Multi-Format Exporter**: Package all visual and structured reports into a single ZIP archive (`ptree --bundle`).
+* ⚡ **Zero Dependencies**: 100% pure Node.js standard library with lightning-fast execution.
 
 ---
 
 ## 🚀 Quick Start (No Install Required)
 
-Run directly in any project folder — no global installation needed:
+Run directly in any project directory with `npx`:
 
-| Feature | Command | Output File |
+| Feature / Command | Command | Dedicated Output File |
 | :--- | :--- | :--- |
-| 📊 **Interactive Project Dashboard & Explorer** | `npx ptree --report` | `PROJECT_STRUCTURE.html` *(auto-opens in browser)* |
-| 🧠 **Interactive Mind Map** | `npx ptree --mindmap` | `PROJECT_MINDMAP.html` *(auto-opens in browser)* |
-| 🌐 **2D & 3D Code Graph** | `npx ptree --visualize` | `CODE_GRAPH.html` *(auto-opens in browser)* |
-| 📄 **Markdown Tree** *(Default)* | `npx ptree` | `PROJECT_STRUCTURE.md` *(clean terminal output)* |
+| 📄 **Markdown Tree** *(Default)* | `npx ptree` | `PROJECT_STRUCTURE.md` |
+| 🤖 **AI Context Generator** | `npx ptree ai` | `AI_CONTEXT.md` |
+| 💬 **AI Prompt Generator** | `npx ptree prompt` | `AI_PROMPT.md` |
+| 🌐 **2D/3D Code Relationship Graph** | `npx ptree --visualize` | `CODE_GRAPH.html` *(auto-opens)* |
+| 🧠 **Interactive Mind Map** | `npx ptree --mindmap` | `PROJECT_MINDMAP.html` *(auto-opens)* |
+| 🌿 **Git Status Badges** | `npx ptree --git-status` | `GIT_STATUS_TREE.md` |
+| 🔄 **Changed Files Only** | `npx ptree --changed-only` | `CHANGED_FILES_TREE.md` |
+| 🔍 **File Hashes** | `npx ptree --hash sha256` | `FILE_HASHES.md` |
+| 📋 **Duplicate File Finder** | `npx ptree --duplicates` | `PROJECT_DUPLICATES.md` |
+| 🔀 **Sorted Tree** | `npx ptree --sort size` | `SORTED_TREE.md` |
+| 🏷️ **File Attributes** | `npx ptree --modified --permissions` | `FILE_ATTRIBUTES.md` |
+| 📊 **Terminal Analytics Dashboard** | `npx ptree --dashboard` | *(Terminal Stdout Report)* |
+| 📦 **ZIP Package Bundle** | `npx ptree --bundle` | `project-analysis.zip` |
 
 ---
 
-## 📊 Interactive Project Dashboard & Explorer (`--report`)
+## 🤖 AI Integration & Prompt Context Generator
 
-Transform your entire project structure into a self-contained, interactive web dashboard (`PROJECT_STRUCTURE.html`). It automatically launches in your default browser and gives you instant codebase search, folder expansion, project metrics, architecture analysis, and client-side report exports.
+Generate structured codebase context tailored for LLM prompt windows:
 
-### ⚡ Key Capabilities:
-* 📁 **Interactive Collapsible Tree**: Click to expand/collapse folders with live file counts and type icons.
-* 🔍 **Real-Time Instant Search**: Filter files and folders dynamically as you type with keyboard shortcuts.
-* 📊 **Project Analytics & Stats**: View file count distribution, lines of code, language breakdown, and directory sizes.
-* 🏗️ **Architecture & Dependency Insights**: Inspect module imports, exports, and dead code analysis.
-* 📦 **Built-in Client-Side Export Center**: Export to Markdown, JSON, SVG, Mermaid, and AI Prompts directly from your browser.
+```bash
+# Generate comprehensive AI Context for Cursor / Claude
+npx ptree ai
 
----
+# Generate conversational system prompt snippet
+npx ptree prompt
 
-## 🧠 Interactive Horizontal Mind Map (`--mindmap`)
-
-Transform your codebase into a clean, horizontal node-based interactive Mind Map (`PROJECT_MINDMAP.html`). Built with pure HTML5 SVG and Vanilla JavaScript with **zero external dependencies**.
-
-<p align="center">
-  <img src="assets/react_demo.svg" alt="React Demo Project Tree & Mind Map Preview" width="100%" />
-</p>
-
-### ⚡ Key Features:
-* 🗺️ **Horizontal Auto-Layout**: Root node on the left, child folders and files expanding elegantly to the right.
-* ➰ **Curved Bezier Connectors**: Smooth cubic Bezier line paths connecting parent nodes to children with adaptive branch color palettes.
-* 🔍 **Pan, Zoom & Collapsible Nodes**: Smooth mouse dragging, wheel zooming, and click-to-toggle expand/collapse nodes with folder item count badges.
-* 📝 **Embedded Live Data Editor**: Built-in JSON editor drawer for real-time node editing and structure manipulation.
-* 📷 **Vector SVG Export**: Export high-resolution vector SVG diagrams of your mind map with a single click.
+# Generate repository AI coding rules & agent guidelines
+npx ptree ai-rules
+```
 
 ---
 
 ## 🌐 2D & 3D Code Architecture Graph (`--visualize`)
 
-Transform any codebase into dynamic, interactive 2D canvas & 3D WebGL graphs showing complete architecture, dependency graphs, state flows, hooks, models, and service relationships — all in a single HTML file (`CODE_GRAPH.html`) with instant mode switching (`🎨 2D | 🌐 3D`)!
+Transform any codebase into dynamic, interactive 2D canvas & 3D WebGL graphs showing complete architecture, dependency graphs, state flows, hooks, models, and service relationships:
 
 <p align="center">
   <img src="assets/code_graph_preview.svg" alt="2D & 3D Code Relationship Visualizer Preview" width="100%" />
 </p>
 
-### ⚡ Key Capabilities:
-* 🎨 **Instant 2D & 3D Mode Switcher**: Toggle seamlessly between **2D Flat Canvas** and **3D WebGL Spatial Sphere** views right from the toolbar.
-* 🎨 **5 Layout Engines (2D)**: Switch on-the-fly between **DAG (Sugiyama)**, **Force-Directed (Barnes-Hut)**, **Tree**, **Radial**, and **Horizontal Flow**.
-* 🌌 **3D Force & Particle Link Beams**: Full 3D camera orbit, rotation, pan, zoom, glowing nodes, and directional particle animation flows.
-* 🚀 **Multi-Language Support**: Framework-agnostic parsing for **20+ languages and frameworks** (React, Next.js, Vue, Angular, Svelte, Laravel, PHP, Node.js, Express, NestJS, Flutter, Dart, React Native, Python, Django, FastAPI, Java, Spring Boot, .NET/C#, Go, Rust).
-* 🔍 **Real-Time Instant Search & Minimap**: Live query filtering with auto-centering (`Ctrl+F`) and draggable minimap.
-* 📑 **Slide-out Detail Panel**: Inspect code metrics, file size, line counts, incoming imports, outgoing exports, and dependencies.
-* 📷 **PNG & JSON Export**: Export high-res vector PNG diagrams or raw `CODE_GRAPH.json` models.
+```bash
+npx ptree --visualize
+```
 
 ---
 
-## 🔥 Why `project-tree-md`?
+## 🧠 Interactive Horizontal Mind Map (`--mindmap`)
 
-Most directory tree generators only print basic text folders. **`project-tree-md` is a complete project intelligence suite** designed for modern developers and AI workflows (ChatGPT, Claude, Gemini, Cursor, Copilot).
+Transform your codebase into a clean, horizontal node-based interactive Mind Map (`PROJECT_MINDMAP.html`) with Bezier line connectors and live node editing:
 
 <p align="center">
-  <img src="assets/features_preview.svg" alt="Project Tree Suite Capabilities Preview" width="100%" />
+  <img src="assets/react_demo.svg" alt="React Demo Project Tree & Mind Map Preview" width="100%" />
 </p>
 
-### ⚡ Key Capabilities
-
-* 🌐 **Universal 2D & 3D Code Relationship Visualizer (`--visualize`)**: Generate a unified 2D canvas & 3D WebGL interactive visualizer (`CODE_GRAPH.html`) with instant mode switching.
-* 📄 **9 Export Formats**: Export as Markdown, JSON, HTML, SVG, Mermaid, **CSV**, **TSV**, **XML**, **YAML**, and **PlantUML**.
-* 🎨 **Custom Theme Engine (`--theme`)**: 12 built-in presets (`unicode`, `ascii`, `box`, `emoji`, `compact`, `rounded`, `double`, `minimal`, `classic`, `dotted`, `heavy`, `thin`) + user JSON theme loading.
-* 🎯 **Custom Icon Engine (`--icons`)**: 100+ file extensions mapped with emoji icons + custom JSON override support.
-* 🔀 **Tree Sorter Engine (`--sort`)**: 8 sorting modes (`alpha`, `folders-first`, `files-first`, `extension`, `size`, `modified`, `created`, `natural`).
-* 🔎 **Duplicate File Detector (`--duplicates`)**: Finds duplicate files across the repository by filename or content hash (`md5`, `sha1`, `sha256`).
-* ⚙️ **Config File Support**: Automatically loads settings from `project-tree.config.json`, `project-tree.config.js`, `.projecttreerc`, or `package.json#projectTree`.
-* 🔌 **Plugin API**: Extensible hooks for custom renderers, scanner transformers, and tree formatters.
-* 🛡️ **Nested `.gitignore` Shield**: Discovers nested `.gitignore` files recursively and respects subfolder ignore rules.
-* 📦 **ZIP Analysis Bundles (`--bundle`)**: Export analysis reports into a single `project-analysis.zip` archive.
-* ⚡ **Zero Runtime Dependencies**: Built 100% with Node.js standard modules. Ultra-fast, lightweight, and safe.
-
----
-
-## 🏆 Feature Comparison
-
-| Feature | `project-tree-md` | `tree` (Unix) | `tree-cli` | `directory-tree` |
-| :--- | :---: | :---: | :---: | :---: |
-| **Interactive Code Visualizer** | ✅ **2D Canvas & 3D WebGL** | ❌ No | ❌ No | ❌ No |
-| **Export Formats** | ✅ **9 Formats** (MD, JSON, HTML, SVG, Mermaid, CSV, TSV, XML, YAML, PlantUML) | ❌ Text only | ❌ MD/JSON | ❌ JSON |
-| **Zero Dependencies** | ✅ **100% Zero** | ✅ System | ❌ Heavy | ❌ Heavy |
-| **Custom Themes & Icons** | ✅ **12 Presets + JSON** | ❌ No | ❌ No | ❌ No |
-| **Sorting Strategies** | ✅ **8 Modes** (Natural, Folders-first, Size, Dates) | ⚠️ Basic | ❌ No | ❌ No |
-| **Duplicate File Finder** | ✅ **ByName & Hash** | ❌ No | ❌ No | ❌ No |
-| **Config & Plugin System** | ✅ **JSON/JS Config + API** | ❌ No | ❌ No | ❌ No |
-| **ZIP Bundle Export** | ✅ **1-Click ZIP** | ❌ No | ❌ No | ❌ No |
-| **AI LLM Context & Tokens** | ✅ **Built-in** | ❌ No | ❌ No | ❌ No |
-| **Nested Gitignore Support** | ✅ **Subfolder-aware** | ❌ Manual | ⚠️ Limited | ❌ No |
-
----
-
-## ⚡ Quick Examples & Commands
-
-### 1. Interactive 2D & 3D Code Relationship Visualizer
 ```bash
-# Generate unified 2D & 3D interactive graph (CODE_GRAPH.html)
-npx ptree --visualize
-
-# Export Universal Graph Model JSON
-npx ptree --graph-json
-```
-
-### 2. Export Formats (CSV, TSV, XML, YAML, PlantUML)
-```bash
-# Export as CSV flat table
-npx ptree --csv
-
-# Export as YAML tree
-npx ptree --yaml
-
-# Export as PlantUML diagram
-npx ptree --plantuml
-```
-
-### 3. Tree Sorting & File Hashing
-```bash
-# Sort folders first, then natural alpha
-npx ptree --sort folders-first
-
-# Sort by file size descending
-npx ptree --sort size --sort-order desc
-
-# Include file permissions, modification date, and SHA-256 hash
-npx ptree --permissions --modified --hash sha256
-```
-
-### 4. Duplicate File Detection
-```bash
-# Find duplicate filenames across project
-npx ptree --duplicates
-
-# Find duplicate files by SHA-256 content hash
-npx ptree --duplicates --hash sha256
-```
-
-### 5. Custom Themes & Icons
-```bash
-# Use rounded box-drawing characters
-npx ptree --theme rounded
-
-# Use custom theme JSON
-npx ptree --theme ./my-theme.json --icons ./my-icons.json
-```
-
-### 6. Git Status, AI Rules & Live Hot-Reload Server (New in v3.2)
-```bash
-# Display Git status tags ([M], [A], [?]) alongside files
-npx ptree --git-status
-
-# Show ONLY modified & untracked files for PR code reviews
-npx ptree --changed-only
-
-# Generate AI Agent coding guidelines & context file (AGENTS.md)
-npx ptree ai-rules
-
-# Start Zero-Dependency Live Server with instant hot reload on file changes
-npx ptree serve
+npx ptree --mindmap
 ```
 
 ---
 
-## 📦 Bundle Export System (`--bundle`)
+## 📁 Dedicated Task Outputs & Export System
 
-Generate a comprehensive project analysis package containing report files:
+Every option flag automatically outputs to a dedicated unique filename to ensure your reports never overwrite each other:
 
 ```bash
-npx ptree --bundle --output-dir reports/
+# Git status badges
+npx ptree --git-status         # -> GIT_STATUS_TREE.md
+
+# Filter to changed files only
+npx ptree --changed-only       # -> CHANGED_FILES_TREE.md
+
+# Cryptographic content hashes
+npx ptree --hash sha256        # -> FILE_HASHES.md
+
+# Duplicate files analysis
+npx ptree --duplicates         # -> PROJECT_DUPLICATES.md
+
+# Depth limit tree
+npx ptree --depth 2            # -> DEPTH_TREE.md
+
+# Custom exclude pattern
+npx ptree --exclude "assets"   # -> FILTERED_TREE.md
 ```
 
 ---
 
 ## ⚙️ Configuration File (`project-tree.config.json`)
 
-Configure `project-tree-md` behavior globally or per-project. Settings are loaded automatically in priority order:
-1. CLI arguments *(highest priority)*
-2. `project-tree.config.json`
-3. `project-tree.config.js`
-4. `.projecttreerc`
-5. `package.json` under `"projectTree"`
+Customize behavior globally or per-project using a `project-tree.config.json` file in your root folder:
 
 ```json
 {
-  "silent": true,
-  "openHtml": true,
   "theme": "emoji",
-  "sort": "folders-first",
-  "outputFile": "PROJECT_STRUCTURE.md"
+  "details": true,
+  "respectIgnore": true,
+  "exclude": "dist|build|coverage",
+  "maxDepth": 5
 }
 ```
-
-### Key Configuration Options:
-* **`silent`** *(boolean, default: true)*: Keeps the terminal output clean by suppressing full tree printing in stdout.
-* **`openHtml`** *(boolean, default: true)*: Automatically launches generated HTML reports in your system's default browser.
-* **`theme`** *(string)*: Tree visual theme (`unicode`, `ascii`, `box`, `emoji`, `rounded`, `double`, `minimal`).
-* **`sort`** *(string)*: Sorting strategy (`alpha`, `folders-first`, `files-first`, `extension`, `size`, `modified`, `created`, `natural`).
-
----
-
-## 🎯 Complete CLI Options (v3.0)
-
-```text
-project-tree-md — Enterprise AI-Ready Project Analysis Suite (v3.0)
-
-Usage:
-  npx ptree [options]
-  npx ptree compare <pathA> <pathB>
-
-Bundle & Export System:
-  --bundle [list]         Generate ZIP package with all or selected reports (e.g. --bundle html,json,svg)
-  --export [list]         Export selected reports to directory (e.g. --export html,json)
-  --export-all            Export all individual analysis reports
-  --output-dir <dir>      Output directory for exports and ZIP bundles
-  --no-write, --stdout    Print to console without writing default output files
-
-Output & Tree Customization:
-  -o, --out <file>        Output filename              (default: PROJECT_STRUCTURE.md)
-  -L, --depth <n>         Max depth to traverse        (default: unlimited)
-  -I, --exclude <regex>   Custom exclude pattern       (default: standard ignores)
-  --theme <name|path>     Tree theme                   (unicode|ascii|emoji|box|rounded|double|minimal)
-  --icons <path>          Custom icons JSON file       (override extension -> icon mapping)
-  --sort <mode>           Sort entries                 (alpha|folders-first|files-first|extension|size|modified|created|natural)
-  --sort-order <asc|desc> Sort direction              (default: asc)
-  --details               Show file size & extension
-  --summarize             Extract & show inline file comment summaries
-  --flow                  Generate architecture execution flow & role map
-  --visualize, --graph    Generate 2D & 3D Interactive Code Relationship Graph HTML
-  --graph-json            Export universal graph model as JSON
-  --compress              Compress single-child dirs
-  --collapse <n>          Collapse dirs with >n files
-  --dashboard             Show rich stats dashboard
-  --architecture          Enable advanced architecture parsing & metrics
-
-File Metadata & Hashing:
-  --hash [algo]           Compute file content hashes  (md5|sha1|sha256)
-  --permissions           Show file permissions        (rwxr-xr-x format)
-  --owner                 Show file owner UID/GID
-  --modified              Show last modified dates
-  --created               Show file creation dates
-  --duplicates            Detect & report duplicate files (by name or hash)
-
-Export Formats:
-  --json                  Export as JSON
-  --html                  Export as collapsible HTML with Download Center
-  --svg                   Export as SVG diagram
-  --mermaid               Export as Mermaid graph
-  --csv                   Export as CSV flat table
-  --tsv                   Export as TSV flat table
-  --xml                   Export as well-formed XML
-  --yaml                  Export as YAML document
-  --plantuml              Export as PlantUML diagram
-
-Limits & Controls:
-  --max-files <n>         Stop after scanning N files
-  --max-folders <n>       Stop after scanning N folders
-  --config <path>         Path to custom config file
-  --respect-ignore        Respect nested .gitignore files
-
-AI Features:
-  --ai                    Generate AI context document
-  --prompt                Generate AI-ready prompt
-  --tokens                Output AI context token count & cost estimation
-
-Terminal & Browser Behavior:
-  --silent                Suppress tree output in terminal (default: on)
-  --verbose, --no-silent  Print full tree to terminal (old behavior)
-  --open-html             Auto-open HTML reports in default browser (default: on)
-  --no-open               Disable auto-opening HTML reports
-
-Other Options:
-  -i, --interactive       Interactive guided setup
-  -h, --help              Show this help
-  -v, --version           Show version
-```
-
----
-
-## 📦 Programmatic Node.js API
-
-Integrate `project-tree-md` into your build tools, scripts, or CI/CD pipelines:
-
-```javascript
-const {
-  generateTree,
-  generateUniversalGraph,
-  toGraphVisualizerHtml,
-  toCsv,
-  toTsv,
-  toXml,
-  toYaml,
-  toPlantUml,
-  sortTree,
-  findDuplicatesByName,
-  findDuplicatesByHash,
-  loadConfig,
-  registerRenderer,
-} = require('project-tree-md');
-
-// 1. Generate Tree with Sorter & Metadata
-const result = generateTree({
-  rootDir: process.cwd(),
-  sort: 'folders-first',
-  modified: true,
-  permissions: true,
-  hash: 'sha256',
-});
-
-console.log(result.coloredTreeText);
-
-// 2. Export as 2D & 3D Interactive Graph HTML
-const graphModel = generateUniversalGraph(process.cwd(), result.tree);
-const graph2dHtml = toGraphVisualizerHtml(graphModel, 'My Project');
-const graphJson = toGraphJson(graphModel);
-
-console.log(`Graph Nodes: ${graphModel.nodes.length}, Edges: ${graphModel.edges.length}`);
-
-// 3. Find Duplicates
-const duplicates = findDuplicatesByName(result.tree);
-console.log(`Found ${duplicates.length} duplicate file groups`);
-
-// 4. Generate customized ZIP bundle programmatically
-const bundle = generateBundle({
-  rootDir: process.cwd(),
-  outputDir: 'dist/reports',
-  bundleName: 'my-app-analysis.zip',
-  exportList: ['graph', 'html', 'json', 'svg'],
-});
-
-console.log(`ZIP created at: ${bundle.zipPath} (${bundle.sizeMb} MB)`);
-```
-
----
-
-## 📁 Monorepo & Framework Auto-Detection
-
-Automatically classifies and detects 30+ technologies:
-- **Monorepos**: TurboRepo, Nx, pnpm Workspaces, Yarn Workspaces, Lerna.
-- **Frameworks**: React, Next.js, Vue, Nuxt, Angular, Svelte, Express, NestJS, FastAPI, Django, Laravel, Spring Boot, Flutter/Dart, .NET, Go, Rust.
-- **Languages**: TypeScript, JavaScript, Python, Go, Rust, Java, C/C++, PHP, Ruby, Dart, C#.
-- **Tools**: Docker, GitHub Actions, CI/CD, TailwindCSS, Vite, Webpack, ESLint, Prettier, Jest, Vitest.
-
----
-
-## 🤝 Contributing
-
-Contributions, bug reports, and feature requests are welcome!  
-Feel free to check out the [Issues Page](https://github.com/SKThakor137/Project-Tree/issues).
 
 ---
 
 ## 📄 License
 
-Distributed under the MIT License. See [LICENSE](LICENSE) for details.
-
-© [SKThakor137](https://github.com/SKThakor137). Built with ❤️ for developers worldwide.
+Distributed under the MIT License. See [LICENSE](LICENSE) for more details.

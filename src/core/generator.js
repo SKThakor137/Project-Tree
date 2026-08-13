@@ -62,6 +62,8 @@ function generateTree(options = {}) {
     icons       = null,
     maxFiles    = Infinity,
     maxFolders  = Infinity,
+    gitStatus   = false,
+    changedOnly = false,
   } = options;
 
   const themeTag = (theme && theme !== 'emoji') ? path.basename(theme, path.extname(theme)).toLowerCase() : '';
@@ -91,12 +93,14 @@ function generateTree(options = {}) {
     sortOrder,
     maxFiles,
     maxFolders,
+    gitStatus: gitStatus || changedOnly,
+    changedOnly,
     signal: options.signal,
   });
 
   if (!tree) throw new Error(`Could not read directory: ${rootDir}`);
 
-  const fmtOpts = { theme, details, icons, modified, created, permissions, owner, hash };
+  const fmtOpts = { theme, details, icons, modified, created, permissions, owner, hash, gitStatus: gitStatus || changedOnly };
   const treeText = buildTreeText(tree, fmtOpts);
   const coloredTreeText = buildColoredTreeText(tree, fmtOpts);
   const stats = computeStats(tree);

@@ -126,6 +126,8 @@ function parseArgs(argv) {
       case '--bfs': args.bfs = true; break;
       case '--config': args.config = argv[++i]; break;
       case '--respect-ignore': args.respectIgnore = true; break;
+      case '--git-status': args.gitStatus = true; break;
+      case '--changed-only': args.changedOnly = true; break;
 
       // Terminal & Browser Behavior Flags
       case '--silent': args.silent = true; break;
@@ -225,7 +227,8 @@ function parseArgs(argv) {
   }
 
   if (args.excludeStr) {
-    args.exclude = new RegExp(args.excludeStr);
+    const defaultPattern = 'node_modules|\\.next|\\.git|dist|build|coverage|\\.turbo|venv|\\.venv|__pycache__|\\.dart_tool|\\.cache|\\.pytest_cache|\\.idea|\\.vscode';
+    args.exclude = new RegExp(`${defaultPattern}|${args.excludeStr}`);
   }
 
   return args;
@@ -374,15 +377,45 @@ function runGenerate(cliArgs) {
     }
 
     // Preserve 100% existing functionality: PROJECT_STRUCTURE.md is always written by default unless --no-write is passed
-    const isSpecificExport = args.json || args.html || args.mindmap || args.svg || args.mermaid || args.csv || args.tsv || args.xml || args.yaml || args.plantuml || args.ai || args.prompt || args.tokens || args.aiRules || args.flow || args.architecture || args.visualize || args.visualize3d || args.graphJson;
+    const isSpecificExport = args.json || args.html || args.mindmap || args.svg || args.mermaid || args.csv || args.tsv || args.xml || args.yaml || args.plantuml || args.ai || args.prompt || args.tokens || args.aiRules || args.flow || args.architecture || args.visualize || args.visualize3d || args.graphJson || args.dashboard;
     const shouldWriteMarkdown = !args.noWrite && (!isSpecificExport || (args.outputFile && args.outputFile.endsWith('.md')));
 
     // If architecture is required by bundle or export, enable architecture mode automatically
     const isArchNeeded = args.architecture || args.bundle || args.exportAll || args.exportList;
 
+    // Assign task-specific unique output file names so commands never overwrite PROJECT_STRUCTURE.md
+    let resolvedOutputFile = args.outputFile;
+    if (!resolvedOutputFile) {
+      if (cliArgs.duplicates) {
+        resolvedOutputFile = 'PROJECT_DUPLICATES.md';
+      } else if (cliArgs.hash) {
+        resolvedOutputFile = 'FILE_HASHES.md';
+      } else if (cliArgs.modified || cliArgs.created || cliArgs.permissions || cliArgs.owner) {
+        resolvedOutputFile = 'FILE_ATTRIBUTES.md';
+      } else if (cliArgs.sort) {
+        resolvedOutputFile = 'SORTED_TREE.md';
+      } else if (cliArgs.excludeStr || cliArgs.exclude) {
+        resolvedOutputFile = 'FILTERED_TREE.md';
+      } else if (cliArgs.maxDepth !== undefined || cliArgs.depth !== undefined) {
+        resolvedOutputFile = 'DEPTH_TREE.md';
+      } else if (cliArgs.maxFiles || cliArgs.maxFolders || cliArgs.bfs) {
+        resolvedOutputFile = 'LIMITED_TREE.md';
+      } else if (cliArgs.theme || cliArgs.icons) {
+        resolvedOutputFile = 'THEMED_TREE.md';
+      } else if (cliArgs.details || cliArgs.compress || cliArgs.collapseThreshold || cliArgs.summarize) {
+        resolvedOutputFile = 'FORMATTED_TREE.md';
+      } else if (cliArgs.changedOnly) {
+        resolvedOutputFile = 'CHANGED_FILES_TREE.md';
+      } else if (cliArgs.gitStatus) {
+        resolvedOutputFile = 'GIT_STATUS_TREE.md';
+      } else {
+        resolvedOutputFile = 'PROJECT_STRUCTURE.md';
+      }
+    }
+
     const result = generateTree({
       rootDir,
-      outputFile: args.outputFile,
+      outputFile: resolvedOutputFile,
       exclude: args.exclude || DEFAULT_EXCLUDE,
       maxDepth: args.maxDepth,
       noIgnore: args.noIgnore,

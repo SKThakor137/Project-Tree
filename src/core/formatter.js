@@ -47,7 +47,11 @@ function renderName(node, opts = {}) {
   if (node.isSymlink && node.symlinkTarget) name += ` → ${node.symlinkTarget}`;
   if (node.collapsed) name += ` (${node.collapsedCount} files)`;
   if (node.isEmpty && node.children !== undefined) name += ' [empty]';
-  if (node.gitStatus) name += ` [${node.gitStatus}]`;
+  if (node.gitStatus) {
+    const gitLabels = { 'M': 'Modified', 'A': 'Added', 'D': 'Deleted', '?': 'Untracked', 'R': 'Renamed' };
+    const label = gitLabels[node.gitStatus] || node.gitStatus;
+    name += `  [${label}]`;
+  }
 
   const metaParts = [];
 
@@ -57,13 +61,13 @@ function renderName(node, opts = {}) {
   }
 
   if (node.permissions) metaParts.push(node.permissions);
-  if (node.owner) metaParts.push(`owner:${node.owner}`);
-  if (node.modified) metaParts.push(`mod:${node.modified}`);
-  if (node.created) metaParts.push(`created:${node.created}`);
-  if (node.hash) metaParts.push(`hash:${node.hash.slice(0, 8)}`);
+  if (node.owner) metaParts.push(`owner: ${node.owner}`);
+  if (node.modified) metaParts.push(`mod: ${node.modified}`);
+  if (node.created) metaParts.push(`created: ${node.created}`);
+  if (node.hash) metaParts.push(`hash: ${node.hash.slice(0, 8)}`);
 
   if (metaParts.length > 0) {
-    name += ` (${metaParts.join(', ')})`;
+    name += `  (${metaParts.join(' • ')})`;
   }
 
   if (includeSummary && node.summary) {

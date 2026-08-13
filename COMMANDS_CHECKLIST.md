@@ -41,28 +41,30 @@ Is list mein `project-tree-md` ke saare commands, subcommands, flags aur exporte
 ---
 
 ## 5. 🔍 File Metadata, Hashing & Duplicate Analyzer
-- [ ] **5.1 Content Hashing** (`--hash [md5|sha1|sha256]`)
-- [ ] **5.2 Duplicate File Finder & Report** (`--duplicates`)
-- [ ] **5.3 File System Attributes** (`--permissions`, `--owner`, `--modified`, `--created`)
+- [x] **5.1 Content Hashing** (`--hash [md5|sha1|sha256]`)
+- [x] **5.2 Duplicate File Finder & Report** (`--duplicates`)
+- [x] **5.3 File System Attributes** (`--permissions`, `--owner`, `--modified`, `--created`)
 
 ---
 
 ## 6. ⚙️ Traversal, Sorting & Customization Options
-- [ ] **6.1 Depth & Exclude Patterns** (`--depth / -L`, `--exclude / -I`)
-- [ ] **6.2 Sorting Engines** (`--sort [alpha|folders-first|files-first|extension|size|modified|created]`, `--sort-order [asc|desc]`)
-- [ ] **6.3 Scan Limits & Traversal Modes** (`--max-files`, `--max-folders`, `--bfs`)
-- [ ] **6.4 Themes & Icon System** (`--theme`, `--icons`)
-- [ ] **6.5 Tree Formatting Controls** (`--details`, `--compress`, `--collapse <n>`, `--summarize`)
-- [ ] **6.6 Rich Stats Dashboard** (`--dashboard`)
-- [ ] **6.7 Git Integration & Changed Files Filter** (`--git-status`, `--changed-only`)
+- [x] **6.1 Depth & Exclude Patterns** (`--depth / -L`, `--exclude / -I`)
+- [x] **6.2 Sorting Engines** (`--sort [alpha|folders-first|files-first|extension|size|modified|created]`, `--sort-order [asc|desc]`)
+- [x] **6.3 Scan Limits & Traversal Modes** (`--max-files`, `--max-folders`, `--bfs`)
+- [x] **6.4 Themes & Icon System** (`--theme`, `--icons`)
+- [x] **6.5 Tree Formatting Controls** (`--details`, `--compress`, `--collapse <n>`, `--summarize`)
+- [x] **6.6 Rich Stats Dashboard** (`--dashboard`)
+- [x] **6.7 Git Integration & Changed Files Filter** (`--git-status`, `--changed-only`)
 
 ---
 
 ## 7. 🛠️ Utilities & Server Features
-- [ ] **7.1 Directory Comparison Engine** (`npx project-tree-md compare <pathA> <pathB>`)
+- [x] **7.1 Directory Comparison Engine** (`npx project-tree-md compare <pathA> <pathB>`)
 - [ ] **7.2 Zero-Dependency Live HTTP Server & Live Reload** (`--serve` / `serve`)
 - [ ] **7.3 Directory Watcher Mode** (`--watch`)
 - [ ] **7.4 README / Document Inserter** (`--inject <file>`)
 - [ ] **7.5 Shell Hook Integration** (`init-shell`, `install-hook`)
 
 ---
+
+

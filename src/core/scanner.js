@@ -5,6 +5,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 const { isSensitive } = require('../utils/sensitive.js');
 const { extractFileSummary } = require('../features/summarize.js');
 const { parseFile } = require('./analyzer.js');
@@ -198,7 +199,18 @@ function scan(rootDir, options = {}) {
       extraMeta.permissions = formatPermissions(stat.mode);
     }
     if (owner && stat.uid !== undefined) {
-      extraMeta.owner = `${stat.uid}:${stat.gid}`;
+      let ownerStr = `${stat.uid}:${stat.gid}`;
+      if (process.platform === 'win32' || stat.uid === 0) {
+        try {
+          const userInfo = os.userInfo();
+          if (userInfo && userInfo.username) {
+            ownerStr = userInfo.username;
+          } else if (process.env.USERNAME) {
+            ownerStr = process.env.USERNAME;
+          }
+        } catch (_) {}
+      }
+      extraMeta.owner = ownerStr;
     }
 
     // File node
