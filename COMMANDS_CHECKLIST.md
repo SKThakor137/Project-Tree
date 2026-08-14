@@ -60,10 +60,10 @@ Is list mein `project-tree-md` ke saare commands, subcommands, flags aur exporte
 
 ## 7. 🛠️ Utilities & Server Features
 - [x] **7.1 Directory Comparison Engine** (`npx project-tree-md compare <pathA> <pathB>`)
-- [ ] **7.2 Zero-Dependency Live HTTP Server & Live Reload** (`--serve` / `serve`)
-- [ ] **7.3 Directory Watcher Mode** (`--watch`)
-- [ ] **7.4 README / Document Inserter** (`--inject <file>`)
-- [ ] **7.5 Shell Hook Integration** (`init-shell`, `install-hook`)
+- [x] **7.2 Zero-Dependency Live HTTP Server & Live Reload** (`--serve` / `serve`)
+- [x] ~**7.3 Directory Watcher Mode** (`--watch`)~ *(Disabled / Commented Out per User Request)*
+- [x] ~**7.4 README / Document Inserter** (`--inject <file>`)~ *(Disabled / Commented Out per User Request)*
+- [x] ~**7.5 Shell Hook Integration** (`init-shell`, `install-hook`)~ *(Disabled / Commented Out per User Request)*
 
 ---
 

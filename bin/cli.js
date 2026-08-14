@@ -204,6 +204,7 @@ function parseArgs(argv) {
       case '--changed-only': args.changedOnly = true; break;
       case 'ai-rules': case '--ai-rules': args.aiRules = true; break;
       case 'serve': case '--serve': args.serve = true; break;
+      case '--port': case '-p': args.port = parseInt(argv[++i], 10); break;
 
       // Terminal Shell Hook Integration
       case 'init-shell': case '--init-shell':
@@ -689,13 +690,13 @@ function runGenerate(cliArgs) {
       console.log(colors.success(`AI prompt written to ${path.relative(process.cwd(), promptPath)}`));
     }
 
-    // Inject
-    if (args.inject) {
-      const injectPath = path.isAbsolute(args.inject) ? args.inject : path.join(rootDir, args.inject);
-      const { success, message } = injectIntoFile(injectPath, result.markdown);
-      if (success) console.log(colors.success(message));
-      else console.log(colors.warn(message));
-    }
+    // Inject (Disabled / Commented out per user directive)
+    // if (args.inject) {
+    //   const injectPath = path.isAbsolute(args.inject) ? args.inject : path.join(rootDir, args.inject);
+    //   const { success, message } = injectIntoFile(injectPath, result.markdown);
+    //   if (success) console.log(colors.success(message));
+    //   else console.log(colors.warn(message));
+    // }
 
     // Bundle Mode
     if (args.bundle) {
@@ -730,27 +731,6 @@ function runGenerate(cliArgs) {
       if (opened) {
         console.log(`🌐 ${colors.cyan('Opened in browser:')} ${colors.bold(path.relative(process.cwd(), primaryHtml))}`);
       }
-    }
-
-    // Watch mode
-    if (args.watch) {
-      watchDirectory(rootDir, () => {
-        try {
-          const r = generateTree({
-            rootDir, outputFile: args.outputFile,
-            exclude: args.exclude || DEFAULT_EXCLUDE, maxDepth: args.maxDepth,
-            noIgnore: args.noIgnore, includeBinary: args.includeBinary,
-            showSensitive: args.showSensitive, maxSize: args.maxSize,
-            compress: args.compress, collapseThreshold: args.collapseThreshold,
-            theme: args.theme, details: args.details, summarize: args.summarize,
-            writeFile: shouldWriteMarkdown,
-          });
-          const ts = new Date().toLocaleTimeString();
-          console.log(`🔄 ${colors.cyan(`Tree updated at ${ts}`)} (${r.statsText})`);
-        } catch (e) {
-          console.error(colors.error(e.message));
-        }
-      });
     }
 
   } catch (err) {
@@ -792,28 +772,28 @@ function main() {
     return;
   }
 
-  // Shell Hook Subcommands / Flags
-  if (args.initShell) {
-    try {
-      const snippet = generateShellHook(args.initShell);
-      console.log(snippet);
-    } catch (e) {
-      console.error(colors.error(e.message));
-      process.exit(1);
-    }
-    return;
-  }
-
-  if (args.installHook) {
-    try {
-      const res = installShellHook(args.installHook);
-      console.log(colors.success(res.message));
-    } catch (e) {
-      console.error(colors.error(e.message));
-      process.exit(1);
-    }
-    return;
-  }
+  // Shell Hook Subcommands / Flags (Disabled / Commented out per user directive)
+  // if (args.initShell) {
+  //   try {
+  //     const snippet = generateShellHook(args.initShell);
+  //     console.log(snippet);
+  //   } catch (e) {
+  //     console.error(colors.error(e.message));
+  //     process.exit(1);
+  //   }
+  //   return;
+  // }
+  //
+  // if (args.installHook) {
+  //   try {
+  //     const res = installShellHook(args.installHook);
+  //     console.log(colors.success(res.message));
+  //   } catch (e) {
+  //     console.error(colors.error(e.message));
+  //     process.exit(1);
+  //   }
+  //   return;
+  // }
 
   // AI Rules Generator
   if (args.aiRules) {
@@ -833,6 +813,7 @@ function main() {
   if (args.serve) {
     const { startLiveServer } = require('../src/features/server.js');
     startLiveServer(process.cwd(), {
+      port: args.port || 3000,
       openHtml: args.openHtml !== false,
       mode: args.visualize ? 'visualize' : 'report',
     });

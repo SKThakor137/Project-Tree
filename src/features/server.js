@@ -58,7 +58,7 @@ function startLiveServer(dirPath, options = {}) {
     } else {
       const rootNode = scan(rootDir);
       const stats = computeStats(rootNode);
-      rawHtml = toHtml(rootNode, { stats, rootDir });
+      rawHtml = toHtml(rootNode, stats);
     }
 
     if (rawHtml.includes('</body>')) {

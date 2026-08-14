@@ -21,7 +21,7 @@ const { buildTreeText } = require('../core/formatter.js');
  */
 function toHtml(tree, stats = null) {
   const timestamp = new Date().toISOString();
-  const effectiveStats = stats || computeStats(tree);
+  const effectiveStats = (stats && stats.stats) ? stats.stats : (stats || computeStats(tree));
 
   // Helper to sort children: Directories FIRST, then files (both alphabetically)
   function sortChildrenFoldersFirst(children) {
