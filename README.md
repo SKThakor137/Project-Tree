@@ -1,11 +1,11 @@
 <p align="center">
   <a href="https://github.com/SKThakor137/Project-Tree">
-    <img src="assets/hero_banner.jpg" alt="project-tree-md Hero Banner" width="100%" />
+    <img src="assets/banner.svg" alt="project-tree-md Banner" width="100%" />
   </a>
   <h1 align="center">🌳 project-tree-md</h1>
   <p align="center">
     <strong>Enterprise AI-Ready Project Intelligence & 2D/3D Code Visualizer Suite</strong><br>
-    <em>Instantly map codebases for Cursor, Claude, ChatGPT & Developers. Generates Interactive Mind Maps, 2D/3D Code Graphs, Markdown, JSON, HTML, SVG, Mermaid, CSV, ZIP Bundles in 1-Second. Zero Dependencies. Node.js 20+.</em>
+    <em>Instantly map codebases for Cursor, Claude, ChatGPT & Developers. Generates Interactive Mind Maps, 2D/3D Code Graphs, Markdown, JSON, HTML, SVG, Mermaid, ZIP Bundles in 1-Second. Zero Dependencies. Node.js 20+.</em>
   </p>
   <p align="center">
     <a href="https://www.npmjs.com/package/project-tree-md"><img src="https://img.shields.io/npm/v/project-tree-md.svg?style=for-the-badge&color=58a6ff" alt="npm version" /></a>
@@ -23,7 +23,8 @@
   <a href="#-2d--3d-code-architecture-graph---visualize">2D/3D Code Graph</a> •
   <a href="#-interactive-mind-map---mindmap">Mind Map</a> •
   <a href="#-dedicated-task-outputs--export-system">Dedicated Outputs</a> •
-  <a href="#-configuration-file-project-treeconfigjson">Configuration</a>
+  <a href="#-configuration-file-project-treeconfigjson">Configuration</a> •
+  <a href="#-programmatic-api">API Usage</a>
 </p>
 
 ---
@@ -36,6 +37,7 @@
 * 📁 **Dedicated Output File Names**: Every command writes to its own task-specific file to prevent overwriting (`GIT_STATUS_TREE.md`, `CHANGED_FILES_TREE.md`, `SORTED_TREE.md`, `FILE_HASHES.md`, etc.).
 * 🌿 **Git Integration & Changed Files Filter**: Highlight modified, added, and untracked files (`[Modified]`, `[Added]`, `[Untracked]`) or filter tree to changed files only (`ptree --git-status`, `ptree --changed-only`).
 * 🔍 **Content Hashing & Duplicate File Analyzer**: Compute cryptographic checksums (`md5`, `sha256`) and detect duplicate files (`ptree --hash`, `ptree --duplicates`).
+* 📏 **Lines of Code & File Size Details**: Inspect line counts, byte sizes, permissions, and OS owner for every file (`ptree --details`, `ptree --permissions`, `ptree --owner`).
 * 📦 **ZIP Bundle Generator & Multi-Format Exporter**: Package all visual and structured reports into a single ZIP archive (`ptree --bundle`).
 * ⚡ **Zero Dependencies**: 100% pure Node.js standard library with lightning-fast execution.
 
@@ -52,9 +54,10 @@ Run directly in any project directory with `npx`:
 | 💬 **AI Prompt Generator** | `npx ptree prompt` | `AI_PROMPT.md` |
 | 🌐 **2D/3D Code Relationship Graph** | `npx ptree --visualize` | `CODE_GRAPH.html` *(auto-opens)* |
 | 🧠 **Interactive Mind Map** | `npx ptree --mindmap` | `PROJECT_MINDMAP.html` *(auto-opens)* |
+| 📏 **Lines of Code & File Size** | `npx ptree --details` | `FORMATTED_TREE.md` |
 | 🌿 **Git Status Badges** | `npx ptree --git-status` | `GIT_STATUS_TREE.md` |
 | 🔄 **Changed Files Only** | `npx ptree --changed-only` | `CHANGED_FILES_TREE.md` |
-| 🔍 **File Hashes** | `npx ptree --hash sha256` | `FILE_HASHES.md` |
+| 🔍 **File Checksums** | `npx ptree --hash sha256` | `FILE_HASHES.md` |
 | 📋 **Duplicate File Finder** | `npx ptree --duplicates` | `PROJECT_DUPLICATES.md` |
 | 🔀 **Sorted Tree** | `npx ptree --sort size` | `SORTED_TREE.md` |
 | 🏷️ **File Attributes** | `npx ptree --modified --permissions` | `FILE_ATTRIBUTES.md` |
@@ -76,6 +79,9 @@ npx ptree prompt
 
 # Generate repository AI coding rules & agent guidelines
 npx ptree ai-rules
+
+# View total lines of code & token estimations
+npx ptree tokens
 ```
 
 ---
@@ -113,6 +119,9 @@ npx ptree --mindmap
 Every option flag automatically outputs to a dedicated unique filename to ensure your reports never overwrite each other:
 
 ```bash
+# Line counts and file sizes
+npx ptree --details            # -> FORMATTED_TREE.md
+
 # Git status badges
 npx ptree --git-status         # -> GIT_STATUS_TREE.md
 
@@ -146,6 +155,25 @@ Customize behavior globally or per-project using a `project-tree.config.json` fi
   "exclude": "dist|build|coverage",
   "maxDepth": 5
 }
+```
+
+---
+
+## 💻 Programmatic API
+
+Use `project-tree-md` inside your Node.js scripts and workflows:
+
+```javascript
+const { generateTree, scan, computeStats } = require('project-tree-md');
+
+// Generate complete project markdown
+const result = generateTree({
+  rootDir: process.cwd(),
+  details: true,
+  theme: 'emoji'
+});
+
+console.log(result.markdown);
 ```
 
 ---
