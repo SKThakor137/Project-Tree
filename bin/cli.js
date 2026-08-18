@@ -114,7 +114,7 @@ function parseArgs(argv) {
       // New v3.0 flags
       case '--sort': args.sort = argv[++i]; break;
       case '--sort-order': args.sortOrder = argv[++i]; break;
-      case '--hash': args.hash = argv[++i] || 'sha256'; break;
+      // case '--hash': args.hash = argv[++i] || 'sha256'; break;
       case '--permissions': args.permissions = true; break;
       case '--owner': args.owner = true; break;
       case '--modified': args.modified = true; break;
@@ -157,8 +157,11 @@ function parseArgs(argv) {
         args.noWrite = true; break;
 
       // Format & Analysis Flags & Subcommands
-      case 'ai': case '--ai': args.ai = true; break;
-      case 'prompt': case '--prompt': args.prompt = true; break;
+      case 'ai': case '--ai': case '--format=ai': case '--ai-context': args.ai = true; break;
+      case 'prompt': case '--prompt': case '--ai-prompt': args.prompt = true; break;
+      case '--format':
+        if (argv[i + 1] === 'ai') { args.ai = true; i++; }
+        break;
       case 'tokens': case '--tokens': args.tokens = true; break;
       case 'summarize': case '--summarize': args.summarize = true; break;
       case 'flow': case '--flow': args.flow = true; break;
@@ -240,7 +243,7 @@ function parseArgs(argv) {
 function printHelp() {
   const pkg = require('../package.json');
   console.log(`
-${colors.boldCyan('project-tree-md')} — Enterprise AI-Ready Project Analysis Suite (v${pkg.version})
+${colors.boldCyan('project-tree-md')} — Enterprise Project Analysis & Visualizer Suite (v${pkg.version})
 
 ${colors.bold('Usage:')}
   npx project-tree-md [options]
@@ -272,7 +275,7 @@ ${colors.bold('Output & Tree Customization:')}
   --architecture          Enable advanced architecture parsing & metrics
 
 ${colors.bold('File Metadata & Hashing:')}
-  --hash [algo]           Compute file content hashes  ${colors.gray('(md5|sha1|sha256)')}
+  // --hash [algo]           Compute file content hashes  ${colors.gray('(md5|sha1|sha256)')}
   --permissions           Show file permissions        ${colors.gray('(rwxr-xr-x format)')}
   --owner                 Show file owner UID/GID
   --modified              Show last modified dates
@@ -297,9 +300,9 @@ ${colors.bold('Limits & Controls:')}
   --config <path>         Path to custom config file
   --respect-ignore        Respect nested .gitignore files
 
-${colors.bold('AI Features:')}
-  --ai                    Generate AI context document
-  --prompt                Generate AI-ready prompt
+${colors.bold('AI & LLM Integration:')}
+  --ai, --format=ai       Generate AI context document for LLMs  ${colors.gray('(AI_CONTEXT.md)')}
+  --prompt                Generate AI-ready prompt snippet       ${colors.gray('(AI_PROMPT.md)')}
   --tokens                Output AI context token count & cost estimation
 
 ${colors.bold('Terminal & Browser Behavior:')}
@@ -389,8 +392,8 @@ function runGenerate(cliArgs) {
     if (!resolvedOutputFile) {
       if (cliArgs.duplicates) {
         resolvedOutputFile = 'PROJECT_DUPLICATES.md';
-      } else if (cliArgs.hash) {
-        resolvedOutputFile = 'FILE_HASHES.md';
+      // } else if (cliArgs.hash) {
+      //   resolvedOutputFile = 'FILE_HASHES.md';
       } else if (cliArgs.modified || cliArgs.created || cliArgs.permissions || cliArgs.owner) {
         resolvedOutputFile = 'FILE_ATTRIBUTES.md';
       } else if (cliArgs.sort) {
@@ -679,7 +682,7 @@ function runGenerate(cliArgs) {
       const aiContent = generateAiContext(rootDir, result.treeText, result.stats);
       const aiPath = path.join(outDir, 'AI_CONTEXT.md');
       fs.writeFileSync(aiPath, aiContent, 'utf8');
-      console.log(colors.success(`AI context written to ${path.relative(process.cwd(), aiPath)}`));
+      console.log(colors.success(`AI Context written to ${path.relative(process.cwd(), aiPath)}`));
     }
 
     // AI Prompt
@@ -687,7 +690,7 @@ function runGenerate(cliArgs) {
       const promptContent = generateAiPrompt(rootDir, result.treeText, result.stats);
       const promptPath = path.join(outDir, 'AI_PROMPT.md');
       fs.writeFileSync(promptPath, promptContent, 'utf8');
-      console.log(colors.success(`AI prompt written to ${path.relative(process.cwd(), promptPath)}`));
+      console.log(colors.success(`AI Prompt written to ${path.relative(process.cwd(), promptPath)}`));
     }
 
     // Inject (Disabled / Commented out per user directive)

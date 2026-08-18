@@ -42,6 +42,7 @@ const { sortTree, getSortComparator } = require('./core/sorter.js');
 const { findDuplicatesByName, findDuplicatesByHash, formatDuplicateReport } = require('./features/duplicates.js');
 const { hashFileSync, hashData } = require('./utils/hasher.js');
 const { loadTheme, getPresetNames } = require('./core/themeEngine.js');
+const { createIconResolver } = require('./core/iconEngine.js');
 // const { toCsv, toTsv } = require('./exporters/csv.js');
 // const { toXml } = require('./exporters/xml.js');
 // const { toYaml } = require('./exporters/yaml.js');
@@ -86,9 +87,11 @@ module.exports = {
   toGraphJson,
   fromGraphJson,
 
-  // Features
+  // Features & AI Grounding
   generateAiContext,
   generateAiPrompt,
+  generateAIContext: generateAiContext,
+  generateAIPrompt: generateAiPrompt,
   generateAiRules,
   injectIntoFile,
   compare,

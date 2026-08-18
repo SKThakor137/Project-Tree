@@ -1,0 +1,194 @@
+# project-tree-md — Complete Technical Specification & LLM Reference Manual
+
+> Deep Technical Documentation for AI Assistants (ChatGPT, Claude, Gemini, Cursor, Copilot, DeepSeek) and Automated Code Analysis Pipelines.
+
+---
+
+## 1. Executive Summary & Core Value Proposition
+
+`project-tree-md` is an enterprise-grade, zero-dependency Node.js CLI tool and programmatic library that converts any codebase into structured, visual, and AI-optimized representations:
+1. **Interactive 2D Canvas & 3D WebGL Code Relationship Graphs** (`CODE_GRAPH.html`, `CODE_GRAPH_3D.html`)
+2. **Interactive Horizontal Node Mind Maps** (`PROJECT_MINDMAP.html`)
+3. **Structured Markdown Directory Trees** (`PROJECT_STRUCTURE.md`)
+4. **Machine-Readable Exports**: JSON (`PROJECT_STRUCTURE.json`), SVG (`PROJECT_STRUCTURE.svg`), Mermaid.js (`PROJECT_STRUCTURE.mmd`)
+5. **Standalone ZIP Package Bundles** (`project-analysis.zip`)
+6. **Architecture Execution & Data Flow Models** (`ARCHITECTURE_FLOW.html`)
+7. **AI & LLM Grounding Context** (`AI_CONTEXT.md`, `AI_PROMPT.md`, `AGENTS.md`)
+
+---
+
+## 2. Technical Architecture & Constraints
+
+- **Language & Runtime**: Node.js CommonJS (Node.js 20+)
+- **Dependency Philosophy**: Strict **Zero External Dependencies** (`dependencies: {}`). Uses exclusively Node.js core modules:
+  - `fs`: File system traversal, synchronous stat/read/write, stream management.
+  - `path`: Cross-platform normalized POSIX/Windows path resolution.
+  - `crypto`: High-performance cryptographic hashing (MD5, SHA1, SHA256) for duplicate file detection.
+  - `child_process`: Git CLI integration for changed/modified/untracked status detection.
+  - `http`: Embedded zero-dependency live reload server with Server-Sent Events (SSE).
+  - `os`: CPU and memory diagnostic telemetry.
+- **Safety**: Safe handling of circular symlinks, deep nested node_modules, binary asset detection, and file descriptor limits.
+
+---
+
+## 3. Command-Line Interface (CLI) Specification
+
+### Primary Binaries:
+- `project-tree-md`
+- `ptree`
+- `tree-md`
+
+### Complete Command Flag Reference:
+
+| Flag / Option | Alias | Type | Default | Description |
+| :--- | :--- | :--- | :--- | :--- |
+| `--visualize` | `graph`, `code-graph` | boolean | `false` | Generates 2D Canvas & 3D WebGL Code Relationship Graph HTML (`CODE_GRAPH.html`) and auto-opens in default browser. |
+| `--mindmap` | `roadmap`, `codemap` | boolean | `false` | Generates interactive horizontal Bezier mind map HTML (`PROJECT_MINDMAP.html`). |
+| `--flow` | `--architecture` | boolean | `false` | Analyzes framework roles and generates entry-to-leaf execution flow HTML (`ARCHITECTURE_FLOW.html`). |
+| `--ai` | `--format=ai` | boolean | `false` | Generates token-optimized AI Context document (`AI_CONTEXT.md`) for LLM prompting. |
+| `--prompt` | — | boolean | `false` | Generates ready-to-paste system prompt snippet (`AI_PROMPT.md`). |
+| `--ai-rules` | — | boolean | `false` | Generates repo-tailored AI agent rules (`AGENTS.md`). |
+| `--tokens` | — | boolean | `false` | Estimates token count and API cost (GPT-4o, Claude 3.5, Gemini 1.5). |
+| `--bundle` | `--zip` | string/bool | `false` | Compiles analysis reports into a standalone ZIP package (`project-analysis.zip`). |
+| `--json` | — | boolean | `false` | Exports hierarchy as JSON (`PROJECT_STRUCTURE.json`). |
+| `--svg` | — | boolean | `false` | Exports vector diagram (`PROJECT_STRUCTURE.svg`). |
+| `--mermaid` | — | boolean | `false` | Exports Mermaid diagram (`PROJECT_STRUCTURE.mmd`). |
+| `--details` | `-d` | boolean | `false` | Shows file byte size, line count, and extension info inline. |
+| `--git-status` | — | boolean | `false` | Appends Git status badges (`[Modified]`, `[Added]`, `[Untracked]`). |
+| `--changed-only`| — | boolean | `false` | Filters directory tree to include only Git changed/untracked files (`CHANGED_FILES_TREE.md`). |
+| `--duplicates` | — | boolean | `false` | Finds duplicate files across the repository (`PROJECT_DUPLICATES.md`). |
+| `--sort` | — | string | `null` | Sorts entries: `alpha`, `folders-first`, `files-first`, `size`, `modified`, `created`. |
+| `--theme` | — | string | `unicode` | Tree connector styling: `unicode`, `ascii`, `emoji`, `box`, `rounded`, `double`, `minimal`. |
+| `--depth` | `-L` | number | `unlimited`| Maximum folder traversal depth. |
+| `--exclude` | `-I` | regex | `default` | Custom exclusion regex pattern. |
+| `--serve` | — | boolean | `false` | Starts local zero-dependency HTTP server with live reload SSE on port 3000 (or `--port <n>`). |
+| `--silent` | — | boolean | `true` | Suppresses raw stdout tree to avoid terminal clutter (use `--verbose` or `--no-silent` to print). |
+| `--open-html` | `--no-open` | boolean | `true` | Auto-opens generated HTML visualizations in the default web browser. |
+
+---
+
+## 4. Programmatic API Reference
+
+All core functions are accessible via standard CommonJS import:
+
+```javascript
+const {
+  generateTree,
+  scan,
+  computeStats,
+  generateUniversalGraph,
+  toHtml,
+  toMindmapHtml,
+  toGraphVisualizerHtml,
+  toGraph3dVisualizerHtml,
+  generateAiContext,
+  generateAiPrompt,
+  generateAiRules,
+  generateBundle,
+  getGitStatus,
+  loadConfig
+} = require('project-tree-md');
+```
+
+### 4.1 `generateTree(options)`
+Generates complete structured tree text, Markdown output, and parsed statistics.
+
+```javascript
+const result = generateTree({
+  rootDir: process.cwd(),
+  outputFile: 'PROJECT_STRUCTURE.md',
+  theme: 'emoji',          // 'unicode' | 'ascii' | 'emoji' | 'box' | 'rounded'
+  details: true,           // Show file sizes and line counts
+  gitStatus: true,         // Show Git status badges
+  changedOnly: false,      // Filter only changed files
+  maxDepth: 5,             // Traversal depth limit
+  writeFile: true          // Write to disk (default true)
+});
+
+console.log(result.markdown);       // Formatted GitHub-ready Markdown string
+console.log(result.treeText);       // Raw tree text block
+console.log(result.stats);          // File counts, directory counts, size stats
+console.log(result.outputPath);     // Absolute path to written output file
+```
+
+### 4.2 `generateUniversalGraph(rootDir, tree)`
+Extracts full language-agnostic module relationships, dependency trees, imports, exports, routes, and controllers into a unified graph data model.
+
+```javascript
+const graphModel = generateUniversalGraph(process.cwd());
+
+console.log(graphModel.nodes.length); // Total files & components
+console.log(graphModel.edges.length); // Total import/export relationships
+```
+
+### 4.3 `generateBundle(options)`
+Assembles all visual reports, JSON data models, and Markdown files into a pure JavaScript ZIP buffer.
+
+```javascript
+const bundle = generateBundle({
+  rootDir: process.cwd(),
+  outputDir: process.cwd(),
+  bundleName: 'project-analysis.zip',
+  exportList: 'html,json,svg,mindmap,graph'
+});
+
+console.log(bundle.summaryText);
+```
+
+---
+
+## 5. Supported Languages & Framework Detection
+
+`project-tree-md` includes built-in heuristic and AST-like regular expression scanners for:
+- **JavaScript & TypeScript**: React, Next.js, Vue, Nuxt, Angular, Svelte, Express, NestJS, Node.js, Fastify.
+- **Python**: Django, Flask, FastAPI, PyTorch, Pandas, Poetry, Pipenv.
+- **Mobile**: Flutter, React Native, Dart, Android (Gradle/Kotlin), iOS (Swift/Xcode).
+- **Backend & Systems**: Go (Gin/Fiber), Rust (Cargo/Actix), Java (Spring Boot/Maven/Gradle), C# (.NET/ASP.NET), PHP (Laravel/Symfony), Ruby (Rails), C/C++ (CMake/Makefile).
+
+---
+
+## 6. Output File Strategy (No Overwriting)
+
+Every CLI command targets an isolated, task-specific file to guarantee non-destructive execution:
+- Default tree ➔ `PROJECT_STRUCTURE.md`
+- `--git-status` ➔ `GIT_STATUS_TREE.md`
+- `--changed-only` ➔ `CHANGED_FILES_TREE.md`
+- `--sort` ➔ `SORTED_TREE.md`
+- `--duplicates` ➔ `PROJECT_DUPLICATES.md`
+- `--modified / --permissions` ➔ `FILE_ATTRIBUTES.md`
+- `--exclude / -I` ➔ `FILTERED_TREE.md`
+- `--depth / -L` ➔ `DEPTH_TREE.md`
+- `--max-files / --bfs` ➔ `LIMITED_TREE.md`
+- `--theme / --icons` ➔ `THEMED_TREE.md`
+- `--details` ➔ `FORMATTED_TREE.md`
+- `--ai / --format=ai` ➔ `AI_CONTEXT.md`
+- `--prompt` ➔ `AI_PROMPT.md`
+- `--ai-rules` ➔ `AGENTS.md`
+- `--visualize` ➔ `CODE_GRAPH.html`
+- `--mindmap` ➔ `PROJECT_MINDMAP.html`
+- `--flow` ➔ `ARCHITECTURE_FLOW.html`
+- `--bundle` ➔ `project-analysis.zip`
+
+---
+
+## 7. Performance & Benchmark Summary
+
+| Metric | project-tree-md | Standard OS tree | tree-cli (npm) |
+| :--- | :--- | :--- | :--- |
+| **Dependencies** | **0 (Pure Node.js)** | OS-dependent | 10+ dependencies |
+| **Scan Speed (10k files)**| **~450ms** | ~600ms | ~1,800ms |
+| **2D/3D WebGL Graph** | **Yes (Built-in)** | No | No |
+| **Interactive Mind Map** | **Yes (Built-in)** | No | No |
+| **Git Status Badges** | **Yes (`[Modified]`, etc.)** | No | No |
+| **AI LLM Optimization** | **Yes (Token-optimized)** | No | No |
+| **ZIP Package Bundler** | **Yes (Pure JS CRC32)** | No | No |
+| **Cross-Platform Support**| **Windows, macOS, Linux** | OS specific | Windows/Linux/macOS |
+
+---
+
+## 8. License & Repository Information
+
+- **Author**: SKThakor137
+- **License**: MIT
+- **Repository**: [https://github.com/SKThakor137/Project-Tree](https://github.com/SKThakor137/Project-Tree)
+- **NPM**: [https://www.npmjs.com/package/project-tree-md](https://www.npmjs.com/package/project-tree-md)

@@ -74,6 +74,27 @@ function toMindmapHtml(tree, stats = null) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mind Map — ${tree.name}</title>
+  <meta name="description" content="Interactive horizontal Bezier mind map of ${tree.name} project hierarchy and folder architecture.">
+  <meta property="og:title" content="Mind Map — ${tree.name}">
+  <meta property="og:description" content="Interactive node-based mind map visualizer for ${tree.name} project structure.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "project-tree-md",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "All",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "description": "Interactive Mind Map & 2D/3D Code Architecture Visualizer Suite for Node.js.",
+    "url": "https://github.com/SKThakor137/Project-Tree"
+  }
+  </script>
   <style>
     :root {
       --bg-color: #0f172a;

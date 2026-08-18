@@ -152,7 +152,8 @@ console.log('🧪 Testing v3.0 Enterprise Upgrade Features...\n');
   console.log('  ✅ Theme & icon engine tests passed');
 }
 
-// 7. New Exporters Tests (CSV, TSV, XML, YAML, PlantUML)
+// 7. New Exporters Tests (CSV, TSV, XML, YAML, PlantUML) - Commented out per disabled status
+/*
 {
   const sampleTree = {
     name: 'my-project',
@@ -182,6 +183,7 @@ console.log('🧪 Testing v3.0 Enterprise Upgrade Features...\n');
 
   console.log('  ✅ New exporter tests passed (CSV, TSV, XML, YAML, PlantUML)');
 }
+*/
 
 // 8. Plugin API Tests
 {

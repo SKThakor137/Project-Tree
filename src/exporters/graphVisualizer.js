@@ -43,7 +43,27 @@ function toGraphVisualizerHtml(graphModel, projectName) {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${esc(name)} — Code Relationship Graph</title>
-  <meta name="description" content="Interactive code architecture visualization for ${esc(name)}">
+  <meta name="description" content="Interactive 2D/3D code architecture visualization and dependency graph for ${esc(name)}">
+  <meta property="og:title" content="${esc(name)} — Code Relationship Graph">
+  <meta property="og:description" content="Interactive 2D Canvas & 3D WebGL Code Relationship Graph visualizer.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "project-tree-md",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "All",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "description": "Interactive Code Relationship Graph and 2D/3D Visualizer Suite for Node.js.",
+    "url": "https://github.com/SKThakor137/Project-Tree"
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>

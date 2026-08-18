@@ -1,7 +1,7 @@
 {
   "name": "project-tree-md",
-  "version": "3.3.1",
-  "description": "Enterprise-grade AI-ready project analysis, architecture & visualizer suite. Generates interactive Code Relationship Graphs (HTML/Canvas/3D), Markdown, JSON, HTML, SVG, Mermaid, CSV, TSV, XML, YAML, PlantUML, ZIP bundles, AI context, duplicate reports, custom themes, custom icons, and plugin system. Zero dependencies. Node.js 20+.",
+  "version": "3.3.2",
+  "description": "Enterprise codebase intelligence, directory tree generator & 2D/3D code visualizer suite. Generates interactive Code Relationship Graphs, Mind Maps, Markdown, JSON, HTML, SVG, Mermaid, and ZIP bundles. Zero dependencies. AI-ready context for ChatGPT, Claude, Gemini & Cursor.",
   "main": "src/index.js",
   "types": "types/index.d.ts",
   "type": "commonjs",
@@ -15,7 +15,9 @@
     "src",
     "types",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "llms.txt",
+    "llms-full.txt"
   ],
   "scripts": {
     "test": "node bin/cli.js --no-write",
@@ -88,7 +90,15 @@
     "codebase-visualization",
     "3d-code-graph",
     "webgl-graph",
-    "project-documentation"
+    "project-documentation",
+    "directory-tree-generator",
+    "folder-structure-markdown",
+    "chatgpt-codebase",
+    "cursor-rules",
+    "generative-engine-optimization",
+    "geo",
+    "llmstxt",
+    "developer-tools"
   ],
   "author": "SKThakor137",
   "license": "MIT",

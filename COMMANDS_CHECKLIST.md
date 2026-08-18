@@ -26,8 +26,8 @@ Is list mein `project-tree-md` ke saare commands, subcommands, flags aur exporte
 ---
 
 ## 3. 🤖 AI Integration & Rule Generators
-- [x] **3.1 AI Context Generator** (`--ai` / `ai`)
-- [x] **3.2 AI Prompt Generator** (`--prompt` / `prompt`)
+- [x] ~**3.1 AI Context Generator** (`--ai` / `ai`)~ *(Disabled / Commented Out)*
+- [x] ~**3.2 AI Prompt Generator** (`--prompt` / `prompt`)~ *(Disabled / Commented Out)*
 - [x] **3.3 AI Token & Cost Estimator** (`--tokens` / `tokens`)
 - [x] **3.4 AI Rules / Agent Guidelines Generator** (`--ai-rules` / `ai-rules`)
 
@@ -41,7 +41,7 @@ Is list mein `project-tree-md` ke saare commands, subcommands, flags aur exporte
 ---
 
 ## 5. 🔍 File Metadata, Hashing & Duplicate Analyzer
-- [x] **5.1 Content Hashing** (`--hash [md5|sha1|sha256]`)
+- [x] ~**5.1 Content Hashing** (`--hash [md5|sha1|sha256]`)~ *(Disabled / Commented Out)*
 - [x] **5.2 Duplicate File Finder & Report** (`--duplicates`)
 - [x] **5.3 File System Attributes** (`--permissions`, `--owner`, `--modified`, `--created`)
 

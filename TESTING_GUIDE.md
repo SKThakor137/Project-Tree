@@ -143,18 +143,11 @@ project-tree-md --architecture --dashboard
 ---
 
 ## 5. AI Features & Token Estimator
+*(Note: `--ai` and `--prompt` commands are commented out / disabled)*
 
-### Test 5.1: AI LLM Context Document (`--ai`)
-```bash
-project-tree-md --ai
-```
-- **Expected Output:** `AI_CONTEXT.md` file generate hogi (ChatGPT, Claude, Gemini ke liye optimized).
+### Test 5.1: ~AI LLM Context Document (`--ai`)~ *(Disabled / Commented Out)*
 
-### Test 5.2: AI Prompt File (`--prompt`)
-```bash
-project-tree-md --prompt
-```
-- **Expected Output:** `AI_PROMPT.md` file create hogi.
+### Test 5.2: ~AI Prompt File (`--prompt`)~ *(Disabled / Commented Out)*
 
 ### Test 5.3: Token Count & Input Cost Estimation (`--tokens`)
 ```bash

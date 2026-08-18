@@ -25,6 +25,27 @@ function toArchitectureFlowHtml(flowResult, projectName = 'Project') {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${esc(projectName)} — Architecture Flow</title>
+  <meta name="description" content="Entry-to-leaf architecture execution flow and framework hierarchy visualizer for ${esc(projectName)}">
+  <meta property="og:title" content="${esc(projectName)} — Architecture Flow">
+  <meta property="og:description" content="Architecture execution flow and dependency visualizer.">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "project-tree-md",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "All",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "description": "Interactive Architecture Execution Flow Visualizer for Node.js.",
+    "url": "https://github.com/SKThakor137/Project-Tree"
+  }
+  </script>
   <style>
     :root {
       --bg: #0d1117; --bg-panel: #161b22; --bg-hover: #21262d;
