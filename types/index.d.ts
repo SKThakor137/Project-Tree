@@ -113,11 +113,11 @@ export function toGraph3dVisualizerHtml(graphModel: UniversalGraphModel, options
 export function toGraphJson(graphModel: UniversalGraphModel): string;
 export function fromGraphJson(jsonString: string): UniversalGraphModel;
 
-// Features & AI Discovery
-export function generateAiContext(dirPath: string, options?: any): string;
-export function generateAiPrompt(dirPath: string, options?: any): string;
-export function generateAIContext(dirPath: string, options?: any): string;
-export function generateAIPrompt(dirPath: string, options?: any): string;
+// Features
+// export function generateAiContext(dirPath: string, options?: any): string;
+// export function generateAiPrompt(dirPath: string, options?: any): string;
+// export function generateAIContext(dirPath: string, options?: any): string;
+// export function generateAIPrompt(dirPath: string, options?: any): string;
 export function generateAiRules(dirPath: string, options?: any): string;
 export function estimateTokens(text: string): { tokens: number; lines: number; characters: number };
 export function compare(dirPathA: string, dirPathB: string, options?: any): any;

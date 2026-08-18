@@ -16,7 +16,7 @@ const { toMindmapHtml } = require('../src/exporters/mindmap.js');
 const { toSvg } = require('../src/exporters/svg.js');
 const { toMermaid } = require('../src/exporters/mermaid.js');
 const { toMarkdown } = require('../src/exporters/markdown.js');
-const { generateAiContext, generateAiPrompt } = require('../src/features/ai.js');
+// const { generateAiContext, generateAiPrompt } = require('../src/features/ai.js');
 const { injectIntoFile } = require('../src/features/inject.js');
 const { watchDirectory } = require('../src/features/watcher.js');
 const { compare } = require('../src/features/compare.js');
@@ -60,8 +60,8 @@ function parseArgs(argv) {
     outputDir: null,
     noWrite: false,
     // Modes
-    ai: false,
-    prompt: false,
+    // ai: false,
+    // prompt: false,
     json: false,
     html: false,
     mindmap: false,
@@ -157,11 +157,8 @@ function parseArgs(argv) {
         args.noWrite = true; break;
 
       // Format & Analysis Flags & Subcommands
-      case 'ai': case '--ai': case '--format=ai': case '--ai-context': args.ai = true; break;
-      case 'prompt': case '--prompt': case '--ai-prompt': args.prompt = true; break;
-      case '--format':
-        if (argv[i + 1] === 'ai') { args.ai = true; i++; }
-        break;
+      // case 'ai': case '--ai': case '--format=ai': case '--ai-context': args.ai = true; break;
+      // case 'prompt': case '--prompt': case '--ai-prompt': args.prompt = true; break;
       case 'tokens': case '--tokens': args.tokens = true; break;
       case 'summarize': case '--summarize': args.summarize = true; break;
       case 'flow': case '--flow': args.flow = true; break;
@@ -300,10 +297,10 @@ ${colors.bold('Limits & Controls:')}
   --config <path>         Path to custom config file
   --respect-ignore        Respect nested .gitignore files
 
-${colors.bold('AI & LLM Integration:')}
-  --ai, --format=ai       Generate AI context document for LLMs  ${colors.gray('(AI_CONTEXT.md)')}
-  --prompt                Generate AI-ready prompt snippet       ${colors.gray('(AI_PROMPT.md)')}
-  --tokens                Output AI context token count & cost estimation
+// ${colors.bold('AI Features:')}
+//   --ai                    Generate AI context document
+//   --prompt                Generate AI-ready prompt
+  --tokens                Output lines of code token count & cost estimation
 
 ${colors.bold('Terminal & Browser Behavior:')}
   --silent                Suppress tree output in terminal           ${colors.gray('(default: on)')}
@@ -381,7 +378,7 @@ function runGenerate(cliArgs) {
     }
 
     // Preserve 100% existing functionality: PROJECT_STRUCTURE.md is always written by default unless --no-write is passed
-    const isSpecificExport = args.json || args.html || args.mindmap || args.svg || args.mermaid || args.csv || args.tsv || args.xml || args.yaml || args.plantuml || args.ai || args.prompt || args.tokens || args.aiRules || args.flow || args.architecture || args.visualize || args.visualize3d || args.graphJson || args.dashboard;
+    const isSpecificExport = args.json || args.html || args.mindmap || args.svg || args.mermaid || args.csv || args.tsv || args.xml || args.yaml || args.plantuml || args.tokens || args.aiRules || args.flow || args.architecture || args.visualize || args.visualize3d || args.graphJson || args.dashboard;
     const shouldWriteMarkdown = !args.noWrite && (!isSpecificExport || (args.outputFile && args.outputFile.endsWith('.md')));
 
     // If architecture is required by bundle or export, enable architecture mode automatically
@@ -533,10 +530,7 @@ function runGenerate(cliArgs) {
 
     // Token Estimation Summary
     if (args.tokens) {
-      let targetText = result.markdown;
-      if (args.ai) {
-        targetText = generateAiContext(rootDir, result.treeText, result.stats);
-      }
+      const targetText = result.markdown;
       const estimatedCount = estimateTokens(targetText);
       const summaryText = formatTokenSummary(estimatedCount);
       console.log(`🧮 ${colors.boldCyan(summaryText)}`);
@@ -677,21 +671,20 @@ function runGenerate(cliArgs) {
     }
     */
 
-    // AI Context
-    if (args.ai) {
-      const aiContent = generateAiContext(rootDir, result.treeText, result.stats);
-      const aiPath = path.join(outDir, 'AI_CONTEXT.md');
-      fs.writeFileSync(aiPath, aiContent, 'utf8');
-      console.log(colors.success(`AI Context written to ${path.relative(process.cwd(), aiPath)}`));
-    }
-
-    // AI Prompt
-    if (args.prompt) {
-      const promptContent = generateAiPrompt(rootDir, result.treeText, result.stats);
-      const promptPath = path.join(outDir, 'AI_PROMPT.md');
-      fs.writeFileSync(promptPath, promptContent, 'utf8');
-      console.log(colors.success(`AI Prompt written to ${path.relative(process.cwd(), promptPath)}`));
-    }
+    // AI Context & AI Prompt (Disabled / Commented out per user directive)
+    // if (args.ai) {
+    //   const aiContent = generateAiContext(rootDir, result.treeText, result.stats);
+    //   const aiPath = path.join(outDir, 'AI_CONTEXT.md');
+    //   fs.writeFileSync(aiPath, aiContent, 'utf8');
+    //   console.log(colors.success(`AI Context written to ${path.relative(process.cwd(), aiPath)}`));
+    // }
+    //
+    // if (args.prompt) {
+    //   const promptContent = generateAiPrompt(rootDir, result.treeText, result.stats);
+    //   const promptPath = path.join(outDir, 'AI_PROMPT.md');
+    //   fs.writeFileSync(promptPath, promptContent, 'utf8');
+    //   console.log(colors.success(`AI Prompt written to ${path.relative(process.cwd(), promptPath)}`));
+    // }
 
     // Inject (Disabled / Commented out per user directive)
     // if (args.inject) {

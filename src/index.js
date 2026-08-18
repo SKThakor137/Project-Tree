@@ -18,7 +18,7 @@ const { toJson } = require('./exporters/json.js');
 const { toHtml } = require('./exporters/html.js');
 const { toSvg } = require('./exporters/svg.js');
 const { toMermaid } = require('./exporters/mermaid.js');
-const { generateAiContext, generateAiPrompt } = require('./features/ai.js');
+// const { generateAiContext, generateAiPrompt } = require('./features/ai.js');
 const { injectIntoFile } = require('./features/inject.js');
 const { compare } = require('./features/compare.js');
 const { detectMonorepo, formatWorkspaceSummary } = require('./features/monorepo.js');
@@ -87,11 +87,11 @@ module.exports = {
   toGraphJson,
   fromGraphJson,
 
-  // Features & AI Grounding
-  generateAiContext,
-  generateAiPrompt,
-  generateAIContext: generateAiContext,
-  generateAIPrompt: generateAiPrompt,
+  // Features
+  // generateAiContext,
+  // generateAiPrompt,
+  // generateAIContext: generateAiContext,
+  // generateAIPrompt: generateAiPrompt,
   generateAiRules,
   injectIntoFile,
   compare,

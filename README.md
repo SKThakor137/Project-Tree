@@ -19,9 +19,9 @@
 <p align="center">
   <a href="#-key-features--capabilities">Top Features</a> •
   <a href="#-quick-start">Quick Start</a> •
-  <a href="#-ai--llm-grounding-suite-llmstxt---ai">AI Grounding</a> •
   <a href="#-2d--3d-code-architecture-graph---visualize">2D/3D Code Graph</a> •
   <a href="#-interactive-mind-map---mindmap">Mind Map</a> •
+  <a href="#-dedicated-task-outputs--export-system">Dedicated Outputs</a> •
   <a href="#-competitor-comparison-matrix">Comparison</a> •
   <a href="#-frequently-asked-questions-faq">FAQ</a> •
   <a href="#-programmatic-api">API Usage</a>
@@ -31,10 +31,9 @@
 
 ## 🔥 Key Features & Capabilities
 
-* 🤖 **AI Prompt & Context Generator**: Create token-optimized architecture context for ChatGPT, Claude, Cursor & Copilot (`ptree --ai`, `ptree --prompt`, `ptree --ai-rules`).
 * 🌐 **Interactive 2D & 3D Code Graph**: Explore codebase imports, exports, and module relationships with 3D WebGL spatial sphere and flat 2D canvas (`ptree --visualize`).
 * 🧠 **Interactive Horizontal Mind Map**: Auto-layout node hierarchy with curved Bezier connectors, pan/zoom, and live JSON data editor (`ptree --mindmap`).
-* 📁 **Dedicated Output File Names**: Every command writes to its own task-specific file to prevent overwriting (`GIT_STATUS_TREE.md`, `CHANGED_FILES_TREE.md`, `SORTED_TREE.md`, `PROJECT_DUPLICATES.md`, `AI_CONTEXT.md`, etc.).
+* 📁 **Dedicated Output File Names**: Every command writes to its own task-specific file to prevent overwriting (`GIT_STATUS_TREE.md`, `CHANGED_FILES_TREE.md`, `SORTED_TREE.md`, `PROJECT_DUPLICATES.md`, `DEPTH_TREE.md`, etc.).
 * 🌿 **Git Integration & Changed Files Filter**: Highlight modified, added, and untracked files (`[Modified]`, `[Added]`, `[Untracked]`) or filter tree to changed files only (`ptree --git-status`, `ptree --changed-only`).
 * 🔍 **Duplicate File Analyzer**: Detect and report duplicate files across the repository (`ptree --duplicates`).
 * 📏 **Lines of Code & File Size Details**: Inspect line counts, byte sizes, permissions, and OS owner for every file (`ptree --details`, `ptree --permissions`, `ptree --owner`).
@@ -50,8 +49,6 @@ Run directly in any project directory with `npx`:
 | Feature / Command | Command | Dedicated Output File |
 | :--- | :--- | :--- |
 | 📄 **Markdown Tree** *(Default)* | `npx ptree` | `PROJECT_STRUCTURE.md` |
-| 🤖 **AI Context Generator** | `npx ptree --ai` | `AI_CONTEXT.md` |
-| 💬 **AI Prompt Generator** | `npx ptree --prompt` | `AI_PROMPT.md` |
 | 🌐 **2D/3D Code Relationship Graph** | `npx ptree --visualize` | `CODE_GRAPH.html` *(auto-opens)* |
 | 🧠 **Interactive Mind Map** | `npx ptree --mindmap` | `PROJECT_MINDMAP.html` *(auto-opens)* |
 | 📏 **Lines of Code & File Size** | `npx ptree --details` | `FORMATTED_TREE.md` |
@@ -64,28 +61,6 @@ Run directly in any project directory with `npx`:
 | 📦 **ZIP Package Bundle** | `npx ptree --bundle` | `project-analysis.zip` |
 
 ---
-
-<!--
-## 🤖 AI Integration & Prompt Context Generator
-
-Generate structured codebase context tailored for LLM prompt windows:
-
-```bash
-# Generate comprehensive AI Context for Cursor / Claude
-npx ptree ai
-
-# Generate conversational system prompt snippet
-npx ptree prompt
-
-# Generate repository AI coding rules & agent guidelines
-npx ptree ai-rules
-
-# View total lines of code & token estimations
-npx ptree tokens
-```
-
----
--->
 
 ## 🌐 2D & 3D Code Architecture Graph (`--visualize`)
 
@@ -141,29 +116,6 @@ npx ptree --exclude "assets"   # -> FILTERED_TREE.md
 
 ---
 
-## 🤖 AI & LLM Grounding Suite (`llms.txt` & `--ai`)
-
-`project-tree-md` is built natively for Generative Engine Optimization (GEO) and AI developer workflows (Cursor, Claude, ChatGPT, Gemini, Copilot):
-
-- **[llms.txt](llms.txt)**: Official machine-readable discovery summary for LLMs following the [llmstxt.org](https://llmstxt.org/) standard.
-- **[llms-full.txt](llms-full.txt)**: Comprehensive API and architectural reference for deep retrieval and autonomous coding agents.
-
-```bash
-# Generate token-optimized AI Context document for ChatGPT / Claude
-npx ptree --ai                 # -> AI_CONTEXT.md
-
-# Generate quick conversational system prompt snippet
-npx ptree --prompt             # -> AI_PROMPT.md
-
-# Generate repository AI agent guidelines & rules
-npx ptree --ai-rules           # -> AGENTS.md
-
-# Estimate tokens and prompt window costs for LLM models
-npx ptree --tokens
-```
-
----
-
 ## 📊 Competitor Comparison Matrix
 
 | Capability / Feature | `project-tree-md` | `tree-cli` | `tree-node-cli` | OS `tree` |
@@ -171,9 +123,8 @@ npx ptree --tokens
 | **Zero External Dependencies** | ✅ **0 Dependencies** | ❌ 10+ Dependencies | ❌ Multiple | ⚠️ OS Dependent |
 | **2D / 3D WebGL Code Graph** | ✅ **Yes (`--visualize`)** | ❌ No | ❌ No | ❌ No |
 | **Interactive Bezier Mind Map** | ✅ **Yes (`--mindmap`)** | ❌ No | ❌ No | ❌ No |
-| **AI Discovery Standard (`llms.txt`)** | ✅ **Native** | ❌ No | ❌ No | ❌ No |
-| **AI Context Generator (`--ai`)** | ✅ **Yes** | ❌ No | ❌ No | ❌ No |
 | **Multi-Format Export (JSON, SVG, ZIP)**| ✅ **9+ Formats** | ❌ Text Only | ❌ Text Only | ❌ Text Only |
+| **Duplicate File Detection** | ✅ **Yes (`--duplicates`)** | ❌ No | ❌ No | ❌ No |
 | **Git Status Badges (`--git-status`)**| ✅ **Built-in** | ❌ No | ❌ No | ❌ No |
 | **Dedicated Output Filenames** | ✅ **No Overwriting** | ❌ Overwrites | ❌ Overwrites | ❌ Overwrites |
 | **Execution Speed (10k files)** | ⚡ **< 500ms** | 🐢 ~1.8s | 🐢 ~1.5s | ⚡ ~600ms |
@@ -193,13 +144,13 @@ This scans your project and generates a clean, GitHub-ready `PROJECT_STRUCTURE.m
 </details>
 
 <details>
-<summary><strong>2. How can I provide my entire codebase structure to ChatGPT, Claude, or Cursor?</strong></summary>
+<summary><strong>2. How do I detect duplicate files in my codebase?</strong></summary>
 
 Run:
 ```bash
-npx ptree --ai
+npx ptree --duplicates
 ```
-This generates a token-optimized `AI_CONTEXT.md` containing your project framework, dependency list, scripts, and structured folder tree designed to fit directly into LLM prompt context windows without wasting tokens.
+This inspects files across your workspace and exports a clean deduplication summary to `PROJECT_DUPLICATES.md`.
 </details>
 
 <details>
@@ -264,4 +215,3 @@ console.log(result.markdown);
 ## 📄 License
 
 Distributed under the MIT License. See [LICENSE](LICENSE) for more details.
-

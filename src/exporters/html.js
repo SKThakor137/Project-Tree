@@ -8,7 +8,6 @@ const { computeStats } = require('../core/stats.js');
 const { toJson } = require('./json.js');
 const { toSvg } = require('./svg.js');
 const { toMermaid } = require('./mermaid.js');
-const { generateAiContext } = require('../features/ai.js');
 const { buildTreeText } = require('../core/formatter.js');
 
 /** @typedef {import('../core/scanner').ScanNode} ScanNode */
@@ -78,7 +77,6 @@ function toHtml(tree, stats = null) {
   const jsonStr = toJson(tree, effectiveStats);
   const svgStr = toSvg(tree, effectiveStats);
   const mermaidStr = toMermaid(tree);
-  const aiStr = generateAiContext(process.cwd(), treeTextEmoji, effectiveStats);
 
   const deadCount = (archData.deadCode.files || []).length;
   const circularCount = (archData.circular || []).length;
@@ -89,7 +87,6 @@ function toHtml(tree, stats = null) {
     'PROJECT_STRUCTURE.json': jsonStr,
     'PROJECT_STRUCTURE.svg': svgStr,
     'PROJECT_STRUCTURE.mmd': mermaidStr,
-    'AI_CONTEXT.md': aiStr,
     'COMPONENT_USAGE.json': JSON.stringify(archData.usage || {}, null, 2),
     'IMPORT_GRAPH.json': JSON.stringify(archData.imports || {}, null, 2),
     'EXPORT_GRAPH.json': JSON.stringify(archData.exports || {}, null, 2),
@@ -286,7 +283,6 @@ function toHtml(tree, stats = null) {
       <span>🌳</span> ${tree.name}
     </div>
     <div class="nav-actions">
-      <button class="btn btn-outline" id="copyAiPromptBtn" onclick="copyAiPrompt()" title="Copy Token-Optimized AI Prompt for ChatGPT / Claude / Cursor">🤖 Copy AI Prompt</button>
       <button class="btn" id="themeToggleBtn" title="Toggle Theme (D)">🌙 Dark Mode</button>
     </div>
   </div>
@@ -388,20 +384,6 @@ function toHtml(tree, stats = null) {
                 <p>Vector graphic diagram of project structure tree with line connectors and node dots.</p>
               </div>
               <button class="btn btn-outline" onclick="downloadReport('PROJECT_STRUCTURE.svg')">Download SVG</button>
-            </div>
-
-            <div class="export-card">
-              <div>
-                <div class="export-card-header">
-                  <h3>🤖 AI Prompt & Context</h3>
-                  <input type="checkbox" class="checkbox-custom report-select-cb" data-file="AI_CONTEXT.md" checked />
-                </div>
-                <p>Token-optimized codebase context formatted for ChatGPT, Claude, Gemini, and Cursor.</p>
-              </div>
-              <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-                <button class="btn btn-primary" onclick="copyAiPrompt()">Copy AI Prompt</button>
-                <button class="btn btn-outline" onclick="downloadReport('AI_CONTEXT.md')">Download MD</button>
-              </div>
             </div>
 
             <div class="export-card">
@@ -646,24 +628,6 @@ function toHtml(tree, stats = null) {
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-    }
-
-    function copyAiPrompt() {
-      const promptText = CLIENT_REPORTS['AI_CONTEXT.md'] || CLIENT_REPORTS['PROJECT_STRUCTURE.md'] || '';
-      if (!navigator.clipboard) {
-        alert('Clipboard API not supported in this browser.');
-        return;
-      }
-      navigator.clipboard.writeText(promptText).then(() => {
-        const btn = document.getElementById('copyAiPromptBtn');
-        if (btn) {
-          const original = btn.textContent;
-          btn.textContent = '✅ Copied AI Prompt!';
-          setTimeout(() => { btn.textContent = original; }, 2200);
-        }
-      }).catch(err => {
-        alert('Failed to copy to clipboard: ' + err.message);
-      });
     }
 
     document.addEventListener('DOMContentLoaded', () => {
